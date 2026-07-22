@@ -29,8 +29,18 @@ class AudioSynth {
       osc.start();
       osc.stop(this.ctx.currentTime + duration);
     } catch (e) {
-      // Audio context errors ignored if muted or blocked by browser policy
+      // Audio context errors ignored
     }
+  }
+
+  playVictoryFanfare() {
+    if (!this.ctx) return;
+    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    notes.forEach((freq, idx) => {
+      setTimeout(() => {
+        this.playTone(freq, "sine", 0.2, 0.08);
+      }, idx * 100);
+    });
   }
 }
 

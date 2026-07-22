@@ -52,7 +52,7 @@ export default function TreeVisualizer({ step }) {
               y1={line.y1}
               x2={line.x2}
               y2={line.y2}
-              stroke="#374151"
+              stroke="#334155"
               strokeWidth="2"
             />
           ))}
@@ -62,12 +62,12 @@ export default function TreeVisualizer({ step }) {
             const isActive = activeVal === n.val;
             const isVisited = visitedList.includes(n.val);
 
-            let fill = "#161b22";
-            let stroke = "#30363d";
+            let fill = "#0f172a";
+            let stroke = "#334155";
 
             if (isActive) {
-              fill = "#f59e0b";
-              stroke = "#fbbf24";
+              fill = "#6366f1";
+              stroke = "#818cf8";
             } else if (isVisited) {
               fill = "#059669";
               stroke = "#34d399";
@@ -82,15 +82,15 @@ export default function TreeVisualizer({ step }) {
                   fill={fill}
                   stroke={stroke}
                   strokeWidth="3"
-                  className={isActive ? "animate-pulse" : ""}
                 />
                 <text
                   x={n.x}
-                  y={n.y + 4}
+                  y={n.y}
                   fill="#ffffff"
                   fontSize="12"
                   fontWeight="bold"
                   textAnchor="middle"
+                  dominantBaseline="central"
                   className="font-mono select-none"
                 >
                   {n.val}
@@ -102,8 +102,8 @@ export default function TreeVisualizer({ step }) {
       </div>
 
       {/* Traversal Output Log */}
-      <div className="p-3 bg-gray-950 rounded-lg border border-gray-800 text-xs font-mono flex items-center justify-between">
-        <div className="flex items-center gap-2 text-emerald-400 font-bold">
+      <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono flex items-center justify-between">
+        <div className="flex items-center gap-2 text-emerald-400 font-bold font-sans">
           <GitGraph className="w-4 h-4" />
           <span>Inorder Traversal Output:</span>
         </div>

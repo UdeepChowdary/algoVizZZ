@@ -12,30 +12,30 @@ export default function GraphVisualizer({ step, currentAlgo }) {
   const algoId = currentAlgo?.file?.includes("BFS") ? "bfs" : currentAlgo?.file?.includes("DFS") ? "dfs" : "dijkstra";
 
   return (
-    <div className="flex-1 flex flex-col justify-between min-h-[320px]">
+    <div className="flex-1 flex flex-col justify-between min-h-[340px]">
       {/* Mode Switcher Header */}
-      <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-gray-800 text-xs font-mono">
-        <div className="flex items-center gap-2 text-gray-400">
-          <span className="text-gray-500 font-bold">// Graph Visualization Style:</span>
+      <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-800/80 text-xs font-sans">
+        <div className="flex items-center gap-2 text-slate-400">
+          <span className="text-slate-400 font-medium">Visualization Style:</span>
         </div>
 
-        <div className="flex gap-1.5 p-0.5 rounded-lg bg-gray-950 border border-gray-800">
+        <div className="flex gap-1.5 p-1 rounded-xl bg-slate-950 border border-slate-800">
           <button
             onClick={() => setViewMode("GRID")}
-            className={`px-3 py-1 rounded-md flex items-center gap-1.5 transition font-semibold ${
+            className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition font-semibold ${
               viewMode === "GRID"
-                ? "bg-blue-600 text-white shadow glow-blue font-bold"
-                : "text-gray-400 hover:text-white"
+                ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
+                : "text-slate-400 hover:text-white"
             }`}
           >
             <GridIcon className="w-3.5 h-3.5" /> 2D Grid Pathfinding
           </button>
           <button
             onClick={() => setViewMode("NETWORK")}
-            className={`px-3 py-1 rounded-md flex items-center gap-1.5 transition font-semibold ${
+            className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition font-semibold ${
               viewMode === "NETWORK"
-                ? "bg-blue-600 text-white shadow glow-blue font-bold"
-                : "text-gray-400 hover:text-white"
+                ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
+                : "text-slate-400 hover:text-white"
             }`}
           >
             <Network className="w-3.5 h-3.5" /> Network Graph
@@ -48,16 +48,16 @@ export default function GraphVisualizer({ step, currentAlgo }) {
         <GridPathfindingVisualizer algorithm={algoId} />
       ) : (
         <div className="flex-1 flex flex-col justify-between p-4 min-h-[320px]">
-          {/* Interactive SVG Network Graph Canvas */}
+          {/* SVG Network Graph Canvas */}
           <div className="flex-1 flex items-center justify-center p-2 relative">
             <svg className="w-full h-[260px] max-w-[540px]" viewBox="0 0 520 220">
               <defs>
-                <filter id="glow-orange" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
+                <filter id="glow-indigo" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
-                <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
+                <filter id="glow-emerald" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
               </defs>
@@ -77,27 +77,29 @@ export default function GraphVisualizer({ step, currentAlgo }) {
                       y1={u.y}
                       x2={v.x}
                       y2={v.y}
-                      stroke={isVisitedEdge ? "#10B981" : "#374151"}
+                      stroke={isVisitedEdge ? "#10B981" : "#334155"}
                       strokeWidth={isVisitedEdge ? "3" : "2"}
                       className="transition-all duration-300"
                     />
                     {e.weight !== undefined && (
                       <g>
                         <rect
-                          x={(u.x + v.x) / 2 - 10}
-                          y={(u.y + v.y) / 2 - 14}
-                          width="20"
-                          height="14"
-                          fill="#0d1117"
-                          rx="3"
+                          x={(u.x + v.x) / 2 - 12}
+                          y={(u.y + v.y) / 2 - 12}
+                          width="24"
+                          height="16"
+                          fill="#090b10"
+                          stroke="#334155"
+                          rx="4"
                         />
                         <text
                           x={(u.x + v.x) / 2}
-                          y={(u.y + v.y) / 2 - 3}
-                          fill="#9CA3AF"
+                          y={(u.y + v.y) / 2}
+                          fill="#94A3B8"
                           fontSize="10"
                           fontWeight="bold"
                           textAnchor="middle"
+                          dominantBaseline="central"
                           className="font-mono select-none"
                         >
                           {e.weight}
@@ -113,18 +115,18 @@ export default function GraphVisualizer({ step, currentAlgo }) {
                 const isCurrent = step.current === n.id;
                 const isVisited = step.visited?.includes(n.id);
 
-                let fill = "#161b22";
-                let stroke = "#30363d";
+                let fill = "#0f172a";
+                let stroke = "#334155";
                 let filter = "";
 
                 if (isCurrent) {
-                  fill = "#f59e0b";
-                  stroke = "#fbbf24";
-                  filter = "url(#glow-orange)";
+                  fill = "#6366f1";
+                  stroke = "#818cf8";
+                  filter = "url(#glow-indigo)";
                 } else if (isVisited) {
                   fill = "#059669";
                   stroke = "#34d399";
-                  filter = "url(#glow-green)";
+                  filter = "url(#glow-emerald)";
                 }
 
                 return (
@@ -137,21 +139,21 @@ export default function GraphVisualizer({ step, currentAlgo }) {
                       stroke={stroke}
                       strokeWidth="3"
                       filter={filter}
-                      className={isCurrent ? "animate-pulse" : ""}
                     />
                     <text
                       x={n.x}
-                      y={n.y + 4}
+                      y={n.y}
                       fill="#ffffff"
                       fontSize="12"
                       fontWeight="bold"
                       textAnchor="middle"
+                      dominantBaseline="central"
                       className="font-mono select-none pointer-events-none"
                     >
                       {n.label}
                     </text>
 
-                    {/* Dijkstra Distance Tag */}
+                    {/* Distance Tag */}
                     {step.dist && (
                       <g>
                         <rect
@@ -159,17 +161,18 @@ export default function GraphVisualizer({ step, currentAlgo }) {
                           y={n.y + 26}
                           width="44"
                           height="16"
-                          fill="#090d13"
-                          stroke="#30363d"
+                          fill="#090b10"
+                          stroke="#334155"
                           rx="4"
                         />
                         <text
                           x={n.x}
-                          y={n.y + 38}
+                          y={n.y + 34}
                           fill="#34d399"
                           fontSize="10"
                           fontWeight="bold"
                           textAnchor="middle"
+                          dominantBaseline="central"
                           className="font-mono"
                         >
                           d={step.dist[n.id] === Infinity ? "∞" : step.dist[n.id]}
@@ -182,22 +185,22 @@ export default function GraphVisualizer({ step, currentAlgo }) {
             </svg>
           </div>
 
-          {/* Real-time Data Structure Inspector (Queue or Stack) */}
-          <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-gray-950 rounded-lg border border-gray-800 text-xs font-mono">
-            <div className="flex items-center gap-2 text-gray-400">
-              <Layers className="w-4 h-4 text-blue-400" />
+          {/* Real-time Data Structure State Inspector */}
+          <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono">
+            <div className="flex items-center gap-2 text-slate-400 font-sans">
+              <Layers className="w-4 h-4 text-indigo-400" />
               <span>Active Data Structure State:</span>
             </div>
 
             {queue !== undefined && (
-              <div className="flex items-center gap-1.5">
-                <span className="text-gray-500 font-bold">FIFO Queue:</span>
+              <div className="flex items-center gap-2 font-mono">
+                <span className="text-slate-500 font-bold">FIFO Queue:</span>
                 <div className="flex gap-1">
                   {queue.length === 0 ? (
-                    <span className="text-gray-600">[ Empty ]</span>
+                    <span className="text-slate-600">[ Empty ]</span>
                   ) : (
                     queue.map((item, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded bg-blue-600/30 border border-blue-500 text-blue-300 font-bold">
+                      <span key={idx} className="px-2 py-0.5 rounded bg-indigo-600/20 border border-indigo-500/40 text-indigo-300 font-bold">
                         {item}
                       </span>
                     ))
@@ -207,14 +210,14 @@ export default function GraphVisualizer({ step, currentAlgo }) {
             )}
 
             {stack !== undefined && (
-              <div className="flex items-center gap-1.5">
-                <span className="text-gray-500 font-bold">Recursion Stack:</span>
+              <div className="flex items-center gap-2 font-mono">
+                <span className="text-slate-500 font-bold">Call Stack:</span>
                 <div className="flex gap-1">
                   {stack.length === 0 ? (
-                    <span className="text-gray-600">[ Empty ]</span>
+                    <span className="text-slate-600">[ Empty ]</span>
                   ) : (
                     stack.map((item, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded bg-purple-600/30 border border-purple-500 text-purple-300 font-bold">
+                      <span key={idx} className="px-2 py-0.5 rounded bg-purple-600/20 border border-purple-500/40 text-purple-300 font-bold">
                         Node {item}
                       </span>
                     ))

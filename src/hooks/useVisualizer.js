@@ -124,6 +124,12 @@ export function useVisualizer(initialAlgoKey = "selection") {
     setStepIdx(0);
   }, []);
 
+  const handleJumpToStep = useCallback((targetStep) => {
+    setPlaying(false);
+    const clamped = Math.max(0, Math.min(steps.length - 1, targetStep));
+    setStepIdx(clamped);
+  }, [steps.length]);
+
   return {
     algoKey,
     setAlgoKey,
@@ -153,5 +159,6 @@ export function useVisualizer(initialAlgoKey = "selection") {
     handleStepNext,
     handleStepPrev,
     handleReset,
+    handleJumpToStep
   };
 }
