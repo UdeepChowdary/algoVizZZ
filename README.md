@@ -1,23 +1,23 @@
 <div align="center">
 
 ```text
-                    █████╗ ██╗     ██████╗  ██████╗ ██╗   ██╗██╗███████╗███████╗
-                   ██╔══██╗██║    ██╔════╝ ██╔═══██╗██║   ██║██║╚══███╔╝╚══███╔╝
-                   ███████║██║    ██║  ███╗██║   ██║██║   ██║██║  ███╔╝  ███╔╝  
-                   ██╔══██║██║    ██║   ██║██║   ██║╚██╗ ██╔╝██║ ███╔╝  ███╔╝   
-                   ██║  ██║███████╗╚██████╔╝╚██████╔╝ ╚████╔╝ ██║███████╗███████╗
-                   ╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚═════╝   ╚═══╝  ╚═╝╚══════╝╚══════╝
+            █████╗ ██╗     ██████╗  ██████╗ ██╗   ██╗██╗███████╗███████╗
+           ██╔══██╗██║    ██╔════╝ ██╔═══██╗██║   ██║██║╚══███╔╝╚══███╔╝
+           ███████║██║    ██║  ███╗██║   ██║██║   ██║██║  ███╔╝  ███╔╝  
+           ██╔══██║██║    ██║   ██║██║   ██║╚██╗ ██╔╝██║ ███╔╝  ███╔╝   
+           ██║  ██║███████╗╚██████╔╝╚██████╔╝ ╚████╔╝ ██║███████╗███████╗
+           ╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚═════╝   ╚═══╝  ╚═╝╚══════╝╚══════╝
 
-                           ███████╗████████╗██╗   ██╗██████╗ ██╗ ██████╗ 
-                           ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██║██╔═══██╗
-                           ███████╗   ██║   ██║   ██║██║  ██║██║██║   ██║
-                           ╚════██║   ██║   ██║   ██║██║  ██║██║██║   ██║
-                           ███████║   ██║   ╚██████╔╝██████╔╝██║╚██████╔╝
-                           ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚═╝ ╚═════╝
+                 ███████╗████████╗██╗   ██╗██████╗ ██╗ ██████╗ 
+                 ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██║██╔═══██╗
+                 ███████╗   ██║   ██║   ██║██║  ██║██║██║   ██║
+                 ╚════██║   ██║   ██║   ██║██║  ██║██║██║   ██║
+                 ███████║   ██║   ╚██████╔╝██████╔╝██║╚██████╔╝
+                 ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚═╝ ╚═════╝
 ```
 
 # ⚡ AlgoViz Studio (`algoVizZZ`)
-### *Interactive Data Structures & Algorithms Visualizer*
+### *Next-Gen Data Structures & Algorithms Visualizer & Learning Engine*
 
 <p align="center">
   <a href="#-key-features">Features</a> •
@@ -40,7 +40,7 @@
 ---
 
 > [!TIP]
-> **AlgoViz Studio** (`algoVizZZ`) turns abstract Data Structures & Algorithms into responsive, interactive visual experiences. Built with zero external API dependencies, it runs 100% offline at up to 50x turbo speed!
+> **AlgoViz Studio** (`algoVizZZ`) turns abstract Data Structures & Algorithms into responsive, interactive visual experiences. Featuring a modern Studio Dark UI, interactive Landing Page, floating code particles, line-by-line inspection, and Web Audio pitch synthesis.
 
 ---
 
@@ -49,32 +49,42 @@
 <table>
   <tr>
     <td width="50%">
+      <h3>🏠 Interactive Product Landing Page</h3>
+      <p>Dedicated home page featuring live interactive demo sandboxes, Bento box engine specs, and algorithm catalog navigation.</p>
+    </td>
+    <td width="50%">
       <h3>📊 16 Algorithms across 7 Categories</h3>
       <p>Comprehensive step-by-step visualizations for Sorting, Searching, Graphs, Dynamic Programming, Backtracking, Greedy, and Binary Search Trees.</p>
     </td>
+  </tr>
+  <tr>
     <td width="50%">
       <h3>🗺️ Dual Graph Visualization Modes</h3>
       <p>Switch seamlessly between an interactive <b>2D Grid Pathfinding Canvas</b> (with Wall drawing & Mud terrain) and an SVG <b>Network Graph View</b>.</p>
     </td>
-  </tr>
-  <tr>
     <td width="50%">
       <h3>⚡ High-Performance Turbo Engine</h3>
       <p>Non-linear animation speed scaling from slow step-reading (<code>1x</code>) up to <b>⚡ TURBO 50x</b> multi-step frame jumps for instant wave expansions.</p>
     </td>
+  </tr>
+  <tr>
     <td width="50%">
       <h3>🔊 Web Audio Pitch Synthesizer</h3>
       <p>Real-time browser audio feedback pitch-scaled to element values during comparisons, swaps, and tree traversals.</p>
     </td>
+    <td width="50%">
+      <h3>🔍 Code Execution & Scope Watcher</h3>
+      <p>Synchronized pseudocode execution line highlights alongside a zero-jitter active scope variable watch window.</p>
+    </td>
   </tr>
   <tr>
     <td width="50%">
-      <h3>✏️ Custom Array Editor & Target Input</h3>
-      <p>Input your own custom datasets (e.g., <code>45, 12, 89, 23</code>) or set custom search targets to test edge cases in real time.</p>
+      <h3>✏️ Custom Array Editor & Presets</h3>
+      <p>Input custom datasets (e.g., <code>45, 12, 89, 23</code>) or load presets (<em>Reversed</em>, <em>Nearly Sorted</em>, <em>Few Unique</em>).</p>
     </td>
     <td width="50%">
-      <h3>🔍 Code Execution & Scope Watcher</h3>
-      <p>Synchronized pseudocode execution line highlights alongside an active scope variable watch window.</p>
+      <h3>🌌 Ambient Floating Code Particles</h3>
+      <p>Floating background code snippet particles drifting on outer screen margins with subtle dark glass styling.</p>
     </td>
   </tr>
 </table>
@@ -102,7 +112,7 @@ npm install
 ```bash
 npm run dev
 ```
-Open your browser and navigate to **`http://localhost:3000`**.
+Open your browser and navigate to **`http://localhost:5173`**.
 
 ### 3️⃣ Build Production Bundle
 ```bash
@@ -134,7 +144,7 @@ npm run build
 | **Dynamic Prog.** | LCS | $O(m \times n)$ | $O(m \times n)$ | $O(m \times n)$ | String character matching matrix |
 | **Backtracking** | N-Queens | $O(N!)$ | $O(N!)$ | $O(N^2)$ | Dynamic $N \times N$ chessboard & queen icons |
 | **Greedy** | Fractional Knapsack | $O(n \log n)$ | $O(n \log n)$ | $O(1)$ | Value/Weight ratio cards & capacity bar |
-| **Trees & DS** | Binary Search Tree | $O( \log n)$ | $O(n)$ | $O(h)$ | SVG Tree hierarchy & Inorder output log |
+| **Trees & DS** | Binary Search Tree | $O(\log n)$ | $O(n)$ | $O(h)$ | SVG Tree hierarchy & Inorder output log |
 
 </details>
 
@@ -160,28 +170,30 @@ npm run build
 
 ```text
 algoVizZZ/
-├── index.html                 # HTML5 Entry with JetBrains Mono & Inter fonts
+├── index.html                 # HTML5 Entry with Plus Jakarta Sans & JetBrains Mono
 ├── package.json               # Dependencies & scripts
 ├── vite.config.js             # Vite dev server configuration
-├── tailwind.config.js         # Tailwind CSS design tokens & slate theme
+├── tailwind.config.js         # Tailwind CSS design tokens & studio dark theme
 ├── postcss.config.js          # PostCSS configuration
 └── src/
-    ├── main.jsx               # React DOM render entry
-    ├── App.jsx                # Master application shell & visualizer router
-    ├── index.css              # Global styles, scrollbar & glassmorphism FX
+    ├── main.jsx               # React DOM render entry & ErrorBoundary
+    ├── App.jsx                # Master application shell & view router (Home / Studio)
+    ├── index.css              # Studio dark glassmorphism, scrollbars & keyframes
     ├── components/
-    │   ├── Header.jsx         # Header bar with audio & shortcut modal triggers
-    │   ├── CategoryNav.jsx    # Category pill filters & algorithm tabs
-    │   ├── ControlPanel.jsx   # Playback buttons, size, speed & turbo controls
-    │   ├── CodeInspector.jsx  # Source code execution view
-    │   ├── VariableWatch.jsx  # Scope variable watch window
-    │   ├── InfoCard.jsx       # Algorithm complexity metadata badge
-    │   ├── ShortcutsModal.jsx # Keyboard shortcuts overlay modal
+    │   ├── HomePage.jsx               # Product landing page with hero demo & bento grid
+    │   ├── FloatingCodeParticles.jsx  # Floating code snippet particles background
+    │   ├── Header.jsx                 # Header bar with audio & shortcut triggers
+    │   ├── CategoryNav.jsx            # Category segmented control & algorithm dock
+    │   ├── ControlPanel.jsx           # Floating player dock with timeline scrubber
+    │   ├── CodeInspector.jsx          # Source code line execution spotlight
+    │   ├── VariableWatch.jsx          # Zero-jitter scope variable watch window
+    │   ├── InfoCard.jsx               # Algorithm complexity metadata badge
+    │   ├── ShortcutsModal.jsx         # Keyboard shortcuts overlay modal
     │   └── visualizers/
-    │       ├── ArrayVisualizer.jsx            # Dynamic bar chart visualizer
+    │       ├── ArrayVisualizer.jsx            # Dynamic 3D pill bar visualizer
     │       ├── GraphVisualizer.jsx            # Dual-mode graph container
     │       ├── GridPathfindingVisualizer.jsx  # Interactive 2D grid pathfinder
-    │       ├── MatrixDPVisualizer.jsx         # 2D DP matrix table
+    │       ├── MatrixDPVisualizer.jsx         # 2D DP heatmap matrix table
     │       ├── ChessboardVisualizer.jsx       # N-Queens chessboard
     │       ├── KnapsackGreedyVisualizer.jsx   # Greedy ratio cards & capacity gauge
     │       └── TreeVisualizer.jsx             # SVG binary tree hierarchy
