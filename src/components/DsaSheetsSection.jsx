@@ -144,24 +144,16 @@ export default function DsaSheetsSection({ onLaunchStudio }) {
               </div>
 
               {/* Card Bottom CTA Actions */}
-              <div className="flex items-center gap-2 pt-3 border-t border-slate-800/80 text-xs">
+              <div className="pt-3 border-t border-slate-800/80 text-xs">
                 <a
                   href={sheet.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-md glow-indigo-subtle"
+                  className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-md glow-indigo-subtle active:scale-95"
                 >
-                  <span>Open Sheet</span>
+                  <span>Open Full Sheet Resource</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
-
-                <button
-                  onClick={() => onLaunchStudio()}
-                  className="py-2 px-3 rounded-xl bg-slate-950 hover:bg-slate-900 text-slate-300 border border-slate-800 text-xs font-semibold flex items-center justify-center gap-1.5 transition"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Visualize</span>
-                </button>
               </div>
             </div>
           );
