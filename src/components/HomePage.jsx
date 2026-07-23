@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { randomArray } from '../utils/helpers.js';
 import FloatingCodeParticles from './FloatingCodeParticles.jsx';
+import DsaSheetsSection from './DsaSheetsSection.jsx';
 
 export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
   // Interactive Hero Demo State
@@ -77,6 +78,10 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
         </div>
 
         <nav className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-400">
+          <a href="#sheets" className="hover:text-white transition flex items-center gap-1 text-indigo-400">
+            <Sparkles className="w-3 h-3 text-indigo-400" />
+            <span>DSA Sheets</span>
+          </a>
           <a href="#features" className="hover:text-white transition">Features</a>
           <a href="#algorithms" className="hover:text-white transition">Algorithms Catalog</a>
           <a href="#bento" className="hover:text-white transition">Engine Specs</a>
@@ -310,6 +315,9 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
           </div>
         </div>
       </section>
+
+      {/* Curated DSA Sheets Hub Section */}
+      <DsaSheetsSection onLaunchStudio={onLaunchStudio} />
 
       {/* Algorithm Catalog Grid */}
       <section id="algorithms" className="px-4 md:px-8 py-16 max-w-[1400px] mx-auto w-full border-t border-slate-800/80">
