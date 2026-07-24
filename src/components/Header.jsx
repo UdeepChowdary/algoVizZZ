@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layers, Volume2, VolumeX, Keyboard, Command, Home } from 'lucide-react';
+import { audioSynth } from '../utils/audioSynth.js';
 
 export default function Header({
   soundEnabled,
@@ -65,7 +66,10 @@ export default function Header({
 
         {/* Audio Synthesizer Toggle */}
         <button
-          onClick={() => setSoundEnabled(!soundEnabled)}
+          onClick={() => {
+            if (!soundEnabled) audioSynth.init();
+            setSoundEnabled(!soundEnabled);
+          }}
           className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-2 transition active:scale-95 ${
             soundEnabled
               ? "bg-indigo-600/20 border-indigo-500/40 text-indigo-300 glow-indigo-subtle"

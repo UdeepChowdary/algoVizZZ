@@ -49,9 +49,19 @@ export function useVisualizer(initialAlgoKey = "selection") {
         audioSynth.playTone(550, "triangle", 0.08, 0.06);
       } else if (step.pivot && step.pivot.length > 0) {
         audioSynth.playTone(700, "square", 0.05, 0.03);
+      } else {
+        // Fallback tone for steps in non-sorting visualizers (grid, DP, BST, N-Queens)
+        audioSynth.playTone(400, "sine", 0.04, 0.02);
       }
     }
   }, [stepIdx, soundEnabled, playing, step]);
+
+  // Victory Fanfare Trigger
+  useEffect(() => {
+    if (isDone && soundEnabled && playing) {
+      audioSynth.playVictoryFanfare();
+    }
+  }, [isDone, soundEnabled, playing]);
 
   // Reset playback when algo or input changes
   useEffect(() => {
@@ -90,45 +100,61 @@ export function useVisualizer(initialAlgoKey = "selection") {
   }, [playing, stepIdx, steps.length, speed]);
 
   const handleShuffle = useCallback(() => {
+    if (soundEnabled) audioSynth.init();
     const newArr = randomArray(size);
     setBaseArray(newArr);
     if (currentAlgo.category === "searching") {
       setSearchTarget(newArr[Math.floor(newArr.length * 0.6)]);
     }
-  }, [size, currentAlgo.category]);
+  }, [size, currentAlgo.category, soundEnabled]);
 
   const handleSetCustomArray = useCallback((newArr) => {
+    if (soundEnabled) audioSynth.init();
     if (Array.isArray(newArr) && newArr.length > 0) {
       setBaseArray(newArr);
       setSize(newArr.length);
     }
-  }, []);
+  }, [soundEnabled]);
 
   const handlePlayPause = useCallback(() => {
+    if (soundEnabled) {
+      audioSynth.init();
+      audioSynth.playStartTone();
+    }
     if (isDone) setStepIdx(0);
     setPlaying(prev => !prev);
-  }, [isDone]);
+  }, [isDone, soundEnabled]);
 
   const handleStepNext = useCallback(() => {
+    if (soundEnabled) {
+      audioSynth.init();
+      audioSynth.playTone(450, "sine", 0.04, 0.03);
+    }
     setPlaying(false);
     setStepIdx(s => Math.min(steps.length - 1, s + 1));
-  }, [steps.length]);
+  }, [steps.length, soundEnabled]);
 
   const handleStepPrev = useCallback(() => {
+    if (soundEnabled) {
+      audioSynth.init();
+      audioSynth.playTone(350, "sine", 0.04, 0.03);
+    }
     setPlaying(false);
     setStepIdx(s => Math.max(0, s - 1));
-  }, []);
+  }, [soundEnabled]);
 
   const handleReset = useCallback(() => {
+    if (soundEnabled) audioSynth.init();
     setPlaying(false);
     setStepIdx(0);
-  }, []);
+  }, [soundEnabled]);
 
   const handleJumpToStep = useCallback((targetStep) => {
+    if (soundEnabled) audioSynth.init();
     setPlaying(false);
     const clamped = Math.max(0, Math.min(steps.length - 1, targetStep));
     setStepIdx(clamped);
-  }, [steps.length]);
+  }, [steps.length, soundEnabled]);
 
   return {
     algoKey,
