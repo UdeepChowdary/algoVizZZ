@@ -82,7 +82,14 @@ export default function App() {
           />
         );
       case "graph":
-        return <GraphVisualizer step={step} currentAlgo={currentAlgo} />;
+        return (
+          <GraphVisualizer
+            step={step}
+            currentAlgo={currentAlgo}
+            playing={playing}
+            onPlayPause={handlePlayPause}
+          />
+        );
       case "dp":
         return <MatrixDPVisualizer step={step} currentAlgo={currentAlgo} />;
       case "backtracking":

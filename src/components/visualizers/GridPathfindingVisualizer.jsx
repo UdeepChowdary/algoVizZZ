@@ -5,7 +5,11 @@ import { Rocket, Target, Shield, Droplets, Trash2, Play, Pause, RotateCcw, Zap }
 const ROWS = 10;
 const COLS = 18;
 
-export default function GridPathfindingVisualizer({ algorithm = "bfs" }) {
+export default function GridPathfindingVisualizer({
+  algorithm = "bfs",
+  masterPlaying = false,
+  onPlayPause
+}) {
   const [startNode, setStartNode] = useState([2, 2]);
   const [endNode, setEndNode] = useState([7, 15]);
   const [walls, setWalls] = useState(new Set());
@@ -18,6 +22,13 @@ export default function GridPathfindingVisualizer({ algorithm = "bfs" }) {
   const [speed, setSpeed] = useState(85);
 
   const nodeKey = (r, c) => `${r}-${c}`;
+
+  // Global mouseup listener for drag drawing safety
+  useEffect(() => {
+    const handleGlobalMouseUp = () => setIsMouseDown(false);
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
+  }, []);
 
   // Generate steps based on current grid state and algorithm
   const steps = useMemo(() => {
@@ -46,9 +57,11 @@ export default function GridPathfindingVisualizer({ algorithm = "bfs" }) {
     setPlaying(false);
   }, [algorithm, startNode, endNode, walls, mudCells]);
 
+  const isCurrentlyPlaying = playing || masterPlaying;
+
   // Animation Loop
   useEffect(() => {
-    if (playing) {
+    if (isCurrentlyPlaying) {
       let delay = 0;
       let stepIncrement = 1;
 
@@ -66,6 +79,7 @@ export default function GridPathfindingVisualizer({ algorithm = "bfs" }) {
           const next = s + stepIncrement;
           if (next >= steps.length - 1) {
             setPlaying(false);
+            if (masterPlaying && onPlayPause) onPlayPause();
             return steps.length - 1;
           }
           return next;
@@ -74,7 +88,16 @@ export default function GridPathfindingVisualizer({ algorithm = "bfs" }) {
 
       return () => clearTimeout(timer);
     }
-  }, [playing, stepIdx, steps.length, speed]);
+  }, [isCurrentlyPlaying, masterPlaying, onPlayPause, stepIdx, steps.length, speed]);
+
+  const handleTogglePlay = () => {
+    if (stepIdx >= steps.length - 1) setStepIdx(0);
+    if (onPlayPause) {
+      onPlayPause();
+    } else {
+      setPlaying(prev => !prev);
+    }
+  };
 
   const handleCellClick = (r, c) => {
     if (r === startNode[0] && c === startNode[1]) return;
@@ -239,14 +262,11 @@ export default function GridPathfindingVisualizer({ algorithm = "bfs" }) {
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={() => {
-              if (stepIdx >= steps.length - 1) setStepIdx(0);
-              setPlaying(!playing);
-            }}
+            onClick={handleTogglePlay}
             className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold flex items-center gap-1.5 glow-indigo-subtle transition active:scale-95 font-sans"
           >
-            {playing ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-            <span>{playing ? "Pause Wave" : "Play Wave"}</span>
+            {isCurrentlyPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+            <span>{isCurrentlyPlaying ? "Pause Wave" : "Play Wave"}</span>
           </button>
           <span className="ml-1">
             Step: <strong className="text-indigo-400 font-bold">{stepIdx + 1}</strong> / {steps.length}

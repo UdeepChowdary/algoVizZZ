@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layers, Network, Grid as GridIcon } from 'lucide-react';
 import GridPathfindingVisualizer from './GridPathfindingVisualizer.jsx';
 
-export default function GraphVisualizer({ step, currentAlgo }) {
+export default function GraphVisualizer({ step, currentAlgo, playing, onPlayPause }) {
   const [viewMode, setViewMode] = useState("GRID"); // "NETWORK" | "GRID"
 
   const graph = step.graph || { nodes: [], edges: [] };
@@ -45,7 +45,11 @@ export default function GraphVisualizer({ step, currentAlgo }) {
 
       {/* Render selected view mode */}
       {viewMode === "GRID" ? (
-        <GridPathfindingVisualizer algorithm={algoId} />
+        <GridPathfindingVisualizer
+          algorithm={algoId}
+          masterPlaying={playing}
+          onPlayPause={onPlayPause}
+        />
       ) : (
         <div className="flex-1 flex flex-col justify-between p-4 min-h-[320px]">
           {/* SVG Network Graph Canvas */}
