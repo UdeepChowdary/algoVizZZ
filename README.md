@@ -112,12 +112,17 @@ Master the foundational patterns that solve over 80% of coding interview problem
 
 | Pattern | Description | Key Use Cases |
 | :--- | :--- | :--- |
-| **Two Pointers** | Converging or reader-writer pointers to search pairs or process arrays in linear time. | 2Sum, 3Sum, Container With Most Water, Trapping Rain Water |
-| **Sliding Window** | Maintain a dynamic window over contiguous sub-array/sub-string elements. | Longest Substring Without Repeating Chars, Minimum Window Substring |
-| **Fast & Slow Pointers** | Tortoise & Hare pointers moving at different speeds to detect cycles. | Linked List Cycle, Find Duplicate Number, Happy Number |
-| **Monotonic Stack** | Maintain stack elements in strict increasing/decreasing order for next/prev element queries. | Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram |
-| **Top K Elements** | Min-Heap or Max-Heap to track the K largest or smallest elements efficiently. | Kth Largest Element, Top K Frequent Elements |
-| **Binary Search Space** | Search over monotonic answer spaces instead of index arrays. | Koko Eating Bananas, Capacity to Ship Packages, Painter's Partition |
+| **Two Pointers** | Converging or reader-writer pointers to search pairs or process arrays in linear time. | 2Sum, 3Sum, Valid Palindrome, Container With Most Water |
+| **Sliding Window** | Maintain a dynamic window over contiguous sub-array/sub-string elements. | Longest Substring Without Repeating Chars, Minimum Size Subarray Sum, Sliding Window Maximum |
+| **Fast & Slow Pointers** | Tortoise & Hare pointers moving at different speeds to detect cycles. | Linked List Cycle, Find Duplicate Number, Middle of Linked List, Happy Number |
+| **Merge Intervals** | Sort intervals by start time and merge overlapping ranges or schedule conflicts. | Merge Intervals, Insert Interval, Non-overlapping Intervals, Meeting Rooms II |
+| **Monotonic Stack** | Maintain stack elements in strict increasing/decreasing order for next/prev element queries. | Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water |
+| **Top K Elements (Heap)** | Min-Heap or Max-Heap to track the K largest, smallest, or most frequent items. | Kth Largest Element, Top K Frequent Elements, Find Median from Data Stream |
+| **Modified Binary Search** | Halve search space in sorted, rotated sorted arrays, or 2D matrices in $O(\log N)$. | Search in Rotated Sorted Array, Find Minimum in Rotated Array, Search 2D Matrix |
+| **Matrix BFS / DFS** | Grid cell traversal in 4 directions to count connected components or shortest paths. | Number of Islands, Max Area of Island, Rotting Oranges, Pacific Atlantic Flow |
+| **Backtracking & State-Space** | Choose, explore recursively, and un-choose (backtrack) to generate all valid states. | Subsets, Permutations, Combination Sum, N-Queens |
+| **0/1 Knapsack & DP** | Build decision DP table comparing choices of including vs excluding items. | Partition Equal Subset Sum, Target Sum, Coin Change, LCS |
+
 
 ---
 
