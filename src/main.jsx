@@ -22,8 +22,8 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="min-h-screen bg-[#090b10] text-slate-200 p-8 flex flex-col items-center justify-center font-sans text-center">
           <div className="max-w-md studio-card p-6 rounded-2xl border border-rose-500/30 flex flex-col gap-4">
-            <h2 className="text-xl font-bold text-rose-400">Something went wrong</h2>
-            <p className="text-xs text-slate-400 font-mono text-left bg-slate-950 p-3 rounded-xl overflow-x-auto">
+            <h2 className="text-xl font-bold text-rose-300">Something went wrong</h2>
+            <p className="text-xs text-slate-300 font-mono text-left bg-slate-950 p-3 rounded-xl overflow-x-auto">
               {this.state.error?.toString()}
             </p>
             <button

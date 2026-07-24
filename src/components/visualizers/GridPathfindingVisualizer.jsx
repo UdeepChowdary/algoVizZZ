@@ -7,8 +7,14 @@ const COLS = 18;
 
 export default function GridPathfindingVisualizer({
   algorithm = "bfs",
-  masterPlaying = false,
-  onPlayPause
+  step: parentStep,
+  stepIdx: parentStepIdx,
+  playing: parentPlaying,
+  onPlayPause,
+  onSetStepIdx,
+  speed: parentSpeed,
+  setSpeed: parentSetSpeed,
+  onSetCustomSteps
 }) {
   const [startNode, setStartNode] = useState([2, 2]);
   const [endNode, setEndNode] = useState([7, 15]);
@@ -17,9 +23,10 @@ export default function GridPathfindingVisualizer({
   const [drawMode, setDrawMode] = useState("WALL"); // "WALL" | "MUD" | "START" | "END"
   const [isMouseDown, setIsMouseDown] = useState(false);
 
-  const [stepIdx, setStepIdx] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [speed, setSpeed] = useState(85);
+  // Local fallback state if used standalone
+  const [localStepIdx, setLocalStepIdx] = useState(0);
+  const [localPlaying, setLocalPlaying] = useState(false);
+  const [localSpeed, setLocalSpeed] = useState(85);
 
   const nodeKey = (r, c) => `${r}-${c}`;
 
@@ -31,7 +38,7 @@ export default function GridPathfindingVisualizer({
   }, []);
 
   // Generate steps based on current grid state and algorithm
-  const steps = useMemo(() => {
+  const generatedSteps = useMemo(() => {
     return generateGridPathfindingSteps({
       algorithm,
       startNode,
@@ -41,8 +48,26 @@ export default function GridPathfindingVisualizer({
     });
   }, [algorithm, startNode, endNode, walls, mudCells]);
 
-  const step = steps[Math.min(stepIdx, steps.length - 1)] || {};
-  const gridState = step.gridState || { visited: [], path: [], current: null };
+  // Sync generated steps to parent if callback is provided
+  useEffect(() => {
+    if (onSetCustomSteps) {
+      onSetCustomSteps(generatedSteps);
+    }
+    if (onSetStepIdx) {
+      onSetStepIdx(0);
+    } else {
+      setLocalStepIdx(0);
+      setLocalPlaying(false);
+    }
+  }, [generatedSteps, onSetCustomSteps, onSetStepIdx]);
+
+  // Determine current active step & control values
+  const currentStepIdx = parentStepIdx !== undefined ? parentStepIdx : localStepIdx;
+  const isPlaying = parentPlaying !== undefined ? parentPlaying : localPlaying;
+  const currentSpeed = parentSpeed !== undefined ? parentSpeed : localSpeed;
+
+  const currentStep = parentStep?.gridState ? parentStep : (generatedSteps[Math.min(currentStepIdx, generatedSteps.length - 1)] || {});
+  const gridState = currentStep.gridState || { visited: [], path: [], current: null };
 
   const visitedSet = useMemo(() => new Set(gridState.visited || []), [gridState.visited]);
   const pathSet = useMemo(() => {
@@ -51,36 +76,27 @@ export default function GridPathfindingVisualizer({
     return set;
   }, [gridState.path]);
 
-  // Reset step index when parameters change
+  // Local animation loop fallback if no parent controls provided
   useEffect(() => {
-    setStepIdx(0);
-    setPlaying(false);
-  }, [algorithm, startNode, endNode, walls, mudCells]);
-
-  const isCurrentlyPlaying = playing || masterPlaying;
-
-  // Animation Loop
-  useEffect(() => {
-    if (isCurrentlyPlaying) {
+    if (!onPlayPause && isPlaying) {
       let delay = 0;
       let stepIncrement = 1;
 
-      if (speed <= 50) {
-        delay = 550 - speed * 10;
-      } else if (speed <= 85) {
-        delay = Math.max(3, 50 - (speed - 50) * 1.3);
+      if (currentSpeed <= 50) {
+        delay = 550 - currentSpeed * 10;
+      } else if (currentSpeed <= 85) {
+        delay = Math.max(3, 50 - (currentSpeed - 50) * 1.3);
       } else {
         delay = 0;
-        stepIncrement = Math.floor(1 + (speed - 85) * 0.4);
+        stepIncrement = Math.floor(1 + (currentSpeed - 85) * 0.4);
       }
 
       const timer = setTimeout(() => {
-        setStepIdx(s => {
+        setLocalStepIdx(s => {
           const next = s + stepIncrement;
-          if (next >= steps.length - 1) {
-            setPlaying(false);
-            if (masterPlaying && onPlayPause) onPlayPause();
-            return steps.length - 1;
+          if (next >= generatedSteps.length - 1) {
+            setLocalPlaying(false);
+            return generatedSteps.length - 1;
           }
           return next;
         });
@@ -88,14 +104,31 @@ export default function GridPathfindingVisualizer({
 
       return () => clearTimeout(timer);
     }
-  }, [isCurrentlyPlaying, masterPlaying, onPlayPause, stepIdx, steps.length, speed]);
+  }, [onPlayPause, isPlaying, currentStepIdx, generatedSteps.length, currentSpeed]);
 
   const handleTogglePlay = () => {
-    if (stepIdx >= steps.length - 1) setStepIdx(0);
     if (onPlayPause) {
       onPlayPause();
     } else {
-      setPlaying(prev => !prev);
+      if (localStepIdx >= generatedSteps.length - 1) setLocalStepIdx(0);
+      setLocalPlaying(prev => !prev);
+    }
+  };
+
+  const handleResetWave = () => {
+    if (onSetStepIdx) {
+      onSetStepIdx(0);
+    } else {
+      setLocalStepIdx(0);
+      setLocalPlaying(false);
+    }
+  };
+
+  const handleSetSpeed = (val) => {
+    if (parentSetSpeed) {
+      parentSetSpeed(val);
+    } else {
+      setLocalSpeed(val);
     }
   };
 
@@ -146,8 +179,7 @@ export default function GridPathfindingVisualizer({
   const handleClearBoard = () => {
     setWalls(new Set());
     setMudCells(new Set());
-    setStepIdx(0);
-    setPlaying(false);
+    handleResetWave();
   };
 
   return (
@@ -159,7 +191,7 @@ export default function GridPathfindingVisualizer({
       {/* Drawing Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-3 text-xs border-b border-slate-800/80 pb-3 font-sans">
         <div className="flex items-center gap-2">
-          <span className="text-slate-400 font-medium mr-1">Drawing Tool:</span>
+          <span className="text-slate-300 font-medium mr-1">Drawing Tool:</span>
           {[
             { id: "WALL", label: "Wall Barrier", icon: Shield, color: "bg-slate-900 text-slate-300 border-slate-800" },
             { id: "MUD", label: "Mud (+5)", icon: Droplets, color: "bg-amber-950/40 text-amber-300 border-amber-800/60" },
@@ -189,16 +221,16 @@ export default function GridPathfindingVisualizer({
             onClick={handleClearBoard}
             className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-rose-500/40 transition flex items-center gap-1.5 active:scale-95"
           >
-            <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+            <Trash2 className="w-3.5 h-3.5 text-rose-300" />
             <span>Clear Grid</span>
           </button>
         </div>
       </div>
 
       {/* 2D Interactive Grid Canvas */}
-      <div className="flex-1 flex items-center justify-center p-2">
+      <div className="flex-1 w-full flex items-center justify-center p-1 sm:p-2 min-h-0 overflow-x-auto">
         <div
-          className="grid gap-1.5 bg-[#080910] p-3.5 rounded-2xl border border-slate-800/80 shadow-2xl overflow-x-auto max-w-full"
+          className="grid gap-[1px] sm:gap-[2px] md:gap-1 bg-[#080910] p-1 sm:p-2 md:p-3 rounded-xl border border-slate-800/80 shadow-2xl min-w-[300px] max-w-[95vw] lg:max-w-[600px] m-auto"
           style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}
         >
           {Array.from({ length: ROWS }).map((_, r) =>
@@ -216,24 +248,28 @@ export default function GridPathfindingVisualizer({
               let content = null;
 
               if (isStart) {
-                cellStyle = "bg-emerald-600 border-emerald-400 text-white font-bold glow-emerald-subtle scale-105";
-                content = <Rocket className="w-4 h-4 text-white" />;
+                cellStyle = isPath
+                  ? "bg-emerald-600 border-amber-400 text-white font-bold glow-emerald-subtle scale-110 ring-2 ring-amber-400 z-20"
+                  : "bg-emerald-600 border-emerald-400 text-white font-bold glow-emerald-subtle scale-105";
+                content = <Rocket className="w-[60%] h-[60%] text-white" />;
               } else if (isEnd) {
-                cellStyle = "bg-rose-600 border-rose-400 text-white font-bold glow-rose-subtle scale-105";
-                content = <Target className="w-4 h-4 text-white" />;
+                cellStyle = isPath
+                  ? "bg-rose-600 border-amber-400 text-white font-bold scale-110 shadow-[0_0_20px_rgba(251,191,36,1)] ring-2 ring-amber-400 z-20 animate-bounce"
+                  : "bg-rose-600 border-rose-400 text-white font-bold glow-rose-subtle scale-105";
+                content = <Target className="w-[60%] h-[60%] text-white" />;
               } else if (isPath) {
                 cellStyle = "bg-amber-400 border-amber-300 text-black font-bold scale-110 shadow-[0_0_15px_rgba(251,191,36,0.8)] z-10";
-                content = <span className="w-2 h-2 rounded-full bg-slate-950"></span>;
+                content = <span className="w-[30%] h-[30%] rounded-full bg-slate-950"></span>;
               } else if (isCurrent) {
                 cellStyle = "bg-purple-500 border-purple-300 text-white font-bold scale-110 z-10";
               } else if (isVisited) {
                 cellStyle = "bg-indigo-600/30 border-indigo-500/50 text-indigo-200";
               } else if (isWall) {
                 cellStyle = "bg-slate-950 border-slate-800 shadow-inner";
-                content = <Shield className="w-3.5 h-3.5 text-slate-600" />;
+                content = <Shield className="w-[60%] h-[60%] text-slate-600" />;
               } else if (isMud) {
                 cellStyle = "bg-amber-950/50 border-amber-800/60 text-amber-300";
-                content = <span className="text-[10px] font-extrabold text-amber-400">+5</span>;
+                content = <span className="text-[7px] sm:text-[9px] font-extrabold text-amber-300 leading-none">+5</span>;
               }
 
               return (
@@ -241,7 +277,7 @@ export default function GridPathfindingVisualizer({
                   key={key}
                   onMouseDown={() => handleCellClick(r, c)}
                   onMouseEnter={() => handleMouseEnter(r, c)}
-                  className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center text-xs rounded-lg border transition-all duration-150 cursor-pointer ${cellStyle}`}
+                  className={`aspect-square w-full h-full flex items-center justify-center rounded-[3px] sm:rounded-md border transition-all duration-150 cursor-pointer ${cellStyle}`}
                 >
                   {content}
                 </div>
@@ -252,10 +288,10 @@ export default function GridPathfindingVisualizer({
       </div>
 
       {/* Grid Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800/80 text-xs font-sans text-slate-400">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800/80 text-xs font-sans text-slate-300">
         <div className="flex items-center gap-2 font-mono">
           <button
-            onClick={() => { setStepIdx(0); setPlaying(false); }}
+            onClick={handleResetWave}
             className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white border border-slate-800 transition active:scale-95"
             title="Reset Wave"
           >
@@ -265,18 +301,18 @@ export default function GridPathfindingVisualizer({
             onClick={handleTogglePlay}
             className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold flex items-center gap-1.5 glow-indigo-subtle transition active:scale-95 font-sans"
           >
-            {isCurrentlyPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-            <span>{isCurrentlyPlaying ? "Pause Wave" : "Play Wave"}</span>
+            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+            <span>{isPlaying ? "Pause Wave" : "Play Wave"}</span>
           </button>
           <span className="ml-1">
-            Step: <strong className="text-indigo-400 font-bold">{stepIdx + 1}</strong> / {steps.length}
+            Step: <strong className="text-indigo-300 font-bold">{currentStepIdx + 1}</strong> / {generatedSteps.length}
           </span>
         </div>
 
         {/* Speed Presets */}
         <div className="flex items-center gap-2">
-          <span className="text-slate-400 font-medium flex items-center gap-1">
-            <Zap className="w-3.5 h-3.5 text-amber-400" />
+          <span className="text-slate-300 font-medium flex items-center gap-1">
+            <Zap className="w-3.5 h-3.5 text-amber-300" />
             <span>Speed:</span>
           </span>
           <div className="flex gap-1 font-mono">
@@ -288,11 +324,11 @@ export default function GridPathfindingVisualizer({
             ].map(sp => (
               <button
                 key={sp.val}
-                onClick={() => setSpeed(sp.val)}
+                onClick={() => handleSetSpeed(sp.val)}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition ${
-                  speed === sp.val
+                  currentSpeed === sp.val
                     ? "bg-amber-500 border-amber-400 text-slate-950 shadow glow-amber-subtle"
-                    : "bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-white"
+                    : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white"
                 }`}
               >
                 {sp.label}
@@ -304,3 +340,4 @@ export default function GridPathfindingVisualizer({
     </div>
   );
 }
+

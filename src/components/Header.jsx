@@ -16,7 +16,7 @@ export default function Header({
         className="flex items-center gap-3 cursor-pointer group"
         title="Return to Home Page"
       >
-        <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.2)] group-hover:scale-105 transition">
+        <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.2)] group-hover:scale-105 transition">
           <Layers className="w-5 h-5" />
         </div>
         <div>
@@ -31,7 +31,7 @@ export default function Header({
               Studio
             </span>
           </div>
-          <p className="text-xs text-slate-400 hidden sm:block">
+          <p className="text-xs text-slate-300 hidden sm:block">
             Interactive Algorithm & Data Structure Execution Engine
           </p>
         </div>
@@ -46,7 +46,7 @@ export default function Header({
             className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-indigo-500/30 flex items-center gap-1.5 text-xs font-medium transition active:scale-95 shadow-sm"
             title="Return to Home Page"
           >
-            <Home className="w-3.5 h-3.5 text-indigo-400" />
+            <Home className="w-3.5 h-3.5 text-indigo-300" />
             <span className="hidden sm:inline">Home</span>
           </button>
         )}
@@ -57,9 +57,9 @@ export default function Header({
           className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-indigo-500/30 flex items-center gap-2 text-xs font-medium transition active:scale-95 shadow-sm"
           title="Keyboard Shortcuts"
         >
-          <Keyboard className="w-3.5 h-3.5 text-indigo-400" />
+          <Keyboard className="w-3.5 h-3.5 text-indigo-300" />
           <span className="hidden sm:inline">Shortcuts</span>
-          <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-slate-400 bg-slate-800 rounded border border-slate-700">
+          <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-slate-300 bg-slate-800 rounded border border-slate-700">
             <Command className="w-2.5 h-2.5" /> K
           </kbd>
         </button>
@@ -79,7 +79,7 @@ export default function Header({
         >
           {soundEnabled ? (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-indigo-400" />
+              <Volume2 className="w-3.5 h-3.5 text-indigo-300" />
               <span className="hidden sm:inline">Audio Synth</span>
               <div className="flex items-end gap-0.5 h-3.5 pl-1">
                 <span className="w-0.5 bg-indigo-400 rounded-full animate-wave-bar-1" />

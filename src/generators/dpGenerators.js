@@ -1,8 +1,5 @@
 // 12. 0/1 Knapsack DP Step Generator
-export function generateKnapsack01() {
-  const weights = [2, 3, 4, 5];
-  const values = [3, 4, 5, 6];
-  const W = 5;
+export function generateKnapsack01(weights = [2, 3, 4, 5], values = [3, 4, 5, 6], W = 5) {
   const n = weights.length;
   const dp = Array.from({ length: n + 1 }, () => Array(W + 1).fill(0));
   const steps = [];
@@ -27,9 +24,7 @@ export function generateKnapsack01() {
 }
 
 // 13. LCS DP Step Generator
-export function generateLCS() {
-  const s1 = "STONE";
-  const s2 = "LONGEST";
+export function generateLCS(s1 = "STONE", s2 = "LONGEST") {
   const m = s1.length, n = s2.length;
   const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
   const steps = [];

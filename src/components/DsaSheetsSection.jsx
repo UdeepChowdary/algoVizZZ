@@ -46,13 +46,13 @@ export default function DsaSheetsSection({ onLaunchStudio }) {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mb-3">
-            <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+            <BookOpen className="w-3.5 h-3.5 text-indigo-300" />
             <span>Student Interview Preparation Hub</span>
           </div>
           <h2 className="text-3xl font-extrabold text-white tracking-tight">
             Top Curated DSA Sheets & Practice Roadmaps
           </h2>
-          <p className="text-slate-400 text-sm mt-1 max-w-2xl">
+          <p className="text-slate-300 text-sm mt-1 max-w-2xl">
             Access the most popular problem-solving sheets used by thousands of students to crack top tech company interviews.
           </p>
         </div>
@@ -81,11 +81,11 @@ export default function DsaSheetsSection({ onLaunchStudio }) {
               className={`px-3.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition flex items-center gap-1.5 ${
                 isActive
                   ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20"
-                  : "bg-slate-900/90 text-slate-400 border border-slate-800 hover:text-slate-200 hover:bg-slate-800"
+                  : "bg-slate-900/90 text-slate-300 border border-slate-800 hover:text-slate-200 hover:bg-slate-800"
               }`}
             >
-              {tag === 'Featured' && <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />}
-              {tag === 'Tracked' && <Bookmark className="w-3.5 h-3.5 text-emerald-400" />}
+              {tag === 'Featured' && <Star className="w-3.5 h-3.5 text-amber-300 fill-amber-400" />}
+              {tag === 'Tracked' && <Bookmark className="w-3.5 h-3.5 text-emerald-300" />}
               <span>{tag}</span>
             </button>
           );
@@ -137,7 +137,7 @@ export default function DsaSheetsSection({ onLaunchStudio }) {
                   {sheet.count}
                 </span>
                 {sheet.tags.map((t, idx) => (
-                  <span key={idx} className="text-[10px] px-2 py-0.5 rounded bg-slate-950/60 border border-slate-800/60 text-slate-400">
+                  <span key={idx} className="text-[10px] px-2 py-0.5 rounded bg-slate-950/60 border border-slate-800/60 text-slate-300">
                     {t}
                   </span>
                 ))}

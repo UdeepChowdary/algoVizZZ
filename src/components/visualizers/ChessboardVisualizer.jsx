@@ -17,7 +17,7 @@ export default function ChessboardVisualizer({ step, nQueensSize, onSetNQueensSi
               className={`px-3 py-1 rounded-lg border transition ${
                 N === n
                   ? "bg-indigo-600 border-indigo-400 text-white font-bold shadow-md shadow-indigo-600/30"
-                  : "bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-white"
+                  : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white"
               }`}
             >
               {n}×{n}
@@ -59,7 +59,7 @@ export default function ChessboardVisualizer({ step, nQueensSize, onSetNQueensSi
         )}
       </div>
 
-      <div className="mt-4 text-xs font-sans text-slate-400 flex items-center gap-5">
+      <div className="mt-4 text-xs font-sans text-slate-300 flex items-center gap-5">
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded bg-amber-400 inline-block" /> Testing Position
         </div>

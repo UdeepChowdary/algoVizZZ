@@ -17,12 +17,12 @@ export default function ShortcutsModal({ isOpen, onClose }) {
       <div className="studio-card p-6 max-w-md w-full rounded-2xl shadow-2xl flex flex-col gap-4 border border-white/10 animate-fadeIn">
         <div className="flex justify-between items-center border-b border-slate-800/80 pb-3">
           <div className="flex items-center gap-2 text-white font-bold text-base">
-            <Keyboard className="w-5 h-5 text-indigo-400" />
+            <Keyboard className="w-5 h-5 text-indigo-300" />
             <span>Studio Keyboard Shortcuts</span>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition"
+            className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition"
           >
             <X className="w-4 h-4" />
           </button>

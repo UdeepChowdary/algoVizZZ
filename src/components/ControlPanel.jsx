@@ -86,7 +86,7 @@ export default function ControlPanel({
               className="px-3.5 py-2 bg-slate-900/90 hover:bg-slate-800 text-slate-200 rounded-xl border border-slate-800 hover:border-indigo-500/30 transition flex items-center gap-1.5 text-xs font-semibold active:scale-95 shadow-sm"
               title="Randomize Array (S)"
             >
-              <Shuffle className="w-3.5 h-3.5 text-indigo-400" />
+              <Shuffle className="w-3.5 h-3.5 text-indigo-300" />
               <span className="font-sans">Shuffle</span>
             </button>
           )}
@@ -95,14 +95,14 @@ export default function ControlPanel({
         {/* Timeline Scrubber */}
         <div className="flex-1 min-w-[240px] max-w-xl bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80 flex flex-col gap-1.5">
           <div className="flex items-center justify-between text-[11px]">
-            <span className="text-slate-400 font-medium flex items-center gap-1.5 font-sans">
-              <Sliders className="w-3 h-3 text-indigo-400" />
+            <span className="text-slate-300 font-medium flex items-center gap-1.5 font-sans">
+              <Sliders className="w-3 h-3 text-indigo-300" />
               <span>Timeline Scrubber</span>
             </span>
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-indigo-400 font-bold">{stepIdx}</span>
+              <span className="text-indigo-300 font-bold">{stepIdx}</span>
               <span className="text-slate-600">/</span>
-              <span className="text-slate-400">{maxSteps} steps</span>
+              <span className="text-slate-300">{maxSteps} steps</span>
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-bold">
                 {progressPercent}%
               </span>
@@ -129,8 +129,8 @@ export default function ControlPanel({
           {/* Target Input for Search */}
           {currentAlgo.category === "searching" && (
             <div className="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
-              <Search className="w-3.5 h-3.5 text-amber-400" />
-              <span className="text-slate-400 font-sans">Target:</span>
+              <Search className="w-3.5 h-3.5 text-amber-300" />
+              <span className="text-slate-300 font-sans">Target:</span>
               <input
                 type="number"
                 value={searchTarget}
@@ -143,7 +143,7 @@ export default function ControlPanel({
           {/* Array Size Slider */}
           {isArrayAlgo && (
             <label className="flex items-center gap-2.5 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 font-sans">
-              <span className="text-slate-400">Size:</span>
+              <span className="text-slate-300">Size:</span>
               <input
                 type="range"
                 min="6"
@@ -156,7 +156,7 @@ export default function ControlPanel({
                 }}
                 className="w-20 accent-indigo-500 cursor-pointer"
               />
-              <span className="text-indigo-400 font-bold font-mono w-4">{size}</span>
+              <span className="text-indigo-300 font-bold font-mono w-4">{size}</span>
             </label>
           )}
         </div>
@@ -164,8 +164,8 @@ export default function ControlPanel({
         {/* Speed Controls & Presets */}
         <div className="flex items-center gap-3 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 font-sans">
           <div className="flex items-center gap-2">
-            <Zap className="w-3.5 h-3.5 text-amber-400" />
-            <span className="text-slate-400">Speed:</span>
+            <Zap className="w-3.5 h-3.5 text-amber-300" />
+            <span className="text-slate-300">Speed:</span>
             <input
               type="range"
               min="1"
@@ -188,7 +188,7 @@ export default function ControlPanel({
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition ${
                   speed === sp.val
                     ? "bg-amber-500 border-amber-400 text-slate-950 shadow glow-amber-subtle"
-                    : "bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-white"
+                    : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white"
                 }`}
               >
                 {sp.label}

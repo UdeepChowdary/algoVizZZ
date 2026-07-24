@@ -103,7 +103,7 @@ export default function TreeVisualizer({ step }) {
 
       {/* Traversal Output Log */}
       <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono flex items-center justify-between">
-        <div className="flex items-center gap-2 text-emerald-400 font-bold font-sans">
+        <div className="flex items-center gap-2 text-emerald-300 font-bold font-sans">
           <GitGraph className="w-4 h-4" />
           <span>Inorder Traversal Output:</span>
         </div>

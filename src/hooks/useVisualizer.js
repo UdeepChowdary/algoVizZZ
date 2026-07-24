@@ -10,8 +10,39 @@ export function useVisualizer(initialAlgoKey = "selection") {
   const [baseArray, setBaseArray] = useState(() => randomArray(12));
   const [searchTarget, setSearchTarget] = useState(42);
   const [nQueensSize, setNQueensSize] = useState(4);
+  
+  // Dynamic inputs for DP algorithms
+  const [dpStrings, setDpStrings] = useState({ s1: "STONE", s2: "LONGEST" });
+  const [knapsackItems, setKnapsackItems] = useState({
+    weights: [2, 3, 4, 5],
+    values: [3, 4, 5, 6],
+    capacity: 5
+  });
+  
+  // Custom graph data
+  const [customGraphData, setCustomGraphData] = useState({
+    nodes: [
+      { id: 0, label: "0", x: 100, y: 100 },
+      { id: 1, label: "1", x: 260, y: 60 },
+      { id: 2, label: "2", x: 420, y: 100 },
+      { id: 3, label: "3", x: 180, y: 180 },
+      { id: 4, label: "4", x: 340, y: 180 }
+    ],
+    edges: [
+      { u: 0, v: 1, weight: 4 },
+      { u: 0, v: 3, weight: 2 },
+      { u: 1, v: 2, weight: 3 },
+      { u: 1, v: 3, weight: 5 },
+      { u: 1, v: 4, weight: 1 },
+      { u: 2, v: 4, weight: 7 },
+      { u: 3, v: 4, weight: 8 }
+    ],
+    isDirected: false
+  });
+
   const [speed, setSpeed] = useState(60); // 1-100
   const [stepIdx, setStepIdx] = useState(0);
+  const [customStepsCount, setCustomStepsCount] = useState(null);
   const [playing, setPlaying] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const timerRef = useRef(null);
@@ -32,11 +63,21 @@ export function useVisualizer(initialAlgoKey = "selection") {
     if (algoKey === "nqueens") {
       return gen(nQueensSize);
     }
+    if (algoKey === "lcs") {
+      return gen(dpStrings.s1, dpStrings.s2);
+    }
+    if (algoKey === "knapsack01") {
+      return gen(knapsackItems.weights, knapsackItems.values, knapsackItems.capacity);
+    }
+    if (currentAlgo.category === "graph") {
+      return gen(customGraphData);
+    }
     return gen();
-  }, [algoKey, baseArray, searchTarget, nQueensSize, currentAlgo.category]);
+  }, [algoKey, baseArray, searchTarget, nQueensSize, dpStrings, knapsackItems, customGraphData, currentAlgo.category]);
 
   const step = steps[Math.min(stepIdx, steps.length - 1)] || {};
-  const isDone = stepIdx >= steps.length - 1;
+  const activeLength = customStepsCount !== null ? customStepsCount : steps.length;
+  const isDone = stepIdx >= activeLength - 1;
 
   // Sound Synth Trigger Effect
   useEffect(() => {
@@ -67,6 +108,7 @@ export function useVisualizer(initialAlgoKey = "selection") {
   useEffect(() => {
     setStepIdx(0);
     setPlaying(false);
+    setCustomStepsCount(null);
   }, [algoKey, baseArray, searchTarget, nQueensSize]);
 
   // Animation Interval Loop with Multi-Step Turbo Scaling
@@ -87,9 +129,9 @@ export function useVisualizer(initialAlgoKey = "selection") {
       timerRef.current = setTimeout(() => {
         setStepIdx(s => {
           const next = s + stepIncrement;
-          if (next >= steps.length - 1) {
+          if (next >= activeLength - 1) {
             setPlaying(false);
-            return steps.length - 1;
+            return activeLength - 1;
           }
           return next;
         });
@@ -97,7 +139,7 @@ export function useVisualizer(initialAlgoKey = "selection") {
 
       return () => clearTimeout(timerRef.current);
     }
-  }, [playing, stepIdx, steps.length, speed]);
+  }, [playing, stepIdx, activeLength, speed]);
 
   const handleShuffle = useCallback(() => {
     if (soundEnabled) audioSynth.init();
@@ -131,8 +173,8 @@ export function useVisualizer(initialAlgoKey = "selection") {
       audioSynth.playTone(450, "sine", 0.04, 0.03);
     }
     setPlaying(false);
-    setStepIdx(s => Math.min(steps.length - 1, s + 1));
-  }, [steps.length, soundEnabled]);
+    setStepIdx(s => Math.min(activeLength - 1, s + 1));
+  }, [activeLength, soundEnabled]);
 
   const handleStepPrev = useCallback(() => {
     if (soundEnabled) {
@@ -152,9 +194,9 @@ export function useVisualizer(initialAlgoKey = "selection") {
   const handleJumpToStep = useCallback((targetStep) => {
     if (soundEnabled) audioSynth.init();
     setPlaying(false);
-    const clamped = Math.max(0, Math.min(steps.length - 1, targetStep));
+    const clamped = Math.max(0, Math.min(activeLength - 1, targetStep));
     setStepIdx(clamped);
-  }, [steps.length, soundEnabled]);
+  }, [activeLength, soundEnabled]);
 
   return {
     algoKey,
@@ -169,10 +211,17 @@ export function useVisualizer(initialAlgoKey = "selection") {
     setSearchTarget,
     nQueensSize,
     setNQueensSize,
+    dpStrings,
+    setDpStrings,
+    knapsackItems,
+    setKnapsackItems,
+    customGraphData,
+    setCustomGraphData,
     speed,
     setSpeed,
     stepIdx,
     setStepIdx,
+    setCustomStepsCount,
     playing,
     setPlaying,
     soundEnabled,

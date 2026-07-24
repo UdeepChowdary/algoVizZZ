@@ -74,7 +74,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
         {/* Home Navigation Bar */}
         <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090b10]/90 border-b border-white/[0.08] px-4 md:px-8 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab("overview")}>
-            <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.25)]">
+            <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.25)]">
               <Layers className="w-5 h-5" />
             </div>
             <div className="flex items-center gap-2">
@@ -94,7 +94,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
               className={`px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
                 activeTab === "overview"
                   ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                  : "text-slate-300 hover:text-slate-200 hover:bg-slate-900"
               }`}
             >
               <Home className="w-3.5 h-3.5" />
@@ -106,10 +106,10 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
               className={`px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
                 activeTab === "sheets"
                   ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20 font-bold"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                  : "text-slate-300 hover:text-slate-200 hover:bg-slate-900"
               }`}
             >
-              <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+              <BookOpen className="w-3.5 h-3.5 text-sky-300" />
               <span>DSA Sheets</span>
             </button>
 
@@ -118,10 +118,10 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
               className={`px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 transition ${
                 activeTab === "patterns"
                   ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-extrabold"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                  : "text-slate-300 hover:text-slate-200 hover:bg-slate-900"
               }`}
             >
-              <Target className="w-3.5 h-3.5 text-amber-400" />
+              <Target className="w-3.5 h-3.5 text-amber-300" />
               <span>10 DSA Patterns</span>
             </button>
           </nav>
@@ -139,19 +139,19 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
         <div className="flex md:hidden items-center justify-around gap-1 p-2 bg-slate-950/90 border-b border-slate-800 text-xs font-semibold">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`px-3 py-1 rounded-md text-[11px] ${activeTab === "overview" ? "bg-indigo-600 text-white font-bold" : "text-slate-400"}`}
+            className={`px-3 py-1 rounded-md text-[11px] ${activeTab === "overview" ? "bg-indigo-600 text-white font-bold" : "text-slate-300"}`}
           >
             Overview
           </button>
           <button
             onClick={() => setActiveTab("sheets")}
-            className={`px-3 py-1 rounded-md text-[11px] ${activeTab === "sheets" ? "bg-indigo-600 text-white font-bold" : "text-slate-400"}`}
+            className={`px-3 py-1 rounded-md text-[11px] ${activeTab === "sheets" ? "bg-indigo-600 text-white font-bold" : "text-slate-300"}`}
           >
             DSA Sheets
           </button>
           <button
             onClick={() => setActiveTab("patterns")}
-            className={`px-3 py-1 rounded-md text-[11px] ${activeTab === "patterns" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-400"}`}
+            className={`px-3 py-1 rounded-md text-[11px] ${activeTab === "patterns" ? "bg-amber-500 text-slate-950 font-bold" : "text-slate-300"}`}
           >
             10 Patterns
           </button>
@@ -165,7 +165,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
               {/* Left Hero Text Content */}
               <div className="flex-1 flex flex-col gap-6 text-left max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold w-fit">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-300 animate-pulse" />
                   <span>Next-Gen Algorithm & Data Structure Visualizer</span>
                 </div>
 
@@ -176,7 +176,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                   </span>
                 </h1>
 
-                <p className="text-slate-400 text-base md:text-lg leading-relaxed">
+                <p className="text-slate-300 text-base md:text-lg leading-relaxed">
                   An interactive studio environment engineered for computer science students and engineers. Featuring real-time code inspection, 2D pathfinding grid terrain, Web Audio sound synthesis, and timeline step scrubbing.
                 </p>
 
@@ -194,23 +194,23 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                     onClick={() => setActiveTab("sheets")}
                     className="px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-sm font-semibold transition active:scale-95 flex items-center gap-2"
                   >
-                    <BookOpen className="w-4 h-4 text-sky-400" />
+                    <BookOpen className="w-4 h-4 text-sky-300" />
                     <span>Explore DSA Sheets</span>
                   </button>
                 </div>
 
                 {/* Quick Metrics */}
-                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 text-xs text-slate-400 font-mono">
+                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 text-xs text-slate-300 font-mono">
                   <div>
                     <div className="text-white font-bold text-lg font-sans">14+</div>
                     <div>Algorithms Supported</div>
                   </div>
                   <div>
-                    <div className="text-indigo-400 font-bold text-lg font-sans">9</div>
+                    <div className="text-indigo-300 font-bold text-lg font-sans">9</div>
                     <div>Curated DSA Sheets</div>
                   </div>
                   <div>
-                    <div className="text-emerald-400 font-bold text-lg font-sans">10</div>
+                    <div className="text-emerald-300 font-bold text-lg font-sans">10</div>
                     <div>Core Interview Patterns</div>
                   </div>
                 </div>
@@ -220,11 +220,11 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
               <div className="flex-1 w-full max-w-xl studio-card p-5 rounded-2xl shadow-2xl border border-white/10 flex flex-col gap-4 font-mono relative overflow-hidden">
                 {/* Card Top Header */}
                 <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 text-xs">
-                  <div className="flex items-center gap-2 text-indigo-400 font-semibold font-sans">
+                  <div className="flex items-center gap-2 text-indigo-300 font-semibold font-sans">
                     <BarChart2 className="w-4 h-4" />
                     <span>Interactive Live Demo • Quick Sort</span>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 font-bold border border-emerald-500/20">
                     LIVE PREVIEW
                   </span>
                 </div>
@@ -238,7 +238,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
 
                     return (
                       <div key={idx} className="flex-1 flex flex-col items-center justify-end h-full">
-                        <span className={`text-[10px] font-bold mb-1 ${isComparing ? "text-amber-300" : "text-slate-400"}`}>
+                        <span className={`text-[10px] font-bold mb-1 ${isComparing ? "text-amber-300" : "text-slate-300"}`}>
                           {val}
                         </span>
                         <div
@@ -280,7 +280,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
 
                   <button
                     onClick={() => onLaunchStudio("quick")}
-                    className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition"
+                    className="text-xs font-semibold text-indigo-300 hover:text-indigo-300 flex items-center gap-1 transition"
                   >
                     <span>Launch Full Studio</span>
                     <ChevronRight className="w-4 h-4" />
@@ -295,7 +295,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                 <h2 className="text-3xl font-extrabold text-white tracking-tight">
                   Engineered for Deep Algorithmic Intuition
                 </h2>
-                <p className="text-slate-400 text-sm mt-2">
+                <p className="text-slate-300 text-sm mt-2">
                   Every feature is designed to bridge the gap between abstract code and visual execution state.
                 </p>
               </div>
@@ -303,78 +303,78 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Bento Item 1: Code Inspector */}
                 <div className="studio-card p-6 rounded-2xl flex flex-col gap-3 border border-white/[0.07] hover:border-indigo-500/30 transition group">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-1">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-300 mb-1">
                     <Terminal className="w-5 h-5" />
                   </div>
                   <h3 className="text-lg font-bold text-white group-hover:text-indigo-300 transition">
                     Line-by-Line Code Inspector
                   </h3>
-                  <p className="text-slate-400 text-xs leading-relaxed">
+                  <p className="text-slate-300 text-xs leading-relaxed">
                     Watch exact execution lines highlight in real time across Java, Python, and C++ source implementations alongside dynamic Variable Scope Watcher cards.
                   </p>
                 </div>
 
                 {/* Bento Item 2: 2D Grid Pathfinding */}
                 <div className="studio-card p-6 rounded-2xl flex flex-col gap-3 border border-white/[0.07] hover:border-indigo-500/30 transition group">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-1">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center text-emerald-300 mb-1">
                     <Grid className="w-5 h-5" />
                   </div>
                   <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition">
                     2D Grid & Terrain Pathfinding
                   </h3>
-                  <p className="text-slate-400 text-xs leading-relaxed">
+                  <p className="text-slate-300 text-xs leading-relaxed">
                     Interactive 2D grid matrix allowing custom wall barrier drawing, mud weight placement (+5 penalty), and real-time BFS/DFS/Dijkstra shortest path wave expansion.
                   </p>
                 </div>
 
                 {/* Bento Item 3: Web Audio Synth */}
                 <div className="studio-card p-6 rounded-2xl flex flex-col gap-3 border border-white/[0.07] hover:border-indigo-500/30 transition group">
-                  <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-1">
+                  <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-300 mb-1">
                     <Volume2 className="w-5 h-5" />
                   </div>
                   <h3 className="text-lg font-bold text-white group-hover:text-purple-300 transition">
                     Web Audio Pitch Synthesizer
                   </h3>
-                  <p className="text-slate-400 text-xs leading-relaxed">
+                  <p className="text-slate-300 text-xs leading-relaxed">
                     Experience sorting algorithms multi-sensorially with real-time Web Audio API pitch synthesis scaled dynamically to array element values and comparisons.
                   </p>
                 </div>
 
                 {/* Bento Item 4: Timeline Scrubber */}
                 <div className="studio-card p-6 rounded-2xl flex flex-col gap-3 border border-white/[0.07] hover:border-indigo-500/30 transition group">
-                  <div className="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-1">
+                  <div className="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center text-amber-300 mb-1">
                     <Sliders className="w-5 h-5" />
                   </div>
                   <h3 className="text-lg font-bold text-white group-hover:text-amber-300 transition">
                     Timeline Scrubber & 50x Turbo
                   </h3>
-                  <p className="text-slate-400 text-xs leading-relaxed">
+                  <p className="text-slate-300 text-xs leading-relaxed">
                     Scrub back and forth through execution history step-by-step or dial playback speed up to 50x Turbo speed for massive dataset visualization.
                   </p>
                 </div>
 
                 {/* Bento Item 5: DP & Tree Engine */}
                 <div className="studio-card p-6 rounded-2xl flex flex-col gap-3 border border-white/[0.07] hover:border-indigo-500/30 transition group">
-                  <div className="w-10 h-10 rounded-xl bg-sky-600/20 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-1">
+                  <div className="w-10 h-10 rounded-xl bg-sky-600/20 border border-sky-500/30 flex items-center justify-center text-sky-300 mb-1">
                     <GitGraph className="w-5 h-5" />
                   </div>
                   <h3 className="text-lg font-bold text-white group-hover:text-sky-300 transition">
                     2D DP Heatmaps & BST Trees
                   </h3>
-                  <p className="text-slate-400 text-xs leading-relaxed">
+                  <p className="text-slate-300 text-xs leading-relaxed">
                     Visualize 0/1 Knapsack and LCS dynamic programming matrices with cell spotlight calculations and Binary Search Tree node insertion/traversal output streams.
                   </p>
                 </div>
 
                 {/* Bento Item 6: Keyboard Driven */}
                 <div className="studio-card p-6 rounded-2xl flex flex-col gap-3 border border-white/[0.07] hover:border-indigo-500/30 transition group">
-                  <div className="w-10 h-10 rounded-xl bg-rose-600/20 border border-rose-500/30 flex items-center justify-center text-rose-400 mb-1">
+                  <div className="w-10 h-10 rounded-xl bg-rose-600/20 border border-rose-500/30 flex items-center justify-center text-rose-300 mb-1">
                     <Zap className="w-5 h-5" />
                   </div>
                   <h3 className="text-lg font-bold text-white group-hover:text-rose-300 transition">
                     Keyboard-First Workflow
                   </h3>
-                  <p className="text-slate-400 text-xs leading-relaxed">
+                  <p className="text-slate-300 text-xs leading-relaxed">
                     Full keyboard shortcut support for rapid control: <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-indigo-300 font-mono">Space</kbd> Play/Pause, <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-indigo-300 font-mono">←/→</kbd> Step, <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-indigo-300 font-mono">R</kbd> Reset, <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-indigo-300 font-mono">S</kbd> Shuffle.
                   </p>
                 </div>
@@ -388,7 +388,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                   <h2 className="text-3xl font-extrabold text-white tracking-tight">
                     Supported Algorithm Catalog
                   </h2>
-                  <p className="text-slate-400 text-sm mt-1">
+                  <p className="text-slate-300 text-sm mt-1">
                     Select any algorithm below to launch directly into its visual workspace.
                   </p>
                 </div>
@@ -405,7 +405,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                       <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-indigo-300">
                         {algo.file}
                       </span>
-                      <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                      <span className="text-[10px] font-mono text-emerald-300 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                         {algo.time}
                       </span>
                     </div>
@@ -413,16 +413,16 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                     <div>
                       <h3 className="font-bold text-sm text-white group-hover:text-indigo-300 transition flex items-center justify-between">
                         <span>{algo.name}</span>
-                        <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition text-indigo-400 transform group-hover:translate-x-1" />
+                        <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition text-indigo-300 transform group-hover:translate-x-1" />
                       </h3>
-                      <p className="text-slate-400 text-xs leading-relaxed mt-1 line-clamp-2">
+                      <p className="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
                         {algo.desc}
                       </p>
                     </div>
 
                     <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-800/80 font-mono">
                       <span>Category: <strong className="text-slate-300 uppercase">{algo.category}</strong></span>
-                      <span>Space: <strong className="text-purple-400">{algo.space}</strong></span>
+                      <span>Space: <strong className="text-purple-300">{algo.space}</strong></span>
                     </div>
                   </div>
                 ))}
@@ -455,7 +455,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
           <div className="flex items-center gap-4">
             <button
               onClick={() => onLaunchStudio()}
-              className="text-indigo-400 hover:text-indigo-300 font-sans font-semibold transition"
+              className="text-indigo-300 hover:text-indigo-300 font-sans font-semibold transition"
             >
               Launch Visualizer Studio →
             </button>

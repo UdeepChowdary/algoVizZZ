@@ -5,6 +5,10 @@ import { Edit3, Check, X, BarChart2 } from 'lucide-react';
 export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState('');
+  const canvasRef = React.useRef(null);
+  const containerRef = React.useRef(null);
+  const [hoveredIdx, setHoveredIdx] = useState(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const arr = step.array || baseArray || [];
   const maxVal = Math.max(...arr, 100);
@@ -39,14 +43,228 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
     }
   };
 
+  // Canvas drawing logic
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const container = containerRef.current;
+    if (!container) return;
+    
+    // Support high DPI displays
+    const dpr = window.devicePixelRatio || 1;
+    const rect = container.getBoundingClientRect();
+    
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+    
+    ctx.scale(dpr, dpr);
+    
+    const w = rect.width;
+    const h = rect.height;
+    
+    ctx.clearRect(0, 0, w, h);
+    
+    if (arr.length === 0) return;
+    
+    const padding = 10;
+    const gap = Math.min(4, w / arr.length * 0.2); // max 4px gap, or 20% of allocated width
+    const totalGapWidth = gap * (arr.length - 1);
+    const maxBarWidth = 50;
+    const calculatedBarWidth = (w - 2 * padding - totalGapWidth) / arr.length;
+    const barWidth = Math.min(maxBarWidth, calculatedBarWidth);
+    
+    // Center the graph horizontally if bars are smaller than available width
+    const totalChartWidth = arr.length * barWidth + totalGapWidth;
+    const startX = (w - totalChartWidth) / 2;
+    
+    const bottomPadding = 25; // Space for index
+    const topPadding = 45; // Space for values and badges
+    const maxBarHeight = h - bottomPadding - topPadding;
+    
+    arr.forEach((val, idx) => {
+      const isSorted = step.sortedIdx?.includes(idx);
+      const isSwap = step.swap?.includes(idx);
+      const isPivot = step.pivot?.includes(idx);
+      const isCompare = step.compare?.includes(idx);
+      
+      const x = startX + idx * (barWidth + gap);
+      const barHeight = Math.max(14, (val / maxVal) * maxBarHeight);
+      const y = h - bottomPadding - barHeight;
+      
+      let baseColor = [79, 70, 229]; // indigo-600
+      let topColor = [56, 189, 248]; // sky-400
+      let shadowColor = 'rgba(99,102,241,0.3)';
+      let labelBadge = null;
+      let textColor = '#cbd5e1'; // slate-300
+      
+      if (isSorted) {
+        baseColor = [5, 150, 105]; // emerald-600
+        topColor = [94, 234, 212]; // teal-300
+        shadowColor = 'rgba(16,185,129,0.4)';
+        textColor = '#6ee7b7'; // emerald-300
+      } else if (isSwap) {
+        baseColor = [225, 29, 72]; // rose-600
+        topColor = [244, 114, 182]; // pink-400
+        shadowColor = 'rgba(244,63,94,0.6)';
+        labelBadge = 'SWAP';
+        textColor = '#fda4af'; // rose-300
+      } else if (isPivot) {
+        baseColor = [147, 51, 234]; // purple-600
+        topColor = [232, 121, 249]; // fuchsia-400
+        shadowColor = 'rgba(168,85,247,0.6)';
+        labelBadge = 'PIVOT';
+        textColor = '#d8b4fe'; // purple-300
+      } else if (isCompare) {
+        baseColor = [245, 158, 11]; // amber-500
+        topColor = [253, 224, 71]; // yellow-300
+        shadowColor = 'rgba(245,158,11,0.5)';
+        labelBadge = 'CMP';
+        textColor = '#fcd34d'; // amber-300
+      }
+      
+      // Draw shadow
+      ctx.shadowColor = shadowColor;
+      ctx.shadowBlur = 15;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+      
+      // Create Gradient
+      const grad = ctx.createLinearGradient(x, y + barHeight, x, y);
+      grad.addColorStop(0, `rgb(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]})`);
+      grad.addColorStop(1, `rgb(${topColor[0]}, ${topColor[1]}, ${topColor[2]})`);
+      
+      ctx.fillStyle = grad;
+      
+      // Top corners rounded (approximated for performance)
+      ctx.beginPath();
+      const radius = Math.min(6, barWidth / 2);
+      ctx.moveTo(x, y + barHeight);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.lineTo(x + barWidth - radius, y);
+      ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
+      ctx.lineTo(x + barWidth, y + barHeight);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Top border highlight
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = `rgba(${topColor[0]}, ${topColor[1]}, ${topColor[2]}, 0.8)`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.lineTo(x + barWidth - radius, y);
+      ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
+      ctx.stroke();
+      
+      // Only draw text if bars are wide enough
+      if (barWidth > 20) {
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Index
+        ctx.fillStyle = '#64748b'; // slate-500
+        ctx.font = '10px monospace';
+        ctx.fillText(`[${idx}]`, x + barWidth / 2, h - 10);
+        
+        // Value
+        ctx.fillStyle = textColor;
+        ctx.font = (isCompare || isSwap || isPivot) ? 'bold 11px sans-serif' : '11px sans-serif';
+        ctx.fillText(val.toString(), x + barWidth / 2, y - 10);
+        
+        // Badge
+        if (labelBadge) {
+          ctx.fillStyle = '#020617'; // slate-950
+          ctx.beginPath();
+          ctx.roundRect(x + barWidth / 2 - 15, y - 32, 30, 14, 4);
+          ctx.fill();
+          
+          ctx.strokeStyle = '#334155'; // slate-700
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 9px monospace';
+          ctx.fillText(labelBadge, x + barWidth / 2, y - 25);
+        }
+      }
+      
+      // Draw tooltip if hovered
+      if (hoveredIdx === idx) {
+        ctx.fillStyle = '#020617';
+        ctx.strokeStyle = '#334155';
+        ctx.beginPath();
+        const tooltipW = 120;
+        const tooltipH = 26;
+        const tooltipX = x + barWidth / 2 - tooltipW / 2;
+        const tooltipY = y - 60 > 0 ? y - 60 : y + 20;
+        ctx.roundRect(tooltipX, tooltipY, tooltipW, tooltipH, 8);
+        ctx.fill();
+        ctx.stroke();
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Val: `, tooltipX + 25, tooltipY + 13);
+        ctx.fillStyle = '#818cf8'; // indigo-300
+        ctx.fillText(`${val}`, tooltipX + 50, tooltipY + 13);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(` | Idx: [${idx}]`, tooltipX + 90, tooltipY + 13);
+      }
+    });
+    
+  }, [arr, step, maxVal, hoveredIdx]);
+
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const w = rect.width;
+    
+    if (arr.length === 0) {
+      setHoveredIdx(null);
+      return;
+    }
+    
+    const padding = 10;
+    const gap = Math.min(4, w / arr.length * 0.2);
+    const totalGapWidth = gap * (arr.length - 1);
+    const maxBarWidth = 50;
+    const calculatedBarWidth = (w - 2 * padding - totalGapWidth) / arr.length;
+    const barWidth = Math.min(maxBarWidth, calculatedBarWidth);
+    const totalChartWidth = arr.length * barWidth + totalGapWidth;
+    const startX = (w - totalChartWidth) / 2;
+    
+    if (x >= startX && x <= startX + totalChartWidth) {
+      const idx = Math.floor((x - startX) / (barWidth + gap));
+      if (idx >= 0 && idx < arr.length) {
+        const itemStartX = startX + idx * (barWidth + gap);
+        if (x >= itemStartX && x <= itemStartX + barWidth) {
+          setHoveredIdx(idx);
+          return;
+        }
+      }
+    }
+    setHoveredIdx(null);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredIdx(null);
+  };
+
   return (
     <div className="flex-1 flex flex-col justify-between p-4 md:p-6 min-h-[360px] relative font-mono">
       {/* Top Header / Custom Options Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 mb-2">
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300 mb-2">
         <div className="flex items-center gap-2">
-          <BarChart2 className="w-4 h-4 text-indigo-400" />
+          <BarChart2 className="w-4 h-4 text-indigo-300" />
           <span className="text-slate-300 font-semibold font-sans">Visual Dataset:</span>
-          <span className="text-indigo-400 font-bold px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20">
+          <span className="text-indigo-300 font-bold px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20">
             {arr.length} elements
           </span>
         </div>
@@ -56,19 +274,19 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
           <div className="hidden sm:flex gap-1">
             <button
               onClick={() => handlePreset('reversed')}
-              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-[11px] font-sans transition"
+              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-200 border border-slate-800 text-[11px] font-sans transition"
             >
               Reversed
             </button>
             <button
               onClick={() => handlePreset('nearly')}
-              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-[11px] font-sans transition"
+              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-200 border border-slate-800 text-[11px] font-sans transition"
             >
               Nearly Sorted
             </button>
             <button
               onClick={() => handlePreset('few')}
-              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-[11px] font-sans transition"
+              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-200 border border-slate-800 text-[11px] font-sans transition"
             >
               Few Unique
             </button>
@@ -81,7 +299,7 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
             }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-indigo-500/30 transition active:scale-95 font-sans"
           >
-            <Edit3 className="w-3.5 h-3.5 text-indigo-400" />
+            <Edit3 className="w-3.5 h-3.5 text-indigo-300" />
             <span>{isEditing ? "Cancel" : "Custom Array"}</span>
           </button>
         </div>
@@ -107,7 +325,7 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
             </button>
             <button
               onClick={() => setIsEditing(false)}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 transition active:scale-95"
+              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition active:scale-95"
             >
               <X className="w-4 h-4" />
             </button>
@@ -115,75 +333,18 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
         </div>
       )}
 
-      {/* Main Bar Chart Container */}
-      <div className="flex-1 flex items-end justify-center gap-2 md:gap-2.5 px-2 pt-6 pb-2 min-h-[260px]">
-        {arr.map((val, idx) => {
-          let barGradient = "bg-gradient-to-t from-indigo-700 via-indigo-600 to-sky-400 border-sky-300/50";
-          let shadowStyle = "hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]";
-          let labelBadge = null;
-
-          if (step.sortedIdx?.includes(idx)) {
-            barGradient = "bg-gradient-to-t from-emerald-700 via-emerald-600 to-teal-300 border-teal-300/80";
-            shadowStyle = "shadow-[0_0_18px_rgba(16,185,129,0.4)]";
-          } else if (step.swap?.includes(idx)) {
-            barGradient = "bg-gradient-to-t from-rose-700 via-rose-600 to-pink-400 border-pink-300/80";
-            shadowStyle = "shadow-[0_0_20px_rgba(244,63,94,0.6)]";
-            labelBadge = "SWAP";
-          } else if (step.pivot?.includes(idx)) {
-            barGradient = "bg-gradient-to-t from-purple-700 via-purple-600 to-fuchsia-400 border-fuchsia-300/80";
-            shadowStyle = "shadow-[0_0_20px_rgba(168,85,247,0.6)]";
-            labelBadge = "PIVOT";
-          } else if (step.compare?.includes(idx)) {
-            barGradient = "bg-gradient-to-t from-amber-600 via-amber-500 to-yellow-300 border-yellow-200/80";
-            shadowStyle = "shadow-[0_0_18px_rgba(245,158,11,0.5)]";
-            labelBadge = "CMP";
-          }
-
-          const heightPercent = Math.max(14, (val / maxVal) * 100);
-
-          return (
-            <div key={idx} className="flex-1 max-w-[50px] flex flex-col items-center h-full justify-end group relative">
-              {/* Tooltip on Hover */}
-              <div className="absolute -top-8 opacity-0 group-hover:opacity-100 transition-all pointer-events-none bg-slate-950 text-white text-[10px] px-2.5 py-1 rounded-lg border border-slate-700 shadow-xl z-20 whitespace-nowrap font-mono">
-                Value: <strong className="text-indigo-400">{val}</strong> | Index: [{idx}]
-              </div>
-
-              {/* Locked Height Badge Slot (Prevents Vertical Height Shifts During Steps) */}
-              <div className="h-[20px] mb-1 flex items-center justify-center shrink-0">
-                {labelBadge ? (
-                  <span className="text-[9px] font-mono font-extrabold px-1.5 py-0.2 rounded-full bg-slate-950 border border-slate-700 text-white shadow-md">
-                    {labelBadge}
-                  </span>
-                ) : null}
-              </div>
-
-              {/* Value Label Above Bar (No Scale Transform To Avoid Reflow) */}
-              <span className={`text-[11px] font-bold mb-1 h-[16px] flex items-center justify-center shrink-0 ${
-                step.compare?.includes(idx) ? "text-amber-300 font-black" :
-                step.swap?.includes(idx) ? "text-rose-300 font-black" :
-                step.pivot?.includes(idx) ? "text-purple-300 font-black" :
-                step.sortedIdx?.includes(idx) ? "text-emerald-300" : "text-slate-300"
-              }`}>
-                {val}
-              </span>
-
-              {/* Vertical Pill Bar */}
-              <div
-                className={`w-full rounded-t-xl border-t-2 transition-all duration-150 cursor-pointer ${barGradient} ${shadowStyle}`}
-                style={{ height: `${heightPercent}%` }}
-              />
-
-              {/* Index Tag */}
-              <span className="text-[10px] text-slate-500 mt-1.5 font-mono select-none h-[14px] flex items-center justify-center shrink-0">
-                [{idx}]
-              </span>
-            </div>
-          );
-        })}
+      {/* High-Performance Canvas Rendering */}
+      <div 
+        ref={containerRef} 
+        className="flex-1 w-full min-h-[260px] relative cursor-crosshair"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
 
       {/* Legend Footer */}
-      <div className="flex flex-wrap items-center justify-center gap-5 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 font-sans shrink-0">
+      <div className="flex flex-wrap items-center justify-center gap-5 pt-3 border-t border-slate-800/80 text-[11px] text-slate-300 font-sans shrink-0 mt-2">
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> Unsorted
         </div>
