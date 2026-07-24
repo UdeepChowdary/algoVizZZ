@@ -16,7 +16,7 @@
                            ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚═╝ ╚═════╝
 ```
 
-# ⚡ AlgoViz Studio (`algoVizZZ`) v2.0
+# ⚡ AlgoViz Studio (`algoVizZZ`)
 ### *Next-Gen Interactive Data Structures & Algorithms Visualizer & Interview Learning Engine*
 
 <p align="center">

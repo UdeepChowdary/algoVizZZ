@@ -27,7 +27,7 @@ export default function Header({
               </span>
             </h1>
             <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 tracking-wide">
-              PRO v2.0
+              Studio
             </span>
           </div>
           <p className="text-xs text-slate-400 hidden sm:block">

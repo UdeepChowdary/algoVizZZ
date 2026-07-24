@@ -82,7 +82,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                 AlgoViz<span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Studio</span>
               </span>
               <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-300">
-                v2.0
+                v1.0
               </span>
             </div>
           </div>
