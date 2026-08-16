@@ -28,6 +28,7 @@ import { randomArray } from '../utils/helpers.js';
 import FloatingCodeParticles from './FloatingCodeParticles.jsx';
 import DsaSheetsSection from './DsaSheetsSection.jsx';
 import DsaPatternsSection from './DsaPatternsSection.jsx';
+import LeetCodeStats from './LeetCodeStats.jsx';
 
 export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
   // Navigation Tab State: "overview" | "sheets" | "patterns"
@@ -286,6 +287,13 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
+              </div>
+            </section>
+
+            {/* LeetCode Tracker Section */}
+            <section className="px-4 md:px-8 py-8 max-w-[1400px] mx-auto w-full flex justify-center">
+              <div className="w-full max-w-2xl">
+                <LeetCodeStats />
               </div>
             </section>
 
