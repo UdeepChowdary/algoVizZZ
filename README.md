@@ -55,8 +55,8 @@
       <p>Multi-tab landing page featuring interactive hero sandboxes, curated interview DSA sheets, and pattern guides.</p>
     </td>
     <td width="50%">
-      <h3>📊 16+ Algorithms across 7 Categories</h3>
-      <p>Step-by-step visualizers for Sorting, Searching, Graphs, Dynamic Programming, Backtracking, Greedy, and Binary Search Trees.</p>
+      <h3>📊 20+ Algorithms across 7 Categories</h3>
+      <p>Step-by-step visualizers for Sorting, Searching, Graphs, Dynamic Programming, Backtracking, Greedy, and Trees & Linked Lists.</p>
     </td>
   </tr>
   <tr>
@@ -150,6 +150,10 @@ Master the foundational patterns that solve over 80% of coding interview problem
 | **Backtracking** | N-Queens | $O(N!)$ | $O(N!)$ | $O(N^2)$ | Dynamic $N \times N$ chessboard & queen icons |
 | **Greedy** | Fractional Knapsack | $O(n \log n)$ | $O(n \log n)$ | $O(1)$ | Value/Weight ratio cards & capacity bar |
 | **Trees & DS** | Binary Search Tree | $O(\log n)$ | $O(n)$ | $O(h)$ | SVG Tree hierarchy & Inorder output log |
+| **Trees & DS** | LL — Insert at Head | $O(1)$ | $O(1)$ | $O(1)$ | Node box creation & HEAD pointer re-wiring |
+| **Trees & DS** | LL — Delete Node | $O(n)$ | $O(n)$ | $O(1)$ | prev/curr pointer sweep & node unlink |
+| **Trees & DS** | LL — Reverse List | $O(n)$ | $O(n)$ | $O(1)$ | 3-pointer in-place flip (prev/curr/next badges) |
+| **Trees & DS** | LL — Cycle Detection | $O(n)$ | $O(n)$ | $O(1)$ | Floyd's 🐢 slow / 🐇 fast pointers & dashed cycle arc |
 
 </details>
 
@@ -234,7 +238,8 @@ algoVizZZ/
     │       ├── MatrixDPVisualizer.jsx         # 2D DP heatmap matrix table
     │       ├── ChessboardVisualizer.jsx       # N-Queens chessboard
     │       ├── KnapsackGreedyVisualizer.jsx   # Greedy ratio cards & capacity gauge
-    │       └── TreeVisualizer.jsx             # SVG binary tree hierarchy
+    │       ├── TreeVisualizer.jsx             # SVG binary tree hierarchy
+    │       └── LinkedListVisualizer.jsx       # ← NEW: SVG linked list nodes, arrows & pointer labels
     ├── data/
     │   ├── algorithmData.js               # Pseudocode & algorithm registry
     │   ├── dsaSheetsData.js               # Top prep sheets metadata
@@ -248,6 +253,7 @@ algoVizZZ/
     │   ├── backtrackingGenerators.js
     │   ├── greedyGenerators.js
     │   ├── treeGenerators.js
+    │   ├── linkedListGenerators.js        # ← NEW: LL Insert / Delete / Reverse / Floyd's Cycle
     │   └── index.js
     ├── hooks/
     │   ├── useVisualizer.js               # Animation playback hook

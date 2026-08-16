@@ -516,5 +516,125 @@ export const ALGORITHM_DATA = {
       bestUsedFor: "Dynamic sets, fast lookup tables, and priority queues.",
       proTip: "Inorder traversal of a BST always yields sorted keys!"
     }
+  },
+
+  llInsert: {
+    name: "LL — Insert at Head",
+    category: "datastructures",
+    file: "LinkedList.java",
+    lines: [
+      "// Insert at head of linked list",
+      "Node newNode = new Node(val);",
+      "newNode.next = head;",
+      "head = newNode;",
+      "// List built successfully!"
+    ],
+    time: "O(1)",
+    space: "O(1)",
+    stable: "N/A",
+    desc: "Creates a new node and inserts it at the beginning of the list by re-wiring the head pointer in O(1) constant time.",
+    explanation: {
+      intuition: "Inserting at the head is the most efficient linked list operation because it only requires updating one pointer — the head — regardless of the list's length.",
+      steps: [
+        "Create a new Node with the given value.",
+        "Point newNode.next to the current head.",
+        "Update head to point to the new node."
+      ],
+      bestUsedFor: "Prepending elements to a list, implementing stacks using linked lists.",
+      proTip: "Unlike arrays, linked list head insertion is always O(1) — no shifting of elements needed!"
+    }
+  },
+
+  llDelete: {
+    name: "LL — Delete Node",
+    category: "datastructures",
+    file: "LinkedList.java",
+    lines: [
+      "// Delete node by value",
+      "Node curr = head; Node prev = null;",
+      "while (curr != null && curr.val != target) {",
+      "  prev = curr; curr = curr.next;",
+      "}",
+      "if (curr != null) prev.next = curr.next;",
+      "// curr is now unreferenced (GC'd)"
+    ],
+    time: "O(n)",
+    space: "O(1)",
+    stable: "N/A",
+    desc: "Traverses the list with two pointers (prev & curr) to find the target node, then bypasses it by re-linking prev.next.",
+    explanation: {
+      intuition: "To delete a node, you don't actually erase it — you just make the previous node skip over it. The deleted node becomes unreachable and gets garbage collected.",
+      steps: [
+        "Traverse with prev and curr pointers until curr.val == target.",
+        "Set prev.next = curr.next to bypass (unlink) the target node.",
+        "The orphaned node is now garbage collected."
+      ],
+      bestUsedFor: "Maintaining dynamic ordered lists where deletions are common.",
+      proTip: "Always handle the edge case where the head itself is the target node!"
+    }
+  },
+
+  llReverse: {
+    name: "LL — Reverse List",
+    category: "datastructures",
+    file: "LinkedList.java",
+    lines: [
+      "// Reverse a linked list in-place",
+      "Node prev = null; Node curr = head;",
+      "while (curr != null) {",
+      "  Node next = curr.next;  // save next",
+      "  curr.next = prev;       // reverse pointer",
+      "  prev = curr; curr = next; // advance",
+      "}",
+      "head = prev; // new head"
+    ],
+    time: "O(n)",
+    space: "O(1)",
+    stable: "N/A",
+    desc: "Iteratively reverses all next pointers in-place using three pointers (prev, curr, next) in a single O(n) pass.",
+    explanation: {
+      intuition: "Reversing a linked list means making every node point backwards. We use three pointers: prev (tracks the new 'next'), curr (the node being processed), and next (saved before we overwrite curr.next).",
+      steps: [
+        "Initialize prev = null, curr = head.",
+        "Save next = curr.next (because we're about to overwrite it).",
+        "Set curr.next = prev to flip the pointer.",
+        "Advance: prev = curr, curr = next. Repeat until curr is null.",
+        "Set head = prev (which is now the new head)."
+      ],
+      bestUsedFor: "A fundamental interview question. Reversing segments of lists, palindrome checking.",
+      proTip: "This is purely iterative and runs in O(n) time with O(1) space — memorize this pattern!"
+    }
+  },
+
+  llCycleDetect: {
+    name: "LL — Cycle Detection",
+    category: "datastructures",
+    file: "LinkedList.java",
+    lines: [
+      "// Floyd's Tortoise & Hare",
+      "Node slow = head, fast = head;",
+      "while (fast != null && fast.next != null) {",
+      "  slow = slow.next;         // move 1 step",
+      "  fast = fast.next.next;    // move 2 steps",
+      "  if (slow == fast) { /* CYCLE FOUND */ break; }",
+      "}",
+      "// Find entry: reset slow, move both 1 step"
+    ],
+    time: "O(n)",
+    space: "O(1)",
+    stable: "N/A",
+    desc: "Uses two pointers moving at different speeds to detect if a cycle exists. The fast pointer laps the slow pointer inside the cycle.",
+    explanation: {
+      intuition: "Floyd's algorithm uses two pointers: slow (moves 1 step) and fast (moves 2 steps). If a cycle exists, fast will eventually lap slow and they'll meet inside the cycle — like two runners on a circular track.",
+      steps: [
+        "Initialize slow = head and fast = head.",
+        "Move slow by 1 step and fast by 2 steps each iteration.",
+        "If slow == fast, a cycle is detected.",
+        "To find the cycle entry: reset slow = head. Move both one step at a time — they'll meet at the cycle entry node."
+      ],
+      bestUsedFor: "Detecting loops in linked lists, finding the start of a cycle in O(n) time.",
+      proTip: "This works because the mathematical distance analysis guarantees slow and fast will always meet at the cycle entry after the reset step!"
+    }
   }
 };
+

@@ -26,6 +26,12 @@ import {
 import { generateNQueens } from './backtrackingGenerators.js';
 import { generateFractionalKnapsack } from './greedyGenerators.js';
 import { generateBST } from './treeGenerators.js';
+import {
+  generateLinkedListInsert,
+  generateLinkedListDelete,
+  generateLinkedListReverse,
+  generateLinkedListCycleDetect
+} from './linkedListGenerators.js';
 
 export const GENERATORS = {
   selection: generateSelectionSort,
@@ -43,5 +49,10 @@ export const GENERATORS = {
   lcs: generateLCS,
   nqueens: generateNQueens,
   fractionalKnapsack: generateFractionalKnapsack,
-  bst: generateBST
+  bst: generateBST,
+  llInsert: generateLinkedListInsert,
+  llDelete: generateLinkedListDelete,
+  llReverse: generateLinkedListReverse,
+  llCycleDetect: generateLinkedListCycleDetect,
 };
+
