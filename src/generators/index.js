@@ -33,6 +33,11 @@ import {
   generateLinkedListCycleDetect
 } from './linkedListGenerators.js';
 
+import {
+  generateHashTableChaining,
+  generateHashTableLinearProbing
+} from './hashTableGenerators.js';
+
 export const GENERATORS = {
   selection: generateSelectionSort,
   bubble: generateBubbleSort,
@@ -54,5 +59,7 @@ export const GENERATORS = {
   llDelete: generateLinkedListDelete,
   llReverse: generateLinkedListReverse,
   llCycleDetect: generateLinkedListCycleDetect,
+  htChaining: generateHashTableChaining,
+  htLinearProbing: generateHashTableLinearProbing
 };
 

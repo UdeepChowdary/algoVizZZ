@@ -13,6 +13,7 @@ import ChessboardVisualizer from './components/visualizers/ChessboardVisualizer.
 import KnapsackGreedyVisualizer from './components/visualizers/KnapsackGreedyVisualizer.jsx';
 import TreeVisualizer from './components/visualizers/TreeVisualizer.jsx';
 import LinkedListVisualizer from './components/visualizers/LinkedListVisualizer.jsx';
+import HashTableVisualizer from './components/visualizers/HashTableVisualizer.jsx';
 
 import { useVisualizer } from './hooks/useVisualizer.js';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js';
@@ -146,6 +147,9 @@ export default function App() {
       case "datastructures":
         if (["llInsert", "llDelete", "llReverse", "llCycleDetect"].includes(algoKey)) {
           return <LinkedListVisualizer step={activeStep} />;
+        }
+        if (["htChaining", "htLinearProbing"].includes(algoKey)) {
+          return <HashTableVisualizer step={activeStep} />;
         }
         return <TreeVisualizer step={activeStep} />;
       default:

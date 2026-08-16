@@ -635,6 +635,62 @@ export const ALGORITHM_DATA = {
       bestUsedFor: "Detecting loops in linked lists, finding the start of a cycle in O(n) time.",
       proTip: "This works because the mathematical distance analysis guarantees slow and fast will always meet at the cycle entry after the reset step!"
     }
+  },
+
+  htChaining: {
+    name: "Hash Table (Chaining)",
+    category: "datastructures",
+    file: "HashTable.java",
+    lines: [
+      "// Hash Table with Separate Chaining",
+      "int hash = val % TABLE_SIZE;",
+      "if (table[hash] == null) {",
+      "  table[hash] = new LinkedList();",
+      "}",
+      "table[hash].add(val);"
+    ],
+    time: "O(1) avg",
+    space: "O(n)",
+    stable: "N/A",
+    desc: "Visualizes a Hash Table resolving collisions using Separate Chaining (Linked Lists).",
+    explanation: {
+      intuition: "When two different keys hash to the same index (a collision), chaining stores them in a linked list at that index.",
+      steps: [
+        "Compute hash = key % size.",
+        "Go to the array index.",
+        "If occupied, append the key to the linked list at that index."
+      ],
+      bestUsedFor: "Dynamic sets and dictionaries where you want to handle high load factors gracefully.",
+      proTip: "Chaining is great because the table never 'fills up', but linked list traversal can hurt cache locality."
+    }
+  },
+
+  htLinearProbing: {
+    name: "Hash Table (Linear Probing)",
+    category: "datastructures",
+    file: "HashTable.java",
+    lines: [
+      "// Hash Table with Linear Probing",
+      "int hash = val % TABLE_SIZE;",
+      "while (table[hash] != null) {",
+      "  hash = (hash + 1) % TABLE_SIZE;",
+      "}",
+      "table[hash] = val;"
+    ],
+    time: "O(1) avg",
+    space: "O(n)",
+    stable: "N/A",
+    desc: "Visualizes a Hash Table resolving collisions using Linear Probing (Open Addressing).",
+    explanation: {
+      intuition: "When a collision occurs, Linear Probing simply searches forward sequentially until it finds an empty slot.",
+      steps: [
+        "Compute hash = key % size.",
+        "Check index. If occupied, probe index + 1.",
+        "Repeat probing until an empty slot is found."
+      ],
+      bestUsedFor: "Memory-constrained environments, caching (better cache locality than chaining).",
+      proTip: "Linear probing is prone to 'primary clustering', where long runs of occupied slots slow down future inserts."
+    }
   }
 };
 
