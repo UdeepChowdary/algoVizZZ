@@ -89,6 +89,16 @@
       <p>Real-time browser audio feedback pitch-scaled to element values during array comparisons, swaps, and tree traversals.</p>
     </td>
   </tr>
+  <tr>
+    <td width="50%">
+      <h3>📈 Live LeetCode Progress</h3>
+      <p>Integrated widget to fetch and display real-time LeetCode profile stats, problem solving metrics, and current streak.</p>
+    </td>
+    <td width="50%">
+      <h3>📦 Hash Table Visualizations</h3>
+      <p>Interactive visualizations of hash collisions, separate chaining (Linked Lists), and linear probing.</p>
+    </td>
+  </tr>
 </table>
 
 ---
@@ -154,6 +164,8 @@ Master the foundational patterns that solve over 80% of coding interview problem
 | **Trees & DS** | LL — Delete Node | $O(n)$ | $O(n)$ | $O(1)$ | prev/curr pointer sweep & node unlink |
 | **Trees & DS** | LL — Reverse List | $O(n)$ | $O(n)$ | $O(1)$ | 3-pointer in-place flip (prev/curr/next badges) |
 | **Trees & DS** | LL — Cycle Detection | $O(n)$ | $O(n)$ | $O(1)$ | Floyd's 🐢 slow / 🐇 fast pointers & dashed cycle arc |
+| **Hash Tables** | Separate Chaining | $O(1)$ | $O(n)$ | $O(n)$ | Array buckets & Linked List collision resolution |
+| **Hash Tables** | Linear Probing | $O(1)$ | $O(n)$ | $O(n)$ | Array slots & sequential probing wrap-around |
 
 </details>
 
@@ -220,6 +232,7 @@ algoVizZZ/
     ├── index.css              # Studio dark glassmorphism, scrollbars & keyframes
     ├── components/
     │   ├── HomePage.jsx               # Product landing page with hero demo & tab navigation
+    │   ├── LeetCodeStats.jsx          # ← NEW: Real-time LeetCode profile widget
     │   ├── DsaSheetsSection.jsx       # Top interview DSA preparation sheets hub
     │   ├── DsaPatternsSection.jsx     # Core problem-solving patterns guide section
     │   ├── AlgorithmExplanation.jsx   # Detailed algorithm explanation drawer
@@ -239,7 +252,8 @@ algoVizZZ/
     │       ├── ChessboardVisualizer.jsx       # N-Queens chessboard
     │       ├── KnapsackGreedyVisualizer.jsx   # Greedy ratio cards & capacity gauge
     │       ├── TreeVisualizer.jsx             # SVG binary tree hierarchy
-    │       └── LinkedListVisualizer.jsx       # ← NEW: SVG linked list nodes, arrows & pointer labels
+    │       ├── LinkedListVisualizer.jsx       # ← NEW: SVG linked list nodes, arrows & pointer labels
+    │       └── HashTableVisualizer.jsx        # ← NEW: Hash collision visualizer
     ├── data/
     │   ├── algorithmData.js               # Pseudocode & algorithm registry
     │   ├── dsaSheetsData.js               # Top prep sheets metadata
@@ -254,6 +268,7 @@ algoVizZZ/
     │   ├── greedyGenerators.js
     │   ├── treeGenerators.js
     │   ├── linkedListGenerators.js        # ← NEW: LL Insert / Delete / Reverse / Floyd's Cycle
+    │   ├── hashTableGenerators.js         # ← NEW: Separate Chaining & Linear Probing
     │   └── index.js
     ├── hooks/
     │   ├── useVisualizer.js               # Animation playback hook
