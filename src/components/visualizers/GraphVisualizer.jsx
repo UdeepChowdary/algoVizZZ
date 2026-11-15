@@ -51,30 +51,30 @@ export default function GraphVisualizer({
   return (
     <div className="flex-1 flex flex-col justify-between min-h-[340px]">
       {/* Mode Switcher Header */}
-      <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-800/80 text-xs font-sans">
-        <div className="flex items-center gap-4 text-slate-300">
-          <span className="text-slate-300 font-medium">Visualization Style:</span>
+      <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-[#35413b] text-xs font-sans">
+        <div className="flex items-center gap-4 text-[#d5dbd3]">
+          <span className="text-[#a0aaa2] font-medium">Visualization Style:</span>
           {viewMode === "NETWORK" && (
             <button
               onClick={() => setIsEditingGraph(!isEditingGraph)}
               className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition border ${
                 isEditingGraph 
-                  ? "bg-indigo-500/20 border-indigo-500/50 text-indigo-300" 
-                  : "bg-slate-900 border-slate-700 text-slate-400 hover:text-slate-200"
+                  ? "bg-[#25322c] border-[#3a4740] text-[#d4ec7a]" 
+                  : "bg-[#18211d] border-[#35413b] text-[#d5dbd3] hover:text-white"
               }`}
             >
-              <Edit3 className="w-3.5 h-3.5" /> {isEditingGraph ? "Done Editing" : "Edit Graph"}
+              <Edit3 className="w-3.5 h-3.5 text-[#c9583c]" /> {isEditingGraph ? "Done Editing" : "Edit Graph"}
             </button>
           )}
         </div>
 
-        <div className="flex gap-1.5 p-1 rounded-xl bg-slate-950 border border-slate-800">
+        <div className="flex gap-1.5 p-1 rounded-xl bg-[#111815] border border-[#35413b]">
           <button
             onClick={() => { handleSetViewMode("GRID"); setIsEditingGraph(false); }}
             className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition font-semibold ${
               viewMode === "GRID"
-                ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
-                : "text-slate-300 hover:text-white"
+                ? "bg-[#c9583c] text-white shadow-sm"
+                : "text-[#99a49c] hover:text-white"
             }`}
           >
             <GridIcon className="w-3.5 h-3.5" /> 2D Grid Pathfinding
@@ -83,8 +83,8 @@ export default function GraphVisualizer({
             onClick={() => handleSetViewMode("NETWORK")}
             className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition font-semibold ${
               viewMode === "NETWORK"
-                ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
-                : "text-slate-300 hover:text-white"
+                ? "bg-[#c9583c] text-white shadow-sm"
+                : "text-[#99a49c] hover:text-white"
             }`}
           >
             <Network className="w-3.5 h-3.5" /> Network Graph
@@ -118,11 +118,11 @@ export default function GraphVisualizer({
               <div className="flex-1 flex items-center justify-center p-2 relative">
                 <svg className="w-full h-[260px] max-w-[540px]" viewBox="0 0 520 220">
               <defs>
-                <filter id="glow-indigo" x="-20%" y="-20%" width="140%" height="140%">
+                <filter id="glow-terracotta" x="-20%" y="-20%" width="140%" height="140%">
                   <feGaussianBlur stdDeviation="4" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
-                <filter id="glow-emerald" x="-20%" y="-20%" width="140%" height="140%">
+                <filter id="glow-acid" x="-20%" y="-20%" width="140%" height="140%">
                   <feGaussianBlur stdDeviation="4" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
@@ -143,7 +143,7 @@ export default function GraphVisualizer({
                       y1={u.y}
                       x2={v.x}
                       y2={v.y}
-                      stroke={isVisitedEdge ? "#10B981" : "#334155"}
+                      stroke={isVisitedEdge ? "#d4ec7a" : "#35413b"}
                       strokeWidth={isVisitedEdge ? "3" : "2"}
                       className="transition-all duration-300"
                     />
@@ -154,14 +154,14 @@ export default function GraphVisualizer({
                           y={(u.y + v.y) / 2 - 12}
                           width="24"
                           height="16"
-                          fill="#090b10"
-                          stroke="#334155"
+                          fill="#111815"
+                          stroke="#35413b"
                           rx="4"
                         />
                         <text
                           x={(u.x + v.x) / 2}
                           y={(u.y + v.y) / 2}
-                          fill="#94A3B8"
+                          fill="#a0aaa2"
                           fontSize="10"
                           fontWeight="bold"
                           textAnchor="middle"
@@ -181,18 +181,18 @@ export default function GraphVisualizer({
                 const isCurrent = step.current === n.id;
                 const isVisited = step.visited?.includes(n.id);
 
-                let fill = "#0f172a";
-                let stroke = "#334155";
+                let fill = "#18211d";
+                let stroke = "#35413b";
                 let filter = "";
 
                 if (isCurrent) {
-                  fill = "#6366f1";
-                  stroke = "#818cf8";
-                  filter = "url(#glow-indigo)";
+                  fill = "#c9583c";
+                  stroke = "#ffad8e";
+                  filter = "url(#glow-terracotta)";
                 } else if (isVisited) {
-                  fill = "#059669";
-                  stroke = "#34d399";
-                  filter = "url(#glow-emerald)";
+                  fill = "#3f5431";
+                  stroke = "#a6c36b";
+                  filter = "url(#glow-acid)";
                 }
 
                 return (
@@ -227,14 +227,14 @@ export default function GraphVisualizer({
                           y={n.y + 26}
                           width="44"
                           height="16"
-                          fill="#090b10"
-                          stroke="#334155"
+                          fill="#111815"
+                          stroke="#35413b"
                           rx="4"
                         />
                         <text
                           x={n.x}
                           y={n.y + 34}
-                          fill="#34d399"
+                          fill="#d4ec7a"
                           fontSize="10"
                           fontWeight="bold"
                           textAnchor="middle"
@@ -252,21 +252,21 @@ export default function GraphVisualizer({
           </div>
 
           {/* Real-time Data Structure State Inspector */}
-          <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono">
-            <div className="flex items-center gap-2 text-slate-300 font-sans">
-              <Layers className="w-4 h-4 text-indigo-300" />
+          <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#111815] rounded-xl border border-[#35413b] text-xs font-mono">
+            <div className="flex items-center gap-2 text-[#d5dbd3] font-sans">
+              <Layers className="w-4 h-4 text-[#c9583c]" />
               <span>Active Data Structure State:</span>
             </div>
 
             {queue !== undefined && (
               <div className="flex items-center gap-2 font-mono">
-                <span className="text-slate-500 font-bold">FIFO Queue:</span>
+                <span className="text-[#87918a] font-bold">FIFO Queue:</span>
                 <div className="flex gap-1">
                   {queue.length === 0 ? (
-                    <span className="text-slate-600">[ Empty ]</span>
+                    <span className="text-[#647069]">[ Empty ]</span>
                   ) : (
                     queue.map((item, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded bg-indigo-600/20 border border-indigo-500/40 text-indigo-300 font-bold">
+                      <span key={idx} className="px-2 py-0.5 rounded bg-[#25322c] border border-[#3a4740] text-[#d4ec7a] font-bold">
                         {item}
                       </span>
                     ))
@@ -277,13 +277,13 @@ export default function GraphVisualizer({
 
             {stack !== undefined && (
               <div className="flex items-center gap-2 font-mono">
-                <span className="text-slate-500 font-bold">Call Stack:</span>
+                <span className="text-[#87918a] font-bold">Call Stack:</span>
                 <div className="flex gap-1">
                   {stack.length === 0 ? (
-                    <span className="text-slate-600">[ Empty ]</span>
+                    <span className="text-[#647069]">[ Empty ]</span>
                   ) : (
                     stack.map((item, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded bg-purple-600/20 border border-purple-500/40 text-purple-300 font-bold">
+                      <span key={idx} className="px-2 py-0.5 rounded bg-[#2a2318] border border-[#4d3c22] text-[#f4dd96] font-bold">
                         Node {item}
                       </span>
                     ))

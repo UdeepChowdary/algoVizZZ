@@ -52,7 +52,7 @@ export default function TreeVisualizer({ step }) {
               y1={line.y1}
               x2={line.x2}
               y2={line.y2}
-              stroke="#334155"
+              stroke="#35413b"
               strokeWidth="2"
             />
           ))}
@@ -62,15 +62,15 @@ export default function TreeVisualizer({ step }) {
             const isActive = activeVal === n.val;
             const isVisited = visitedList.includes(n.val);
 
-            let fill = "#0f172a";
-            let stroke = "#334155";
+            let fill = "#18211d";
+            let stroke = "#35413b";
 
             if (isActive) {
-              fill = "#6366f1";
-              stroke = "#818cf8";
+              fill = "#c9583c";
+              stroke = "#ffad8e";
             } else if (isVisited) {
-              fill = "#059669";
-              stroke = "#34d399";
+              fill = "#3f5431";
+              stroke = "#a6c36b";
             }
 
             return (
@@ -102,12 +102,12 @@ export default function TreeVisualizer({ step }) {
       </div>
 
       {/* Traversal Output Log */}
-      <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono flex items-center justify-between">
-        <div className="flex items-center gap-2 text-emerald-300 font-bold font-sans">
+      <div className="p-3 bg-[#111815] rounded-xl border border-[#35413b] text-xs font-mono flex items-center justify-between">
+        <div className="flex items-center gap-2 text-[#d4ec7a] font-bold font-sans">
           <GitGraph className="w-4 h-4" />
           <span>Inorder Traversal Output:</span>
         </div>
-        <div className="text-white font-mono font-bold">
+        <div className="text-[#f5f4ed] font-mono font-bold">
           [{visitedList.join(", ")}]
         </div>
       </div>

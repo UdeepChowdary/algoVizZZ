@@ -18,7 +18,7 @@ function ChainingVisualizer({ step }) {
               {/* Array Slot */}
               <div
                 className={`w-12 h-12 flex items-center justify-center font-mono font-bold border-2 rounded-lg relative z-10 transition-colors ${
-                  isHighlighted ? 'bg-indigo-600 border-indigo-400 text-white' : 'bg-slate-900 border-slate-700 text-slate-300'
+                  isHighlighted ? 'bg-[#c9583c] border-[#ffad8e] text-white' : 'bg-[#18211d] border-[#35413b] text-[#d5dbd3]'
                 }`}
               >
                 {index}
@@ -27,7 +27,7 @@ function ChainingVisualizer({ step }) {
               {/* Chain connecting line and nodes */}
               {chain.length > 0 && (
                 <div className="flex items-center">
-                  <div className={`w-8 h-0.5 ${isHighlighted ? 'bg-indigo-500' : 'bg-slate-600'}`}></div>
+                  <div className={`w-8 h-0.5 ${isHighlighted ? 'bg-[#c9583c]' : 'bg-[#35413b]'}`}></div>
                   <div className="flex gap-4">
                     {chain.map((val, i) => {
                       const isLast = i === chain.length - 1;
@@ -36,13 +36,13 @@ function ChainingVisualizer({ step }) {
                         <div key={`node-${index}-${i}`} className="flex items-center">
                           <div
                             className={`px-4 py-2 rounded font-mono font-bold border-2 flex items-center gap-2 ${
-                              isNewInsert ? 'bg-emerald-600 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'bg-slate-800 border-slate-600 text-slate-200'
+                              isNewInsert ? 'bg-[#d4ec7a] border-[#b5ce73] text-[#111815] shadow-md' : 'bg-[#25322c] border-[#3a4740] text-[#f5f4ed]'
                             }`}
                           >
                             {val}
-                            {i < chain.length - 1 && <Link2 className="w-4 h-4 text-slate-500" />}
+                            {i < chain.length - 1 && <Link2 className="w-4 h-4 text-[#707b73]" />}
                           </div>
-                          {!isLast && <div className="w-4 h-0.5 bg-slate-600"></div>}
+                          {!isLast && <div className="w-4 h-0.5 bg-[#35413b]"></div>}
                         </div>
                       );
                     })}
@@ -69,21 +69,21 @@ function ProbingVisualizer({ step }) {
 
           return (
             <div key={`slot-${index}`} className="flex flex-col items-center gap-2">
-              <span className="text-xs font-mono text-slate-500">[{index}]</span>
+              <span className="text-xs font-mono text-[#87918a]">[{index}]</span>
               <div
                 className={`w-16 h-16 flex items-center justify-center font-mono text-lg font-bold border-2 rounded-xl transition-all ${
-                  isProbing && val === null ? 'bg-indigo-900/50 border-indigo-500 text-indigo-300' :
-                  isNewInsert ? 'bg-emerald-600 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)]' :
-                  isProbing && val !== null ? 'bg-rose-900/50 border-rose-500 text-rose-300' :
-                  val !== null ? 'bg-slate-800 border-slate-600 text-slate-200' :
-                  'bg-slate-900 border-slate-700 text-slate-600'
+                  isProbing && val === null ? 'bg-[#2a2417] border-[#f4dd96] text-[#f4dd96]' :
+                  isNewInsert ? 'bg-[#d4ec7a] border-[#b5ce73] text-[#111815] shadow-md' :
+                  isProbing && val !== null ? 'bg-[#2f1f1a] border-[#ffad8e] text-[#ffad8e]' :
+                  val !== null ? 'bg-[#18211d] border-[#35413b] text-[#f5f4ed]' :
+                  'bg-[#111815] border-[#252f2a] text-[#526058]'
                 }`}
               >
                 {val !== null ? val : '∅'}
               </div>
               {/* Probe pointer */}
               <div className={`transition-opacity ${isProbing ? 'opacity-100' : 'opacity-0'}`}>
-                <span className="text-xs font-bold text-indigo-400">↑ probe</span>
+                <span className="text-xs font-bold text-[#c9583c]">↑ probe</span>
               </div>
             </div>
           );
@@ -96,8 +96,8 @@ function ProbingVisualizer({ step }) {
 export default function HashTableVisualizer({ step }) {
   if (!step || !step.table) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-slate-500 gap-2">
-        <Database className="w-8 h-8" />
+      <div className="flex-1 flex flex-col items-center justify-center text-[#a0aaa2] gap-2">
+        <Database className="w-8 h-8 text-[#c9583c]" />
         <span className="font-mono">Initializing Hash Table...</span>
       </div>
     );
@@ -107,16 +107,16 @@ export default function HashTableVisualizer({ step }) {
     <div className="flex-1 flex flex-col relative w-full h-full">
       {/* Current Insert Info Panel */}
       {step.insertingVal !== null && (
-        <div className="absolute top-4 right-4 bg-slate-900 border border-indigo-500/50 p-4 rounded-xl shadow-lg flex flex-col gap-2 z-20 min-w-[200px]">
-          <div className="text-xs text-indigo-400 font-bold uppercase tracking-wider">Current Operation</div>
-          <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-            <span className="text-slate-400 font-mono text-sm">Value:</span>
-            <span className="text-emerald-400 font-mono font-bold text-lg">{step.insertingVal}</span>
+        <div className="absolute top-4 right-4 bg-[#18211d] border border-[#c9583c]/50 p-4 rounded-xl shadow-lg flex flex-col gap-2 z-20 min-w-[200px]">
+          <div className="text-xs text-[#ffad8e] font-bold uppercase tracking-wider font-mono">Current Operation</div>
+          <div className="flex justify-between items-center border-b border-[#35413b] pb-2">
+            <span className="text-[#a0aaa2] font-mono text-sm">Value:</span>
+            <span className="text-[#d4ec7a] font-mono font-bold text-lg">{step.insertingVal}</span>
           </div>
           {step.computedHash !== null && (
             <div className="flex justify-between items-center">
-              <span className="text-slate-400 font-mono text-sm">Hash % 7:</span>
-              <span className="text-amber-400 font-mono font-bold">{step.computedHash}</span>
+              <span className="text-[#a0aaa2] font-mono text-sm">Hash % 7:</span>
+              <span className="text-[#f4dd96] font-mono font-bold">{step.computedHash}</span>
             </div>
           )}
         </div>

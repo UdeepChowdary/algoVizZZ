@@ -79,36 +79,36 @@ export default function GraphEditor({ customGraphData, setCustomGraphData }) {
     <div className="flex-1 flex flex-col items-center justify-center p-2 relative w-full">
       
       {/* Editor Controls */}
-      <div className="flex items-center gap-2 mb-2 bg-slate-900/80 p-2 rounded-lg border border-slate-700 backdrop-blur-sm z-10 absolute top-2">
+      <div className="flex items-center gap-2 mb-2 bg-[#18211d]/90 p-2 rounded-lg border border-[#35413b] backdrop-blur-sm z-10 absolute top-2">
         <button 
           onClick={() => setMode("SELECT")}
-          className={`p-1.5 rounded-md flex items-center gap-1 text-xs font-semibold transition ${mode === "SELECT" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"}`}
+          className={`p-1.5 rounded-md flex items-center gap-1 text-xs font-semibold transition ${mode === "SELECT" ? "bg-[#c9583c] text-white" : "text-[#87918a] hover:text-white hover:bg-[#202a24]"}`}
           title="Select"
         >
           <MousePointer2 className="w-4 h-4" />
         </button>
         <button 
           onClick={() => { setMode("ADD_NODE"); setSelectedNode(null); }}
-          className={`px-2 py-1.5 rounded-md flex items-center gap-1 text-xs font-semibold transition ${mode === "ADD_NODE" ? "bg-emerald-600 text-white" : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"}`}
+          className={`px-2 py-1.5 rounded-md flex items-center gap-1 text-xs font-semibold transition ${mode === "ADD_NODE" ? "bg-[#d4ec7a] text-[#1e2923]" : "text-[#87918a] hover:text-white hover:bg-[#202a24]"}`}
         >
           <Plus className="w-3.5 h-3.5" /> Node
         </button>
         <button 
           onClick={() => { setMode("ADD_EDGE"); setSelectedNode(null); }}
-          className={`px-2 py-1.5 rounded-md flex items-center gap-1 text-xs font-semibold transition ${mode === "ADD_EDGE" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"}`}
+          className={`px-2 py-1.5 rounded-md flex items-center gap-1 text-xs font-semibold transition ${mode === "ADD_EDGE" ? "bg-[#c9583c] text-white" : "text-[#87918a] hover:text-white hover:bg-[#202a24]"}`}
         >
           <Plus className="w-3.5 h-3.5" /> Edge
         </button>
         <button 
           onClick={() => { setMode("REMOVE"); setSelectedNode(null); }}
-          className={`px-2 py-1.5 rounded-md flex items-center gap-1 text-xs font-semibold transition ${mode === "REMOVE" ? "bg-red-600 text-white" : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"}`}
+          className={`px-2 py-1.5 rounded-md flex items-center gap-1 text-xs font-semibold transition ${mode === "REMOVE" ? "bg-[#d05c42] text-white" : "text-[#87918a] hover:text-white hover:bg-[#202a24]"}`}
         >
           <Trash2 className="w-3.5 h-3.5" /> Remove
         </button>
-        <div className="w-px h-4 bg-slate-700 mx-1"></div>
+        <div className="w-px h-4 bg-[#35413b] mx-1"></div>
         <button 
           onClick={handleClear}
-          className="px-2 py-1.5 rounded-md text-xs font-semibold text-slate-400 hover:text-red-400 transition hover:bg-slate-800"
+          className="px-2 py-1.5 rounded-md text-xs font-semibold text-[#87918a] hover:text-[#d05c42] transition hover:bg-[#202a24]"
         >
           Clear
         </button>
@@ -117,7 +117,7 @@ export default function GraphEditor({ customGraphData, setCustomGraphData }) {
       <svg 
         ref={svgRef}
         onClick={handleSvgClick}
-        className={`w-full h-[280px] max-w-[600px] border border-dashed border-slate-700 rounded-xl bg-[#0b0f19] ${mode === "ADD_NODE" ? "cursor-crosshair" : "cursor-default"}`} 
+        className={`w-full h-[280px] max-w-[600px] border border-dashed border-[#35413b] rounded-xl bg-[#111815] ${mode === "ADD_NODE" ? "cursor-crosshair" : "cursor-default"}`} 
         viewBox="0 0 600 280"
       >
         <defs>
@@ -129,8 +129,8 @@ export default function GraphEditor({ customGraphData, setCustomGraphData }) {
         
         {/* Helper text when empty */}
         {customGraphData.nodes.length === 0 && (
-          <text x="50%" y="50%" fill="#475569" fontSize="14" textAnchor="middle" dominantBaseline="middle" className="font-sans pointer-events-none">
-            Click 'Node' and click here to add nodes
+          <text x="50%" y="50%" fill="#a0aaa2" fontSize="13" textAnchor="middle" dominantBaseline="middle" className="font-sans pointer-events-none">
+            Click '+ Node' and click here to place nodes
           </text>
         )}
 
@@ -147,7 +147,7 @@ export default function GraphEditor({ customGraphData, setCustomGraphData }) {
                 y1={u.y}
                 x2={v.x}
                 y2={v.y}
-                stroke={mode === "REMOVE" ? "#ef4444" : "#334155"}
+                stroke={mode === "REMOVE" ? "#ef4444" : "#4a574f"}
                 strokeWidth="2"
                 className="transition-all duration-300"
               />
@@ -158,14 +158,14 @@ export default function GraphEditor({ customGraphData, setCustomGraphData }) {
                     y={(u.y + v.y) / 2 - 12}
                     width="24"
                     height="16"
-                    fill="#090b10"
-                    stroke="#334155"
+                    fill="#111815"
+                    stroke="#35413b"
                     rx="4"
                   />
                   <text
                     x={(u.x + v.x) / 2}
                     y={(u.y + v.y) / 2}
-                    fill="#94A3B8"
+                    fill="#d4ec7a"
                     fontSize="10"
                     fontWeight="bold"
                     textAnchor="middle"
@@ -184,18 +184,18 @@ export default function GraphEditor({ customGraphData, setCustomGraphData }) {
         {customGraphData.nodes.map(n => {
           const isSelected = selectedNode === n.id;
           
-          let fill = "#0f172a";
-          let stroke = "#475569";
+          let fill = "#18211d";
+          let stroke = "#35413b";
           let filter = "";
 
           if (isSelected) {
-            fill = "#4338ca";
-            stroke = "#818cf8";
+            fill = "#c9583c";
+            stroke = "#ffad8e";
             filter = "url(#glow-selected)";
           } else if (mode === "ADD_EDGE" && selectedNode !== null) {
-            stroke = "#6366f1"; // Highlight as potential target
+            stroke = "#d4ec7a"; // Highlight as potential target
           } else if (mode === "REMOVE") {
-            stroke = "#ef4444";
+            stroke = "#d05c42";
           }
 
           return (
@@ -212,7 +212,7 @@ export default function GraphEditor({ customGraphData, setCustomGraphData }) {
                 stroke={stroke}
                 strokeWidth="2"
                 filter={filter}
-                className={mode === "REMOVE" ? "hover:stroke-red-500" : "hover:stroke-indigo-400"}
+                className={mode === "REMOVE" ? "hover:stroke-[#d05c42]" : "hover:stroke-[#c9583c]"}
               />
               <text
                 x={n.x}

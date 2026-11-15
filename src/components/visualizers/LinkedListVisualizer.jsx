@@ -12,12 +12,12 @@ const SVG_HEIGHT = 220;
 
 function getNodeColor(id, highlighted, hasCycle, cycleEntryId) {
   if (highlighted.includes(id)) {
-    return { fill: '#4f46e5', stroke: '#818cf8', text: '#ffffff' };
+    return { fill: '#c9583c', stroke: '#ffad8e', text: '#ffffff' };
   }
   if (hasCycle && id === cycleEntryId) {
-    return { fill: '#7c3aed', stroke: '#a78bfa', text: '#ffffff' };
+    return { fill: '#d4ec7a', stroke: '#c6e18a', text: '#111815' };
   }
-  return { fill: '#0f172a', stroke: '#334155', text: '#e2e8f0' };
+  return { fill: '#18211d', stroke: '#35413b', text: '#d5dbd3' };
 }
 
 export default function LinkedListVisualizer({ step }) {
@@ -32,11 +32,11 @@ export default function LinkedListVisualizer({ step }) {
   if (nodes.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center gap-4 p-6 min-h-[300px]">
-        <div className="flex items-center gap-2 text-slate-500">
-          <Link2 className="w-5 h-5" />
+        <div className="flex items-center gap-2 text-[#a0aaa2]">
+          <Link2 className="w-5 h-5 text-[#c9583c]" />
           <span className="font-mono text-sm">HEAD → null</span>
         </div>
-        <p className="text-xs text-slate-600 font-mono">Empty linked list</p>
+        <p className="text-xs text-[#707b73] font-mono">Empty linked list</p>
       </div>
     );
   }
@@ -67,13 +67,13 @@ export default function LinkedListVisualizer({ step }) {
         >
           <defs>
             <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
-              <polygon points="0 0, 8 3, 0 6" fill="#475569" />
+              <polygon points="0 0, 8 3, 0 6" fill="#526058" />
             </marker>
             <marker id="arrowhead-active" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
-              <polygon points="0 0, 8 3, 0 6" fill="#818cf8" />
+              <polygon points="0 0, 8 3, 0 6" fill="#c9583c" />
             </marker>
             <marker id="arrowhead-cycle" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
-              <polygon points="0 0, 8 3, 0 6" fill="#a78bfa" />
+              <polygon points="0 0, 8 3, 0 6" fill="#d4ec7a" />
             </marker>
           </defs>
 
@@ -85,7 +85,7 @@ export default function LinkedListVisualizer({ step }) {
             fontSize="11"
             fontFamily="monospace"
             fontWeight="bold"
-            fill="#6366f1"
+            fill="#c9583c"
           >
             HEAD
           </text>
@@ -95,7 +95,7 @@ export default function LinkedListVisualizer({ step }) {
             y1={ROW_Y - NODE_H / 2 - 6}
             x2={posMap[nodes[0].id]}
             y2={ROW_Y - NODE_H / 2 + 2}
-            stroke="#6366f1"
+            stroke="#c9583c"
             strokeWidth="1.5"
             markerEnd="url(#arrowhead-active)"
           />
@@ -111,7 +111,7 @@ export default function LinkedListVisualizer({ step }) {
             const y = ROW_Y;
             const isHighlighted = highlighted.includes(n.id);
             const markerId = isHighlighted ? 'arrowhead-active' : 'arrowhead';
-            const strokeColor = isHighlighted ? '#6366f1' : '#334155';
+            const strokeColor = isHighlighted ? '#c9583c' : '#35413b';
 
             return (
               <line
@@ -141,7 +141,7 @@ export default function LinkedListVisualizer({ step }) {
                 <path
                   d={d}
                   fill="none"
-                  stroke="#7c3aed"
+                  stroke="#d4ec7a"
                   strokeWidth="2"
                   strokeDasharray="5,3"
                   markerEnd="url(#arrowhead-cycle)"
@@ -152,7 +152,7 @@ export default function LinkedListVisualizer({ step }) {
                   textAnchor="middle"
                   fontSize="9"
                   fontFamily="monospace"
-                  fill="#a78bfa"
+                  fill="#d4ec7a"
                   fontWeight="bold"
                 >
                   cycle
@@ -261,7 +261,7 @@ export default function LinkedListVisualizer({ step }) {
                     height={NODE_H + 6}
                     rx="10"
                     fill="none"
-                    stroke="#6366f1"
+                    stroke="#c9583c"
                     strokeWidth="1"
                     opacity="0.4"
                   />
@@ -276,8 +276,8 @@ export default function LinkedListVisualizer({ step }) {
                       width={label.length * 7.2 + 12}
                       height={16}
                       rx="4"
-                      fill="#1e1b4b"
-                      stroke="#4f46e5"
+                      fill="#18211d"
+                      stroke="#c9583c"
                       strokeWidth="1"
                     />
                     <text
@@ -288,7 +288,7 @@ export default function LinkedListVisualizer({ step }) {
                       fontSize="9"
                       fontFamily="monospace"
                       fontWeight="bold"
-                      fill="#a5b4fc"
+                      fill="#ffad8e"
                     >
                       {label}
                     </text>
@@ -298,7 +298,7 @@ export default function LinkedListVisualizer({ step }) {
                       y1={LABEL_Y - 10}
                       x2={cx}
                       y2={ROW_Y + NODE_H / 2 + 2}
-                      stroke="#4f46e5"
+                      stroke="#c9583c"
                       strokeWidth="1"
                       strokeDasharray="3,2"
                       opacity="0.6"
@@ -312,20 +312,20 @@ export default function LinkedListVisualizer({ step }) {
       </div>
 
       {/* Info footer */}
-      <div className="mt-3 w-full max-w-2xl px-3 py-2 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-indigo-300 font-bold font-sans shrink-0">
+      <div className="mt-3 w-full max-w-2xl px-3 py-2 bg-[#111815] rounded-xl border border-[#35413b] text-xs font-mono flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 text-[#c9583c] font-bold font-sans shrink-0">
           <Link2 className="w-4 h-4" />
           <span>Linked List</span>
         </div>
-        <div className="flex items-center gap-3 text-slate-400 truncate">
-          <span className="text-emerald-400 font-bold">Nodes: {nodes.length}</span>
+        <div className="flex items-center gap-3 text-[#a0aaa2] truncate">
+          <span className="text-[#d4ec7a] font-bold">Nodes: {nodes.length}</span>
           {hasCycle && (
-            <span className="flex items-center gap-1 text-violet-400 font-bold">
+            <span className="flex items-center gap-1 text-[#f4dd96] font-bold">
               <GitMerge className="w-3 h-3" />
               Cycle detected
             </span>
           )}
-          <span className="truncate text-slate-500">
+          <span className="truncate text-[#707b73]">
             {nodes.map(n => n.val).join(' → ')}{hasCycle ? ' → (cycle)' : ' → null'}
           </span>
         </div>

@@ -167,7 +167,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen studio-ambient-bg text-slate-200 font-sans p-3 md:p-6 flex flex-col gap-4 select-none max-w-[1600px] mx-auto animate-fadeIn">
+    <div className="min-h-screen studio-ambient-bg text-[#e8ece4] font-sans p-3 md:p-6 flex flex-col gap-4 select-none max-w-[1600px] mx-auto animate-fadeIn">
       {/* Header */}
       <Header
         soundEnabled={soundEnabled}
@@ -184,23 +184,23 @@ export default function App() {
       />
 
       {/* Main Execution Studio Workspace Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 border border-slate-800/80 rounded-2xl overflow-hidden studio-card shadow-2xl">
+      <div className="grid grid-cols-1 lg:grid-cols-12 border border-[#35413b] rounded-2xl overflow-hidden bg-[#18211d] shadow-[0_26px_60px_rgba(30,43,35,0.15)]">
         
         {/* Left Column: Code Inspector & Variables (5 cols) */}
         <CodeInspector currentAlgo={currentAlgo} step={activeStep} />
 
         {/* Right Column: Visualizer Canvas Stage (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col justify-between bg-[#080910] border-t lg:border-t-0 border-slate-800/80 lg:h-[580px] overflow-hidden">
+        <div className="lg:col-span-7 flex flex-col justify-between bg-[#111815] border-t lg:border-t-0 border-[#35413b] lg:h-[580px] overflow-hidden">
           
           {/* Live Step Narrative Banner */}
-          <div className="px-5 py-2.5 h-[44px] bg-slate-950/80 border-b border-slate-800/80 flex items-center justify-between gap-3 text-xs shrink-0">
-            <div className="flex items-center gap-2.5 text-indigo-300 font-semibold truncate font-sans">
-              <Sparkles className="w-4 h-4 text-indigo-300 shrink-0 animate-pulse" />
-              <span className="text-slate-300 font-mono">Step {stepIdx + 1}:</span>
-              <span className="text-white truncate">{activeStep.note || "Ready to execute algorithm step..."}</span>
+          <div className="px-5 py-2.5 h-[44px] bg-[#121916] border-b border-[#323f38] flex items-center justify-between gap-3 text-xs shrink-0">
+            <div className="flex items-center gap-2.5 text-[#d4ec7a] font-semibold truncate font-sans">
+              <Sparkles className="w-4 h-4 text-[#d4ec7a] shrink-0 animate-pulse" />
+              <span className="text-[#c9dc81] font-mono">Step {stepIdx + 1}:</span>
+              <span className="text-[#f5f4ed] truncate">{activeStep.note || "Ready to execute algorithm step..."}</span>
             </div>
             <div className="flex items-center gap-2 shrink-0 font-mono">
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 font-semibold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#202b26] border border-[#35413b] text-[#d4ec7a] font-semibold">
                 {currentAlgo.name}
               </span>
             </div>
@@ -210,17 +210,17 @@ export default function App() {
           {renderVisualizerArea()}
 
           {/* Step Stats Footer Bar */}
-          <div className="px-6 py-2.5 border-t border-slate-800/80 text-xs flex justify-between items-center text-slate-300 bg-slate-950/90 font-mono">
+          <div className="px-6 py-2.5 border-t border-[#303a35] text-xs flex justify-between items-center text-[#a0aaa2] bg-[#121916] font-mono">
             <div className="flex items-center gap-2">
-              <Activity className="w-3.5 h-3.5 text-indigo-300" />
-              <span>Progress:</span>
-              <span className="text-indigo-300 font-bold">{Math.min(stepIdx + 1, activeSteps.length)}</span>
-              <span className="text-slate-600">/</span>
-              <span>{activeSteps.length}</span>
+              <Activity className="w-3.5 h-3.5 text-[#c9583c]" />
+              <span className="text-[#a0aaa2]">Progress:</span>
+              <span className="text-[#d4ec7a] font-bold">{Math.min(stepIdx + 1, activeSteps.length)}</span>
+              <span className="text-[#526058]">/</span>
+              <span className="text-[#a0aaa2]">{activeSteps.length}</span>
             </div>
             {isDone && (
-              <div className="text-emerald-300 font-bold flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 font-sans text-xs glow-emerald-subtle">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" />
+              <div className="text-[#111815] bg-[#d4ec7a] font-bold flex items-center gap-1.5 px-3 py-1 rounded-full font-sans text-xs shadow-sm">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#111815]" />
                 Execution Complete!
               </div>
             )}

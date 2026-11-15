@@ -196,17 +196,17 @@ export default function GridPathfindingVisualizer({
       onMouseUp={() => setIsMouseDown(false)}
     >
       {/* Drawing & Algorithm Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-3 text-xs border-b border-slate-800/80 pb-3 font-sans">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-3 text-xs border-b border-[#35413b] pb-3 font-sans">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-slate-300 font-medium mr-1">Algorithm:</span>
+            <span className="text-[#a0aaa2] font-medium mr-1">Algorithm:</span>
             <select
               value={activeAlgo}
               onChange={(e) => {
                 setSelectedAlgo(e.target.value);
                 handleResetWave();
               }}
-              className="bg-slate-900 text-slate-200 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-indigo-500 hover:bg-slate-800 transition cursor-pointer"
+              className="bg-[#18211d] text-[#f5f4ed] border border-[#35413b] rounded-xl px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-[#c9583c] hover:bg-[#202a24] transition cursor-pointer"
             >
               <option value="bfs">BFS</option>
               <option value="dfs">DFS</option>
@@ -215,15 +215,15 @@ export default function GridPathfindingVisualizer({
             </select>
           </div>
 
-          <div className="h-4 w-[1px] bg-slate-800 hidden sm:block" />
+          <div className="h-4 w-[1px] bg-[#35413b] hidden sm:block" />
 
           <div className="flex items-center gap-2">
-            <span className="text-slate-300 font-medium mr-1">Drawing Tool:</span>
+            <span className="text-[#a0aaa2] font-medium mr-1">Drawing Tool:</span>
             {[
-              { id: "WALL", label: "Wall Barrier", icon: Shield, color: "bg-slate-900 text-slate-300 border-slate-800" },
-              { id: "MUD", label: "Mud (+5)", icon: Droplets, color: "bg-amber-950/40 text-amber-300 border-amber-800/60" },
-              { id: "START", label: "Start Node", icon: Rocket, color: "bg-emerald-950/40 text-emerald-300 border-emerald-800/60" },
-              { id: "END", label: "Target Node", icon: Target, color: "bg-rose-950/40 text-rose-300 border-rose-800/60" }
+              { id: "WALL", label: "Wall Barrier", icon: Shield, color: "bg-[#18211d] text-[#d5dbd3] border-[#35413b]" },
+              { id: "MUD", label: "Mud (+5)", icon: Droplets, color: "bg-[#2a2417] text-[#f4dd96] border-[#5e4b27]" },
+              { id: "START", label: "Start Node", icon: Rocket, color: "bg-[#1e2c1c] text-[#d4ec7a] border-[#3f5431]" },
+              { id: "END", label: "Target Node", icon: Target, color: "bg-[#2f1f1a] text-[#ffad8e] border-[#5a3429]" }
             ].map(tool => {
               const IconComponent = tool.icon;
               return (
@@ -232,8 +232,8 @@ export default function GridPathfindingVisualizer({
                   onClick={() => setDrawMode(tool.id)}
                   className={`px-3 py-1.5 rounded-xl border font-semibold flex items-center gap-1.5 transition ${
                     drawMode === tool.id
-                      ? "bg-indigo-600 border-indigo-400 text-white shadow-md glow-indigo-subtle scale-105"
-                      : tool.color + " hover:bg-slate-800"
+                      ? "bg-[#c9583c] border-[#c9583c] text-white shadow-md scale-105"
+                      : tool.color + " hover:bg-[#202a24]"
                   }`}
                 >
                   <IconComponent className="w-3.5 h-3.5" />
@@ -247,9 +247,9 @@ export default function GridPathfindingVisualizer({
         <div className="flex items-center gap-2">
           <button
             onClick={handleClearBoard}
-            className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-rose-500/40 transition flex items-center gap-1.5 active:scale-95"
+            className="px-3 py-1.5 rounded-xl bg-[#18211d] hover:bg-[#202a24] text-[#d5dbd3] border border-[#35413b] hover:border-[#c9583c]/50 transition flex items-center gap-1.5 active:scale-95"
           >
-            <Trash2 className="w-3.5 h-3.5 text-rose-300" />
+            <Trash2 className="w-3.5 h-3.5 text-[#ffad8e]" />
             <span>Clear Grid</span>
           </button>
         </div>
@@ -258,7 +258,7 @@ export default function GridPathfindingVisualizer({
       {/* 2D Interactive Grid Canvas */}
       <div className="flex-1 w-full flex items-center justify-center p-1 sm:p-2 min-h-0 overflow-x-auto">
         <div
-          className="grid gap-[1px] sm:gap-[2px] md:gap-1 bg-[#080910] p-1 sm:p-2 md:p-3 rounded-xl border border-slate-800/80 shadow-2xl min-w-[300px] max-w-[95vw] lg:max-w-[600px] m-auto"
+          className="grid gap-[1px] sm:gap-[2px] md:gap-1 bg-[#111815] p-1 sm:p-2 md:p-3 rounded-xl border border-[#303a35] shadow-2xl min-w-[300px] max-w-[95vw] lg:max-w-[600px] m-auto"
           style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}
         >
           {Array.from({ length: ROWS }).map((_, r) =>
@@ -272,32 +272,32 @@ export default function GridPathfindingVisualizer({
               const isPath = pathSet.has(key);
               const isVisited = visitedSet.has(key);
 
-              let cellStyle = "bg-slate-900/60 border-slate-800/80 hover:border-indigo-500/50";
+              let cellStyle = "bg-[#18211d]/70 border-[#303a35] hover:border-[#c9583c]/60";
               let content = null;
 
               if (isStart) {
                 cellStyle = isPath
-                  ? "bg-emerald-600 border-amber-400 text-white font-bold glow-emerald-subtle scale-110 ring-2 ring-amber-400 z-20"
-                  : "bg-emerald-600 border-emerald-400 text-white font-bold glow-emerald-subtle scale-105";
-                content = <Rocket className="w-[60%] h-[60%] text-white" />;
+                  ? "bg-[#d4ec7a] border-[#b5ce73] text-[#111815] font-bold scale-110 ring-2 ring-[#f4dd96] z-20"
+                  : "bg-[#d4ec7a] border-[#b5ce73] text-[#111815] font-bold scale-105";
+                content = <Rocket className="w-[60%] h-[60%] text-[#111815]" />;
               } else if (isEnd) {
                 cellStyle = isPath
-                  ? "bg-rose-600 border-amber-400 text-white font-bold scale-110 shadow-[0_0_20px_rgba(251,191,36,1)] ring-2 ring-amber-400 z-20 animate-bounce"
-                  : "bg-rose-600 border-rose-400 text-white font-bold glow-rose-subtle scale-105";
+                  ? "bg-[#c9583c] border-[#ffad8e] text-white font-bold scale-110 ring-2 ring-[#f4dd96] z-20 animate-bounce"
+                  : "bg-[#c9583c] border-[#ffad8e] text-white font-bold scale-105";
                 content = <Target className="w-[60%] h-[60%] text-white" />;
               } else if (isPath) {
-                cellStyle = "bg-amber-400 border-amber-300 text-black font-bold scale-110 shadow-[0_0_15px_rgba(251,191,36,0.8)] z-10";
-                content = <span className="w-[30%] h-[30%] rounded-full bg-slate-950"></span>;
+                cellStyle = "bg-[#f4dd96] border-[#c19243] text-[#111815] font-bold scale-110 shadow-md z-10";
+                content = <span className="w-[30%] h-[30%] rounded-full bg-[#111815]"></span>;
               } else if (isCurrent) {
-                cellStyle = "bg-purple-500 border-purple-300 text-white font-bold scale-110 z-10";
+                cellStyle = "bg-[#ffad8e] border-[#c9583c] text-[#111815] font-bold scale-110 z-10";
               } else if (isVisited) {
-                cellStyle = "bg-indigo-600/30 border-indigo-500/50 text-indigo-200";
+                cellStyle = "bg-[#233324] border-[#3a523b] text-[#c6e18a]";
               } else if (isWall) {
-                cellStyle = "bg-slate-950 border-slate-800 shadow-inner";
-                content = <Shield className="w-[60%] h-[60%] text-slate-600" />;
+                cellStyle = "bg-[#111815] border-[#252f2a] shadow-inner";
+                content = <Shield className="w-[60%] h-[60%] text-[#526058]" />;
               } else if (isMud) {
-                cellStyle = "bg-amber-950/50 border-amber-800/60 text-amber-300";
-                content = <span className="text-[7px] sm:text-[9px] font-extrabold text-amber-300 leading-none">+5</span>;
+                cellStyle = "bg-[#2a2417] border-[#5e4b27] text-[#f4dd96]";
+                content = <span className="text-[7px] sm:text-[9px] font-extrabold text-[#f4dd96] leading-none">+5</span>;
               }
 
               return (
@@ -316,31 +316,35 @@ export default function GridPathfindingVisualizer({
       </div>
 
       {/* Grid Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800/80 text-xs font-sans text-slate-300">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#303a35] text-xs font-sans text-[#d5dbd3]">
         <div className="flex items-center gap-2 font-mono">
           <button
             onClick={handleResetWave}
-            className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white border border-slate-800 transition active:scale-95"
+            className="p-1.5 rounded-xl bg-[#18211d] hover:bg-[#202a24] text-white border border-[#35413b] transition active:scale-95"
             title="Reset Wave"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#d5dbd3]" />
           </button>
           <button
             onClick={handleTogglePlay}
-            className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold flex items-center gap-1.5 glow-indigo-subtle transition active:scale-95 font-sans"
+            className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition active:scale-95 font-sans ${
+              isPlaying
+                ? "bg-[#d4ec7a] text-[#111815]"
+                : "bg-[#c9583c] text-white"
+            }`}
           >
             {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
             <span>{isPlaying ? "Pause Wave" : "Play Wave"}</span>
           </button>
-          <span className="ml-1">
-            Step: <strong className="text-indigo-300 font-bold">{currentStepIdx + 1}</strong> / {generatedSteps.length}
+          <span className="ml-1 text-[#a0aaa2]">
+            Step: <strong className="text-[#d4ec7a] font-bold">{currentStepIdx + 1}</strong> / {generatedSteps.length}
           </span>
         </div>
 
         {/* Speed Presets */}
         <div className="flex items-center gap-2">
-          <span className="text-slate-300 font-medium flex items-center gap-1">
-            <Zap className="w-3.5 h-3.5 text-amber-300" />
+          <span className="text-[#a0aaa2] font-medium flex items-center gap-1">
+            <Zap className="w-3.5 h-3.5 text-[#f4dd96]" />
             <span>Speed:</span>
           </span>
           <div className="flex gap-1 font-mono">
@@ -355,8 +359,8 @@ export default function GridPathfindingVisualizer({
                 onClick={() => handleSetSpeed(sp.val)}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition ${
                   currentSpeed === sp.val
-                    ? "bg-amber-500 border-amber-400 text-slate-950 shadow glow-amber-subtle"
-                    : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white"
+                    ? "bg-[#d4ec7a] border-[#d4ec7a] text-[#111815] shadow-sm"
+                    : "bg-[#18211d] border-[#35413b] text-[#87918a] hover:bg-[#202a24] hover:text-white"
                 }`}
               >
                 {sp.label}

@@ -7,8 +7,8 @@ export default function ChessboardVisualizer({ step, nQueensSize, onSetNQueensSi
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4 min-h-[320px]">
       {/* Board Controls */}
-      <div className="flex items-center gap-3 mb-4 text-xs font-sans text-slate-300">
-        <span className="font-medium">Chessboard Size (N×N):</span>
+      <div className="flex items-center gap-3 mb-4 text-xs font-sans text-[#d5dbd3]">
+        <span className="font-medium text-[#a0aaa2]">Chessboard Size (N×N):</span>
         <div className="flex gap-1.5 font-mono">
           {[4, 5, 6].map(n => (
             <button
@@ -16,8 +16,8 @@ export default function ChessboardVisualizer({ step, nQueensSize, onSetNQueensSi
               onClick={() => onSetNQueensSize(n)}
               className={`px-3 py-1 rounded-lg border transition ${
                 N === n
-                  ? "bg-indigo-600 border-indigo-400 text-white font-bold shadow-md shadow-indigo-600/30"
-                  : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white"
+                  ? "bg-[#c9583c] border-[#c9583c] text-white font-bold shadow-sm"
+                  : "bg-[#18211d] border-[#35413b] text-[#d5dbd3] hover:bg-[#202a24] hover:text-white"
               }`}
             >
               {n}×{n}
@@ -28,7 +28,7 @@ export default function ChessboardVisualizer({ step, nQueensSize, onSetNQueensSi
 
       {/* Chessboard Grid */}
       <div
-        className="grid gap-1.5 bg-slate-950 p-3.5 rounded-2xl border border-slate-800 shadow-2xl"
+        className="grid gap-1.5 bg-[#111815] p-3.5 rounded-2xl border border-[#35413b] shadow-2xl"
         style={{
           gridTemplateColumns: `repeat(${N}, minmax(0, 1fr))`
         }}
@@ -44,12 +44,12 @@ export default function ChessboardVisualizer({ step, nQueensSize, onSetNQueensSi
                 key={`${rIdx}-${cIdx}`}
                 className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-2xl font-bold rounded-xl transition-all duration-200 ${
                   isTesting
-                    ? "bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/50 scale-105"
+                    ? "bg-[#f4dd96] text-[#111815] shadow-lg scale-105"
                     : isQueen
-                    ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/50 glow-emerald-subtle"
+                    ? "bg-[#d4ec7a] text-[#111815] shadow-lg scale-105"
                     : isDark
-                    ? "bg-slate-900 border border-slate-800/80 text-slate-600"
-                    : "bg-slate-900/60 border border-slate-800/60 text-slate-500"
+                    ? "bg-[#18211d] border border-[#303a35] text-[#707b73]"
+                    : "bg-[#222d27] border border-[#303a35] text-[#707b73]"
                 }`}
               >
                 {isQueen ? "♛" : isTesting ? "❓" : ""}
@@ -59,12 +59,12 @@ export default function ChessboardVisualizer({ step, nQueensSize, onSetNQueensSi
         )}
       </div>
 
-      <div className="mt-4 text-xs font-sans text-slate-300 flex items-center gap-5">
+      <div className="mt-4 text-xs font-sans text-[#a0aaa2] flex items-center gap-5">
         <div className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded bg-amber-400 inline-block" /> Testing Position
+          <span className="w-3 h-3 rounded bg-[#f4dd96] inline-block" /> Testing Position
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded bg-emerald-600 inline-block" /> Safe Queen
+          <span className="w-3 h-3 rounded bg-[#d4ec7a] inline-block" /> Safe Queen
         </div>
       </div>
     </div>
