@@ -49,7 +49,7 @@ export default function ChessboardVisualizer({ step, nQueensSize, onSetNQueensSi
                     ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/50 glow-emerald-subtle"
                     : isDark
                     ? "bg-slate-900 border border-slate-800/80 text-slate-600"
-                    : "bg-slate-850 border border-slate-800/60 text-slate-500"
+                    : "bg-slate-900/60 border border-slate-800/60 text-slate-500"
                 }`}
               >
                 {isQueen ? "♛" : isTesting ? "❓" : ""}

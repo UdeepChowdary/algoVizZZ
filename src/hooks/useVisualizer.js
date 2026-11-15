@@ -109,12 +109,12 @@ export function useVisualizer(initialAlgoKey = "selection") {
     setStepIdx(0);
     setPlaying(false);
     setCustomStepsCount(null);
-  }, [algoKey, baseArray, searchTarget, nQueensSize]);
+  }, [algoKey, baseArray, searchTarget, nQueensSize, dpStrings, knapsackItems, customGraphData]);
 
   // Animation Interval Loop with Multi-Step Turbo Scaling
   useEffect(() => {
     if (playing) {
-      let delay = 0;
+      let delay;
       let stepIncrement = 1;
 
       if (speed <= 50) {

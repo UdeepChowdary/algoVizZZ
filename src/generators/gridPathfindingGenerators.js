@@ -1,4 +1,4 @@
-// 2D Grid Pathfinding Step Generators (BFS, DFS, Dijkstra)
+// 2D Grid Pathfinding Step Generators (BFS, DFS, Dijkstra, A*)
 
 const ROWS = 10;
 const COLS = 18;
@@ -284,6 +284,129 @@ export function generateGridPathfindingSteps({
         line: 11,
         vars: { targetFound: false },
         note: "Target cell is unreachable by Dijkstra."
+      });
+    }
+  }
+
+  // 4. GRID A* SEARCH
+  else if (algorithm === "astar") {
+    const h = (r, c) => Math.abs(r - endNode[0]) + Math.abs(c - endNode[1]);
+
+    const gScore = new Map();
+    const fScore = new Map();
+    const visited = new Set();
+    const parentMap = new Map();
+    const openSet = new Set();
+
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const k = nodeKey(r, c);
+        gScore.set(k, Infinity);
+        fScore.set(k, Infinity);
+      }
+    }
+
+    gScore.set(startKey, 0);
+    const startH = h(startNode[0], startNode[1]);
+    fScore.set(startKey, startH);
+    openSet.add(startKey);
+
+    steps.push({
+      gridState: { visited: [], path: [], current: startNode },
+      line: 1,
+      vars: {
+        start: `(${startNode[0]},${startNode[1]})`,
+        g: 0,
+        h: startH,
+        f: startH
+      },
+      note: `Initialized 2D Grid A* Search from start cell (${startNode[0]}, ${startNode[1]}). Using Manhattan heuristic h(r, c).`
+    });
+
+    let found = false;
+
+    if (startNode[0] === endNode[0] && startNode[1] === endNode[1]) {
+      found = true;
+      visited.add(startKey);
+      steps.push({
+        gridState: { visited: Array.from(visited), path: [[...startNode]], current: startNode },
+        line: 5,
+        vars: { targetFound: true, g: 0, h: 0, f: 0, pathLength: 1 },
+        note: "Start and Target are the same cell!"
+      });
+    } else {
+      while (openSet.size > 0) {
+        let minF = Infinity;
+        let currKey = null;
+
+        for (const k of openSet) {
+          const f = fScore.get(k);
+          if (f < minF) {
+            minF = f;
+            currKey = k;
+          } else if (f === minF && currKey) {
+            const [kr, kc] = k.split('-').map(Number);
+            const [cr, cc] = currKey.split('-').map(Number);
+            if (h(kr, kc) < h(cr, cc)) {
+              currKey = k;
+            }
+          }
+        }
+
+        if (!currKey || minF === Infinity) break;
+
+        openSet.delete(currKey);
+        visited.add(currKey);
+
+        const [r, c] = currKey.split('-').map(Number);
+        const currG = gScore.get(currKey);
+        const currH = h(r, c);
+        const currF = fScore.get(currKey);
+
+        if (r === endNode[0] && c === endNode[1]) {
+          found = true;
+          const path = reconstructPath(parentMap);
+          steps.push({
+            gridState: { visited: Array.from(visited), path, current: [r, c] },
+            line: 5,
+            vars: { targetFound: true, g: currG, h: 0, f: currG, pathLength: path.length, visitedTotal: visited.size },
+            note: `TARGET REACHED! A* reconstructed optimal path (${path.length} cells, cost ${currG}).`
+          });
+          break;
+        }
+
+        steps.push({
+          gridState: { visited: Array.from(visited), path: [], current: [r, c] },
+          line: 3,
+          vars: { currentCell: `(${r},${c})`, g: currG, h: currH, f: currF, visitedCount: visited.size },
+          note: `A* evaluating cell (${r}, ${c}): g=${currG}, h=${currH}, f=${currF}.`
+        });
+
+        for (const [nr, nc] of getNeighbors(r, c)) {
+          const nKey = nodeKey(nr, nc);
+          if (visited.has(nKey)) continue;
+
+          const weight = mudCells.has(nKey) ? 6 : 1;
+          const tentativeG = currG + weight;
+
+          if (tentativeG < (gScore.get(nKey) ?? Infinity)) {
+            parentMap.set(nKey, currKey);
+            gScore.set(nKey, tentativeG);
+            const nH = h(nr, nc);
+            const nF = tentativeG + nH;
+            fScore.set(nKey, nF);
+            openSet.add(nKey);
+          }
+        }
+      }
+    }
+
+    if (!found) {
+      steps.push({
+        gridState: { visited: Array.from(visited), path: [], current: null },
+        line: 11,
+        vars: { targetFound: false, g: null, h: null, f: null },
+        note: "Target cell is unreachable by A* Search due to walls."
       });
     }
   }

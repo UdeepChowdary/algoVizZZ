@@ -3,11 +3,14 @@
 // Helper to build adjacency list
 function buildAdj(nodes, edges, isDirected = false) {
   const adj = {};
-  nodes.forEach(n => adj[n.id] = []);
-  edges.forEach(e => {
-    adj[e.u].push({ v: e.v, weight: e.weight || 1 });
+  (nodes || []).forEach(n => {
+    if (n && n.id !== undefined) adj[n.id] = [];
+  });
+  (edges || []).forEach(e => {
+    if (!e || e.u === undefined || e.v === undefined) return;
+    (adj[e.u] = adj[e.u] || []).push({ v: e.v, weight: e.weight || 1 });
     if (!isDirected) {
-      adj[e.v].push({ v: e.u, weight: e.weight || 1 });
+      (adj[e.v] = adj[e.v] || []).push({ v: e.u, weight: e.weight || 1 });
     }
   });
   return adj;
@@ -46,7 +49,7 @@ export function generateBFSGraph(graphData) {
   while (queue.length > 0) {
     const curr = queue.shift();
     steps.push({ graph: { nodes, edges }, current: curr, visited: Array.from(visited), queue: [...queue], line: 5, vars: { curr, queue: `[${queue.join(", ")}]` }, note: `Dequeued node ${curr} for processing.` });
-    for (const neighborObj of adj[curr]) {
+    for (const neighborObj of (adj[curr] || [])) {
       const neighbor = neighborObj.v;
       if (!visited.has(neighbor)) {
         visited.add(neighbor);
@@ -90,7 +93,7 @@ export function generateDFSGraph(graphData) {
     visited.add(u);
     stack.push(u);
     steps.push({ graph: { nodes, edges }, current: u, visited: Array.from(visited), stack: [...stack], line: 2, vars: { curr: u, callStack: `[${stack.join(", ")}]` }, note: `Visited node ${u}. Pushed to call stack.` });
-    for (const neighborObj of adj[u]) {
+    for (const neighborObj of (adj[u] || [])) {
       const v = neighborObj.v;
       if (!visited.has(v)) {
         dfs(v);
@@ -156,7 +159,7 @@ export function generateDijkstra(graphData) {
     const uLabel = nodes.find(n => n.id === u)?.label || u;
     steps.push({ graph: { nodes, edges }, dist: { ...dist }, current: u, visited: Array.from(visited), line: 5, vars: { selectedNode: uLabel, minDistance: dist[u] }, note: `Picked unvisited node ${uLabel} with shortest distance ${dist[u]}.` });
 
-    for (const neighborObj of adj[u]) {
+    for (const neighborObj of (adj[u] || [])) {
       const v = neighborObj.v;
       const weight = neighborObj.weight;
       if (!visited.has(v)) {

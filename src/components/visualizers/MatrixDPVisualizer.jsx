@@ -97,6 +97,7 @@ export default function MatrixDPVisualizer({
             {/* Column Headers for LCS or Knapsack */}
             <tr>
               <th className="p-2 border border-slate-800 bg-slate-900 text-slate-500 font-bold">i \ j</th>
+              {s2 && <th className="p-2.5 border border-slate-800 bg-slate-900 text-slate-500 font-bold">Ø [0]</th>}
               {s2 && s2.split('').map((char, jIdx) => (
                 <th key={jIdx} className="p-2.5 border border-slate-800 bg-slate-900 text-emerald-300 font-bold">
                   {char} [{jIdx + 1}]

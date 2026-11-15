@@ -16,8 +16,23 @@ export default function GraphVisualizer({
   customGraphData,
   setCustomGraphData
 }) {
-  const [viewMode, setViewMode] = useState("GRID"); // "NETWORK" | "GRID"
+  const [viewMode, setViewMode] = useState(() => {
+    try {
+      return localStorage.getItem('algoViz_graph_viewMode') || "NETWORK";
+    } catch {
+      return "NETWORK";
+    }
+  });
   const [isEditingGraph, setIsEditingGraph] = useState(false);
+
+  const handleSetViewMode = (mode) => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem('algoViz_graph_viewMode', mode);
+    } catch {
+      // ignore
+    }
+  };
 
   const graph = step.graph || { nodes: [], edges: [] };
   const queue = step.queue;
@@ -55,7 +70,7 @@ export default function GraphVisualizer({
 
         <div className="flex gap-1.5 p-1 rounded-xl bg-slate-950 border border-slate-800">
           <button
-            onClick={() => { setViewMode("GRID"); setIsEditingGraph(false); }}
+            onClick={() => { handleSetViewMode("GRID"); setIsEditingGraph(false); }}
             className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition font-semibold ${
               viewMode === "GRID"
                 ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
@@ -65,7 +80,7 @@ export default function GraphVisualizer({
             <GridIcon className="w-3.5 h-3.5" /> 2D Grid Pathfinding
           </button>
           <button
-            onClick={() => setViewMode("NETWORK")}
+            onClick={() => handleSetViewMode("NETWORK")}
             className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition font-semibold ${
               viewMode === "NETWORK"
                 ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"

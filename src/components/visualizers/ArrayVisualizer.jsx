@@ -43,181 +43,227 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
     }
   };
 
-  // Canvas drawing logic
+  // Canvas drawing logic with dynamic resize handling
   React.useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
     
     const ctx = canvas.getContext('2d');
-    const container = containerRef.current;
-    if (!container) return;
-    
-    // Support high DPI displays
-    const dpr = window.devicePixelRatio || 1;
-    const rect = container.getBoundingClientRect();
-    
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
-    
-    ctx.scale(dpr, dpr);
-    
-    const w = rect.width;
-    const h = rect.height;
-    
-    ctx.clearRect(0, 0, w, h);
-    
-    if (arr.length === 0) return;
-    
-    const padding = 10;
-    const gap = Math.min(4, w / arr.length * 0.2); // max 4px gap, or 20% of allocated width
-    const totalGapWidth = gap * (arr.length - 1);
-    const maxBarWidth = 50;
-    const calculatedBarWidth = (w - 2 * padding - totalGapWidth) / arr.length;
-    const barWidth = Math.min(maxBarWidth, calculatedBarWidth);
-    
-    // Center the graph horizontally if bars are smaller than available width
-    const totalChartWidth = arr.length * barWidth + totalGapWidth;
-    const startX = (w - totalChartWidth) / 2;
-    
-    const bottomPadding = 25; // Space for index
-    const topPadding = 45; // Space for values and badges
-    const maxBarHeight = h - bottomPadding - topPadding;
-    
-    arr.forEach((val, idx) => {
-      const isSorted = step.sortedIdx?.includes(idx);
-      const isSwap = step.swap?.includes(idx);
-      const isPivot = step.pivot?.includes(idx);
-      const isCompare = step.compare?.includes(idx);
+    if (!ctx) return;
+
+    // Fallback for ctx.roundRect on older browsers
+    if (!ctx.roundRect) {
+      ctx.roundRect = function (x, y, w, h, radii = 0) {
+        const r = typeof radii === 'number' ? radii : (Array.isArray(radii) ? radii[0] : 0);
+        const radius = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
+        this.moveTo(x + radius, y);
+        this.lineTo(x + w - radius, y);
+        this.quadraticCurveTo(x + w, y, x + w, y + radius);
+        this.lineTo(x + w, y + h - radius);
+        this.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+        this.lineTo(x + radius, y + h);
+        this.quadraticCurveTo(x, y + h, x, y + h - radius);
+        this.lineTo(x, y + radius);
+        this.quadraticCurveTo(x, y, x + radius, y);
+        this.closePath();
+      };
+    }
+
+    const draw = () => {
+      // Support high DPI displays
+      const dpr = window.devicePixelRatio || 1;
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
       
-      const x = startX + idx * (barWidth + gap);
-      const barHeight = Math.max(14, (val / maxVal) * maxBarHeight);
-      const y = h - bottomPadding - barHeight;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
       
-      let baseColor = [79, 70, 229]; // indigo-600
-      let topColor = [56, 189, 248]; // sky-400
-      let shadowColor = 'rgba(99,102,241,0.3)';
-      let labelBadge = null;
-      let textColor = '#cbd5e1'; // slate-300
+      ctx.save();
+      ctx.scale(dpr, dpr);
       
-      if (isSorted) {
-        baseColor = [5, 150, 105]; // emerald-600
-        topColor = [94, 234, 212]; // teal-300
-        shadowColor = 'rgba(16,185,129,0.4)';
-        textColor = '#6ee7b7'; // emerald-300
-      } else if (isSwap) {
-        baseColor = [225, 29, 72]; // rose-600
-        topColor = [244, 114, 182]; // pink-400
-        shadowColor = 'rgba(244,63,94,0.6)';
-        labelBadge = 'SWAP';
-        textColor = '#fda4af'; // rose-300
-      } else if (isPivot) {
-        baseColor = [147, 51, 234]; // purple-600
-        topColor = [232, 121, 249]; // fuchsia-400
-        shadowColor = 'rgba(168,85,247,0.6)';
-        labelBadge = 'PIVOT';
-        textColor = '#d8b4fe'; // purple-300
-      } else if (isCompare) {
-        baseColor = [245, 158, 11]; // amber-500
-        topColor = [253, 224, 71]; // yellow-300
-        shadowColor = 'rgba(245,158,11,0.5)';
-        labelBadge = 'CMP';
-        textColor = '#fcd34d'; // amber-300
+      const w = rect.width;
+      const h = rect.height;
+      
+      ctx.clearRect(0, 0, w, h);
+      
+      if (arr.length === 0) {
+        ctx.restore();
+        return;
       }
       
-      // Draw shadow
-      ctx.shadowColor = shadowColor;
-      ctx.shadowBlur = 15;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
+      const padding = 10;
+      const gap = Math.min(4, w / arr.length * 0.2); // max 4px gap, or 20% of allocated width
+      const totalGapWidth = gap * (arr.length - 1);
+      const maxBarWidth = 50;
+      const calculatedBarWidth = (w - 2 * padding - totalGapWidth) / arr.length;
+      const barWidth = Math.min(maxBarWidth, calculatedBarWidth);
       
-      // Create Gradient
-      const grad = ctx.createLinearGradient(x, y + barHeight, x, y);
-      grad.addColorStop(0, `rgb(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]})`);
-      grad.addColorStop(1, `rgb(${topColor[0]}, ${topColor[1]}, ${topColor[2]})`);
+      // Center the graph horizontally if bars are smaller than available width
+      const totalChartWidth = arr.length * barWidth + totalGapWidth;
+      const startX = (w - totalChartWidth) / 2;
       
-      ctx.fillStyle = grad;
+      const bottomPadding = 25; // Space for index
+      const topPadding = 45; // Space for values and badges
+      const maxBarHeight = h - bottomPadding - topPadding;
       
-      // Top corners rounded (approximated for performance)
-      ctx.beginPath();
-      const radius = Math.min(6, barWidth / 2);
-      ctx.moveTo(x, y + barHeight);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.lineTo(x + barWidth - radius, y);
-      ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
-      ctx.lineTo(x + barWidth, y + barHeight);
-      ctx.closePath();
-      ctx.fill();
-      
-      // Top border highlight
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = `rgba(${topColor[0]}, ${topColor[1]}, ${topColor[2]}, 0.8)`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.lineTo(x + barWidth - radius, y);
-      ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
-      ctx.stroke();
-      
-      // Only draw text if bars are wide enough
-      if (barWidth > 20) {
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+      arr.forEach((val, idx) => {
+        const isSorted = step.sortedIdx?.includes(idx);
+        const isSwap = step.swap?.includes(idx);
+        const isPivot = step.pivot?.includes(idx);
+        const isCompare = step.compare?.includes(idx);
         
-        // Index
-        ctx.fillStyle = '#64748b'; // slate-500
-        ctx.font = '10px monospace';
-        ctx.fillText(`[${idx}]`, x + barWidth / 2, h - 10);
+        const x = startX + idx * (barWidth + gap);
+        const barHeight = Math.max(14, (val / maxVal) * maxBarHeight);
+        const y = h - bottomPadding - barHeight;
         
-        // Value
-        ctx.fillStyle = textColor;
-        ctx.font = (isCompare || isSwap || isPivot) ? 'bold 11px sans-serif' : '11px sans-serif';
-        ctx.fillText(val.toString(), x + barWidth / 2, y - 10);
+        let baseColor = [79, 70, 229]; // indigo-600
+        let topColor = [56, 189, 248]; // sky-400
+        let shadowColor = 'rgba(99,102,241,0.3)';
+        let labelBadge = null;
+        let textColor = '#cbd5e1'; // slate-300
         
-        // Badge
-        if (labelBadge) {
-          ctx.fillStyle = '#020617'; // slate-950
-          ctx.beginPath();
-          ctx.roundRect(x + barWidth / 2 - 15, y - 32, 30, 14, 4);
-          ctx.fill();
+        if (isSorted) {
+          baseColor = [5, 150, 105]; // emerald-600
+          topColor = [94, 234, 212]; // teal-300
+          shadowColor = 'rgba(16,185,129,0.4)';
+          textColor = '#6ee7b7'; // emerald-300
+        } else if (isSwap) {
+          baseColor = [225, 29, 72]; // rose-600
+          topColor = [244, 114, 182]; // pink-400
+          shadowColor = 'rgba(244,63,94,0.6)';
+          labelBadge = 'SWAP';
+          textColor = '#fda4af'; // rose-300
+        } else if (isPivot) {
+          baseColor = [147, 51, 234]; // purple-600
+          topColor = [232, 121, 249]; // fuchsia-400
+          shadowColor = 'rgba(168,85,247,0.6)';
+          labelBadge = 'PIVOT';
+          textColor = '#d8b4fe'; // purple-300
+        } else if (isCompare) {
+          baseColor = [245, 158, 11]; // amber-500
+          topColor = [253, 224, 71]; // yellow-300
+          shadowColor = 'rgba(245,158,11,0.5)';
+          labelBadge = 'CMP';
+          textColor = '#fcd34d'; // amber-300
+        }
+        
+        // Draw shadow
+        ctx.shadowColor = shadowColor;
+        ctx.shadowBlur = 15;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        
+        // Create Gradient
+        const grad = ctx.createLinearGradient(x, y + barHeight, x, y);
+        grad.addColorStop(0, `rgb(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]})`);
+        grad.addColorStop(1, `rgb(${topColor[0]}, ${topColor[1]}, ${topColor[2]})`);
+        
+        ctx.fillStyle = grad;
+        
+        // Top corners rounded (approximated for performance)
+        ctx.beginPath();
+        const radius = Math.min(6, barWidth / 2);
+        ctx.moveTo(x, y + barHeight);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.lineTo(x + barWidth - radius, y);
+        ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
+        ctx.lineTo(x + barWidth, y + barHeight);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Top border highlight
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = `rgba(${topColor[0]}, ${topColor[1]}, ${topColor[2]}, 0.8)`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.lineTo(x + barWidth - radius, y);
+        ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
+        ctx.stroke();
+        
+        // Only draw text if bars are wide enough
+        if (barWidth > 20) {
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
           
-          ctx.strokeStyle = '#334155'; // slate-700
-          ctx.lineWidth = 1;
+          // Index
+          ctx.fillStyle = '#64748b'; // slate-500
+          ctx.font = '10px monospace';
+          ctx.fillText(`[${idx}]`, x + barWidth / 2, h - 10);
+          
+          // Value
+          ctx.fillStyle = textColor;
+          ctx.font = (isCompare || isSwap || isPivot) ? 'bold 11px sans-serif' : '11px sans-serif';
+          ctx.fillText(val.toString(), x + barWidth / 2, y - 10);
+          
+          // Badge
+          if (labelBadge) {
+            ctx.fillStyle = '#020617'; // slate-950
+            ctx.beginPath();
+            ctx.roundRect(x + barWidth / 2 - 15, y - 32, 30, 14, 4);
+            ctx.fill();
+            
+            ctx.strokeStyle = '#334155'; // slate-700
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 9px monospace';
+            ctx.fillText(labelBadge, x + barWidth / 2, y - 25);
+          }
+        }
+        
+        // Draw tooltip if hovered
+        if (hoveredIdx === idx) {
+          ctx.fillStyle = '#020617';
+          ctx.strokeStyle = '#334155';
+          ctx.beginPath();
+          const tooltipW = 120;
+          const tooltipH = 26;
+          const tooltipX = x + barWidth / 2 - tooltipW / 2;
+          const tooltipY = y - 60 > 0 ? y - 60 : y + 20;
+          ctx.roundRect(tooltipX, tooltipY, tooltipW, tooltipH, 8);
+          ctx.fill();
           ctx.stroke();
           
           ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 9px monospace';
-          ctx.fillText(labelBadge, x + barWidth / 2, y - 25);
+          ctx.font = '10px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(`Val: `, tooltipX + 25, tooltipY + 13);
+          ctx.fillStyle = '#818cf8'; // indigo-300
+          ctx.fillText(`${val}`, tooltipX + 50, tooltipY + 13);
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(` | Idx: [${idx}]`, tooltipX + 90, tooltipY + 13);
         }
-      }
+      });
       
-      // Draw tooltip if hovered
-      if (hoveredIdx === idx) {
-        ctx.fillStyle = '#020617';
-        ctx.strokeStyle = '#334155';
-        ctx.beginPath();
-        const tooltipW = 120;
-        const tooltipH = 26;
-        const tooltipX = x + barWidth / 2 - tooltipW / 2;
-        const tooltipY = y - 60 > 0 ? y - 60 : y + 20;
-        ctx.roundRect(tooltipX, tooltipY, tooltipW, tooltipH, 8);
-        ctx.fill();
-        ctx.stroke();
-        
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '10px monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Val: `, tooltipX + 25, tooltipY + 13);
-        ctx.fillStyle = '#818cf8'; // indigo-300
-        ctx.fillText(`${val}`, tooltipX + 50, tooltipY + 13);
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText(` | Idx: [${idx}]`, tooltipX + 90, tooltipY + 13);
+      ctx.restore();
+    };
+
+    draw();
+
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        draw();
+      });
+      resizeObserver.observe(container);
+    } else {
+      window.addEventListener('resize', draw);
+    }
+
+    return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      } else {
+        window.removeEventListener('resize', draw);
       }
-    });
-    
+    };
   }, [arr, step, maxVal, hoveredIdx]);
 
   const handleMouseMove = (e) => {

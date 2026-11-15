@@ -22,6 +22,13 @@ export default function GridPathfindingVisualizer({
   const [mudCells, setMudCells] = useState(new Set());
   const [drawMode, setDrawMode] = useState("WALL"); // "WALL" | "MUD" | "START" | "END"
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const [selectedAlgo, setSelectedAlgo] = useState(algorithm);
+
+  useEffect(() => {
+    setSelectedAlgo(algorithm);
+  }, [algorithm]);
+
+  const activeAlgo = selectedAlgo || algorithm;
 
   // Local fallback state if used standalone
   const [localStepIdx, setLocalStepIdx] = useState(0);
@@ -40,13 +47,13 @@ export default function GridPathfindingVisualizer({
   // Generate steps based on current grid state and algorithm
   const generatedSteps = useMemo(() => {
     return generateGridPathfindingSteps({
-      algorithm,
+      algorithm: activeAlgo,
       startNode,
       endNode,
       walls,
       mudCells
     });
-  }, [algorithm, startNode, endNode, walls, mudCells]);
+  }, [activeAlgo, startNode, endNode, walls, mudCells]);
 
   // Sync generated steps to parent if callback is provided
   useEffect(() => {
@@ -188,32 +195,53 @@ export default function GridPathfindingVisualizer({
       onMouseDown={() => setIsMouseDown(true)}
       onMouseUp={() => setIsMouseDown(false)}
     >
-      {/* Drawing Toolbar */}
+      {/* Drawing & Algorithm Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-3 text-xs border-b border-slate-800/80 pb-3 font-sans">
-        <div className="flex items-center gap-2">
-          <span className="text-slate-300 font-medium mr-1">Drawing Tool:</span>
-          {[
-            { id: "WALL", label: "Wall Barrier", icon: Shield, color: "bg-slate-900 text-slate-300 border-slate-800" },
-            { id: "MUD", label: "Mud (+5)", icon: Droplets, color: "bg-amber-950/40 text-amber-300 border-amber-800/60" },
-            { id: "START", label: "Start Node", icon: Rocket, color: "bg-emerald-950/40 text-emerald-300 border-emerald-800/60" },
-            { id: "END", label: "Target Node", icon: Target, color: "bg-rose-950/40 text-rose-300 border-rose-800/60" }
-          ].map(tool => {
-            const IconComponent = tool.icon;
-            return (
-              <button
-                key={tool.id}
-                onClick={() => setDrawMode(tool.id)}
-                className={`px-3 py-1.5 rounded-xl border font-semibold flex items-center gap-1.5 transition ${
-                  drawMode === tool.id
-                    ? "bg-indigo-600 border-indigo-400 text-white shadow-md glow-indigo-subtle scale-105"
-                    : tool.color + " hover:bg-slate-800"
-                }`}
-              >
-                <IconComponent className="w-3.5 h-3.5" />
-                <span>{tool.label}</span>
-              </button>
-            );
-          })}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-slate-300 font-medium mr-1">Algorithm:</span>
+            <select
+              value={activeAlgo}
+              onChange={(e) => {
+                setSelectedAlgo(e.target.value);
+                handleResetWave();
+              }}
+              className="bg-slate-900 text-slate-200 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-indigo-500 hover:bg-slate-800 transition cursor-pointer"
+            >
+              <option value="bfs">BFS</option>
+              <option value="dfs">DFS</option>
+              <option value="dijkstra">Dijkstra</option>
+              <option value="astar">A* Search</option>
+            </select>
+          </div>
+
+          <div className="h-4 w-[1px] bg-slate-800 hidden sm:block" />
+
+          <div className="flex items-center gap-2">
+            <span className="text-slate-300 font-medium mr-1">Drawing Tool:</span>
+            {[
+              { id: "WALL", label: "Wall Barrier", icon: Shield, color: "bg-slate-900 text-slate-300 border-slate-800" },
+              { id: "MUD", label: "Mud (+5)", icon: Droplets, color: "bg-amber-950/40 text-amber-300 border-amber-800/60" },
+              { id: "START", label: "Start Node", icon: Rocket, color: "bg-emerald-950/40 text-emerald-300 border-emerald-800/60" },
+              { id: "END", label: "Target Node", icon: Target, color: "bg-rose-950/40 text-rose-300 border-rose-800/60" }
+            ].map(tool => {
+              const IconComponent = tool.icon;
+              return (
+                <button
+                  key={tool.id}
+                  onClick={() => setDrawMode(tool.id)}
+                  className={`px-3 py-1.5 rounded-xl border font-semibold flex items-center gap-1.5 transition ${
+                    drawMode === tool.id
+                      ? "bg-indigo-600 border-indigo-400 text-white shadow-md glow-indigo-subtle scale-105"
+                      : tool.color + " hover:bg-slate-800"
+                  }`}
+                >
+                  <IconComponent className="w-3.5 h-3.5" />
+                  <span>{tool.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="flex items-center gap-2">

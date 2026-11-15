@@ -24,16 +24,6 @@ export function generateHashTableChaining() {
   });
 
   for (const val of valuesToInsert) {
-    steps.push({
-      table: JSON.parse(JSON.stringify(table)),
-      insertingVal: val,
-      computedHash: null,
-      highlightedIdx: null,
-      line: 1,
-      note: `Ready to insert value: ${val}`,
-      type: "chaining"
-    });
-
     const hash = getHash(val);
     
     steps.push({
@@ -46,14 +36,33 @@ export function generateHashTableChaining() {
       type: "chaining"
     });
 
-    if (table[hash].length > 0) {
+    if (table[hash].length === 0) {
       steps.push({
         table: JSON.parse(JSON.stringify(table)),
         insertingVal: val,
         computedHash: hash,
         highlightedIdx: hash,
         line: 3,
-        note: `Collision at index ${hash}! Appending to the linked list.`,
+        note: `table[${hash}] is null (empty bucket). Initializing LinkedList...`,
+        type: "chaining"
+      });
+      steps.push({
+        table: JSON.parse(JSON.stringify(table)),
+        insertingVal: val,
+        computedHash: hash,
+        highlightedIdx: hash,
+        line: 4,
+        note: `table[${hash}] = new LinkedList();`,
+        type: "chaining"
+      });
+    } else {
+      steps.push({
+        table: JSON.parse(JSON.stringify(table)),
+        insertingVal: val,
+        computedHash: hash,
+        highlightedIdx: hash,
+        line: 3,
+        note: `Collision at index ${hash}! Bucket already contains [${table[hash].join(", ")}]. Appending to chain.`,
         type: "chaining"
       });
     }
@@ -65,8 +74,8 @@ export function generateHashTableChaining() {
       insertingVal: val,
       computedHash: hash,
       highlightedIdx: hash,
-      line: 4,
-      note: `Inserted ${val} into bucket ${hash}.`,
+      line: 6,
+      note: `table[${hash}].add(${val}): Inserted ${val} into bucket ${hash}.`,
       type: "chaining"
     });
   }
@@ -100,16 +109,6 @@ export function generateHashTableLinearProbing() {
   });
 
   for (const val of valuesToInsert) {
-    steps.push({
-      table: [...table],
-      insertingVal: val,
-      computedHash: null,
-      probeIdx: null,
-      line: 1,
-      note: `Ready to insert value: ${val}`,
-      type: "probing"
-    });
-
     const hash = getHash(val);
     
     steps.push({
@@ -157,7 +156,7 @@ export function generateHashTableLinearProbing() {
         insertingVal: val,
         computedHash: hash,
         probeIdx: probe,
-        line: 5,
+        line: 6,
         note: `Found empty slot at index ${probe}. Inserted ${val}.`,
         type: "probing"
       });

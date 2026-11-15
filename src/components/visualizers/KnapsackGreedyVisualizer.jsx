@@ -61,7 +61,7 @@ export default function KnapsackGreedyVisualizer({ step }) {
 
         <div className="flex justify-between text-[11px] text-slate-300 font-mono">
           <span>Remaining Capacity: <strong className="text-rose-300">{capacity.toFixed(1)} kg</strong></span>
-          <span>Total Profit: <strong className="text-emerald-300">${step.totalVal?.toFixed(2) || 0}</strong></span>
+          <span>Total Profit: <strong className="text-emerald-300">${(step.totalVal ?? 0).toFixed(2)}</strong></span>
         </div>
       </div>
     </div>
