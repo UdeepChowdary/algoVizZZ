@@ -187,7 +187,7 @@ export default function App() {
       <div className="grid grid-cols-1 lg:grid-cols-12 border border-[#35413b] rounded-2xl overflow-hidden bg-[#18211d] shadow-[0_26px_60px_rgba(30,43,35,0.15)]">
         
         {/* Left Column: Code Inspector & Variables (5 cols) */}
-        <CodeInspector currentAlgo={currentAlgo} step={activeStep} />
+        <CodeInspector algoKey={algoKey} currentAlgo={currentAlgo} step={activeStep} />
 
         {/* Right Column: Visualizer Canvas Stage (7 cols) */}
         <div className="lg:col-span-7 flex flex-col justify-between bg-[#111815] border-t lg:border-t-0 border-[#35413b] lg:h-[580px] overflow-hidden">
