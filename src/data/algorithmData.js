@@ -1,5 +1,5 @@
 export const ALGORITHM_CATEGORIES = [
-  { id: "sorting", name: "Sorting", desc: "Array ordering algorithms" },
+  { id: "sorting", name: "Sorting & Arrays", desc: "Array ordering and partition algorithms" },
   { id: "searching", name: "Searching", desc: "Element retrieval algorithms" },
   { id: "graph", name: "Graph Traversal", desc: "Network & shortest path search" },
   { id: "dp", name: "Dynamic Prog.", desc: "Optimization using memoization" },
@@ -195,6 +195,71 @@ export const ALGORITHM_DATA = {
       proTip: "In-place sorting with no recursion stack memory, though it is not a stable sort."
     }
   },
+  kadane: {
+    name: "Kadane's Algorithm",
+    category: "sorting",
+    file: "Kadane.java",
+    lines: [
+      "int maxSubArray(int[] nums) {",
+      "  int maxSoFar = nums[0];",
+      "  int currentMax = nums[0];",
+      "  for (int i = 1; i < nums.length; i++) {",
+      "    currentMax = Math.max(nums[i], currentMax + nums[i]);",
+      "    maxSoFar = Math.max(maxSoFar, currentMax);",
+      "  }",
+      "  return maxSoFar;",
+      "}"
+    ],
+    time: "O(n)",
+    space: "O(1)",
+    stable: "N/A",
+    desc: "Finds the contiguous subarray within a one-dimensional array of numbers which has the largest sum in linear time.",
+    explanation: {
+      intuition: "Kadane's algorithm scans the array while maintaining a running maximum subarray sum, dynamically deciding whether to append the current element or restart a fresh subarray when previous sums drop below zero.",
+      steps: [
+        "Initialize currentMax and maxSoFar to the first element.",
+        "Iterate through the array starting from index 1.",
+        "Update currentMax = max(nums[i], currentMax + nums[i]).",
+        "Update maxSoFar = max(maxSoFar, currentMax)."
+      ],
+      bestUsedFor: "Essential for financial profit maximization, stock trading intervals, and image processing filters.",
+      proTip: "Computes the maximum subarray in a single O(n) pass with zero extra memory O(1)."
+    }
+  },
+  dnf: {
+    name: "Dutch National Flag",
+    category: "sorting",
+    file: "DutchNationalFlag.java",
+    lines: [
+      "void sortColors(int[] nums) {",
+      "  int low = 0, mid = 0, high = nums.length - 1;",
+      "  while (mid <= high) {",
+      "    if (nums[mid] == 0) {",
+      "      swap(nums, low++, mid++);",
+      "    } else if (nums[mid] == 1) {",
+      "      mid++;",
+      "    } else {",
+      "      swap(nums, mid, high--);",
+      "    }",
+      "  }",
+      "}"
+    ],
+    time: "O(n)",
+    space: "O(1)",
+    stable: "No",
+    desc: "Partitions an array containing three distinct keys (e.g., 0s, 1s, and 2s) in a single linear scan using three pointers.",
+    explanation: {
+      intuition: "Designed by Edsger Dijkstra, the algorithm maintains three boundaries: elements before 'low' are 0s, between 'low' and 'mid' are 1s, and after 'high' are 2s.",
+      steps: [
+        "Initialize low=0, mid=0, high=n-1.",
+        "If nums[mid] is 0, swap with nums[low], advance low and mid.",
+        "If nums[mid] is 1, it's already in the correct partition, advance mid.",
+        "If nums[mid] is 2, swap with nums[high], decrement high without advancing mid."
+      ],
+      bestUsedFor: "LeetCode 75 (Sort Colors), 3-way QuickSort partitioning, and bucketing multi-category items in O(n) time.",
+      proTip: "When swapping with high, do not increment mid because the swapped element from high has not yet been inspected!"
+    }
+  },
 
   // --- SEARCHING ---
   linearSearch: {
@@ -354,6 +419,75 @@ export const ALGORITHM_DATA = {
       proTip: "Does not work with negative edge weights! Use Bellman-Ford for negative weights."
     }
   },
+  kruskal: {
+    name: "Kruskal's Algorithm (MST)",
+    category: "graph",
+    file: "Kruskal.java",
+    lines: [
+      "int kruskalMST(List<Edge> edges, int V) {",
+      "  Collections.sort(edges);",
+      "  DisjointSet dsu = new DisjointSet(V);",
+      "  int mstWeight = 0, count = 0;",
+      "  for (Edge e : edges) {",
+      "    if (dsu.union(e.u, e.v)) {",
+      "      mstWeight += e.weight;",
+      "      if (++count == V - 1) break;",
+      "    }",
+      "  }",
+      "  return mstWeight;",
+      "}"
+    ],
+    time: "O(E log E)",
+    space: "O(V)",
+    stable: "N/A",
+    desc: "Finds a Minimum Spanning Tree for a connected weighted graph by greedily adding lowest-weight edges that do not form a cycle.",
+    explanation: {
+      intuition: "Kruskal's algorithm builds a minimum spanning tree by sorting all edges by weight and adding them one by one, using Disjoint Set Union (DSU) to reject any edge that forms a cycle.",
+      steps: [
+        "Sort all edges in ascending order of their weight.",
+        "Initialize each vertex in its own disjoint set.",
+        "Pick the smallest edge. If endpoints belong to different sets, union them and add to MST.",
+        "Stop when the MST contains exactly V-1 edges."
+      ],
+      bestUsedFor: "Laying electrical networks, road design, telecommunication cables, and cluster analysis.",
+      proTip: "DSU with path compression and rank union executes find and union operations in nearly O(1) inverse Ackermann time."
+    }
+  },
+  topoSort: {
+    name: "Topological Sort (Kahn's)",
+    category: "graph",
+    file: "TopologicalSort.java",
+    lines: [
+      "List<Integer> topoSort(int V, List<List<Integer>> adj) {",
+      "  int[] inDegree = new int[V];",
+      "  for (int u = 0; u < V; u++) for (int v : adj.get(u)) inDegree[v]++;",
+      "  Queue<Integer> q = new LinkedList<>();",
+      "  for (int i = 0; i < V; i++) if (inDegree[i] == 0) q.add(i);",
+      "  List<Integer> order = new ArrayList<>();",
+      "  while (!q.isEmpty()) {",
+      "    int u = q.poll(); order.add(u);",
+      "    for (int v : adj.get(u)) if (--inDegree[v] == 0) q.add(v);",
+      "  }",
+      "  return order.size() == V ? order : Collections.emptyList();",
+      "}"
+    ],
+    time: "O(V + E)",
+    space: "O(V)",
+    stable: "N/A",
+    desc: "Produces a linear ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge u -> v, u comes before v.",
+    explanation: {
+      intuition: "Kahn's algorithm resolves task dependencies by repeatedly picking vertices with zero incoming prerequisites, executing them, and decrementing the in-degrees of their dependents.",
+      steps: [
+        "Calculate the in-degree (number of incoming directed edges) for each vertex.",
+        "Add all vertices with in-degree 0 to a FIFO Queue.",
+        "Dequeue a vertex, append it to the topological ordering, and reduce in-degree of all its neighbors by 1.",
+        "If a neighbor's in-degree drops to 0, enqueue it.",
+        "If total processed nodes equals V, ordering is valid; otherwise a cycle exists."
+      ],
+      bestUsedFor: "Build systems (Makefile / Webpack dependencies), course prerequisites, and package managers (npm / pip).",
+      proTip: "If the output list contains fewer than V nodes, the graph has a cycle and cannot be topologically sorted!"
+    }
+  },
 
   // --- DYNAMIC PROGRAMMING ---
   knapsack01: {
@@ -418,6 +552,75 @@ export const ALGORITHM_DATA = {
       ],
       bestUsedFor: "Git diff utilities, DNA sequence comparison in bioinformatics, and text similarity detection.",
       proTip: "Forms the basis of file comparison algorithms like git diff!"
+    }
+  },
+  coinChange: {
+    name: "Coin Change (Min Coins)",
+    category: "dp",
+    file: "CoinChange.java",
+    lines: [
+      "int coinChange(int[] coins, int amount) {",
+      "  int[] dp = new int[amount + 1];",
+      "  Arrays.fill(dp, amount + 1);",
+      "  dp[0] = 0;",
+      "  for (int coin : coins) {",
+      "    for (int a = coin; a <= amount; a++) {",
+      "      dp[a] = Math.min(dp[a], 1 + dp[a - coin]);",
+      "    }",
+      "  }",
+      "  return dp[amount] > amount ? -1 : dp[amount];",
+      "}"
+    ],
+    time: "O(n * amount)",
+    space: "O(amount)",
+    stable: "N/A",
+    desc: "Computes the fewest number of coins that you need to make up a given target amount using Dynamic Programming memoization.",
+    explanation: {
+      intuition: "Coin change breaks down the problem of forming target amount A into subproblems: for each coin denomination, determine if taking it results in fewer total coins than the previously computed combinations.",
+      steps: [
+        "Initialize DP table with a large sentinel value (e.g. amount + 1).",
+        "Base case: 0 coins are needed to make an amount of 0 (dp[0] = 0).",
+        "For each coin denomination and each target amount from coin to amount:",
+        "dp[a] = min(dp[a], 1 + dp[a - coin]).",
+        "Return dp[amount] if reachable, else -1."
+      ],
+      bestUsedFor: "Automated vending machines, cash registers, currency exchange engines, and resource rationing.",
+      proTip: "Unlike greedy coin change, DP works correctly with arbitrary coin denomination systems (e.g., coins [1, 3, 4] for amount 6 yields 2 coins [3, 3] instead of greedy's 3 [4, 1, 1])."
+    }
+  },
+  editDistance: {
+    name: "Edit Distance (Levenshtein)",
+    category: "dp",
+    file: "EditDistance.java",
+    lines: [
+      "int minDistance(String s1, String s2) {",
+      "  int m = s1.length(), n = s2.length();",
+      "  int[][] dp = new int[m + 1][n + 1];",
+      "  for (int i = 0; i <= m; i++) dp[i][0] = i;",
+      "  for (int j = 0; j <= n; j++) dp[0][j] = j;",
+      "  for (int i = 1; i <= m; i++) {",
+      "    for (int j = 1; j <= n; j++) {",
+      "      if (s1.charAt(i - 1) == s2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1];",
+      "      else dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1]));",
+      "    }",
+      "  }",
+      "  return dp[m][n];",
+      "}"
+    ],
+    time: "O(m * n)",
+    space: "O(m * n)",
+    stable: "N/A",
+    desc: "Computes the minimum number of single-character edit operations (insertions, deletions, or substitutions) needed to transform string 1 into string 2.",
+    explanation: {
+      intuition: "Levenshtein distance constructs a 2D matrix evaluating the cost to convert prefixes of word1 into prefixes of word2 by comparing the three allowable operations: insert, delete, or replace.",
+      steps: [
+        "Initialize dp[i][0] = i (deleting all characters) and dp[0][j] = j (inserting all characters).",
+        "For character indices i and j, if characters match, cost is 0: dp[i][j] = dp[i-1][j-1].",
+        "If characters mismatch, cost is 1 + min(dp[i-1][j-1] (replace), dp[i][j-1] (insert), dp[i-1][j] (delete)).",
+        "Final answer sits in bottom-right cell dp[m][n]."
+      ],
+      bestUsedFor: "Spell checkers, autocomplete suggestion engines, speech recognition, and DNA alignment.",
+      proTip: "Forms the algorithmic backbone behind Google Search's 'Did you mean?' query corrections."
     }
   },
 
@@ -515,6 +718,79 @@ export const ALGORITHM_DATA = {
       ],
       bestUsedFor: "Dynamic sets, fast lookup tables, and priority queues.",
       proTip: "Inorder traversal of a BST always yields sorted keys!"
+    }
+  },
+  treeTraversals: {
+    name: "Tree Traversals (Pre/In/Post/Level)",
+    category: "datastructures",
+    file: "TreeTraversals.java",
+    lines: [
+      "// Pre-order: Root -> Left -> Right",
+      "void preOrder(Node root) {",
+      "  if (root == null) return;",
+      "  visit(root); preOrder(root.left); preOrder(root.right);",
+      "}",
+      "// Post-order: Left -> Right -> Root",
+      "void postOrder(Node root) {",
+      "  if (root == null) return;",
+      "  postOrder(root.left); postOrder(root.right); visit(root);",
+      "}",
+      "// Level-order (BFS Queue)",
+      "void levelOrder(Node root) {",
+      "  Queue<Node> q = new LinkedList<>(); q.add(root);",
+      "  while (!q.isEmpty()) {",
+      "    Node curr = q.poll(); visit(curr);",
+      "    if (curr.left != null) q.add(curr.left);",
+      "    if (curr.right != null) q.add(curr.right);",
+      "  }",
+      "}"
+    ],
+    time: "O(n)",
+    space: "O(h)",
+    stable: "N/A",
+    desc: "Compares Depth-First (Pre-order, Post-order) and Breadth-First (Level-order) tree traversal strategies step-by-step.",
+    explanation: {
+      intuition: "Tree traversals visit every node in a hierarchical tree. Pre-order processes nodes top-down, Post-order resolves bottom-up (like folder deletion/sizes), and Level-order traverses breadth-first level by level.",
+      steps: [
+        "Pre-order: Visit Node → Left Subtree → Right Subtree.",
+        "Post-order: Left Subtree → Right Subtree → Visit Node.",
+        "Level-order: Enqueue root, then repeatedly dequeue current node and enqueue its non-null children."
+      ],
+      bestUsedFor: "DOM tree rendering, directory size calculation, AST compilers, and file system searches.",
+      proTip: "Post-order traversal is essential for calculating folder sizes or deleting trees, because you must evaluate all children before the parent!"
+    }
+  },
+  minHeap: {
+    name: "Binary Min-Heap (Sift Up/Down)",
+    category: "datastructures",
+    file: "MinHeap.java",
+    lines: [
+      "void insert(int val) {",
+      "  heap.add(val); siftUp(heap.size() - 1);",
+      "}",
+      "void siftUp(int i) {",
+      "  while (i > 0 && heap.get(i) < heap.get(parent(i))) {",
+      "    swap(i, parent(i)); i = parent(i);",
+      "  }",
+      "}",
+      "int extractMin() {",
+      "  int min = heap.get(0); heap.set(0, heap.remove(heap.size() - 1));",
+      "  siftDown(0); return min;",
+      "}"
+    ],
+    time: "O(log n)",
+    space: "O(1)",
+    stable: "No",
+    desc: "Maintains a complete binary tree where every parent <= children. Demonstrates Sift-Up on insertion and Sift-Down on Extract-Min.",
+    explanation: {
+      intuition: "A Min-Heap guarantees that the smallest item is always at the root. New elements enter at the bottom and 'bubble up' (sift-up); when the root is removed, the last element moves to the root and 'trickles down' (sift-down).",
+      steps: [
+        "Insert: Append new element at end of heap array, swap with parent while element < parent (Sift-Up).",
+        "Extract-Min: Pop root, move last element to root.",
+        "Sift-Down: Swap current node with its smaller child until min-heap ordering is restored."
+      ],
+      bestUsedFor: "Priority Queues, Dijkstra's algorithm, Huffman encoding, and finding K-th largest/smallest elements.",
+      proTip: "Represented with a compact array where left child is 2*i + 1 and right child is 2*i + 2 without needing explicit pointer nodes!"
     }
   },
 

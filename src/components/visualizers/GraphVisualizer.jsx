@@ -118,6 +118,9 @@ export default function GraphVisualizer({
               <div className="flex-1 flex items-center justify-center p-2 relative">
                 <svg className="w-full h-[260px] max-w-[540px]" viewBox="0 0 520 220">
               <defs>
+                <marker id="arrowhead-directed" markerWidth="8" markerHeight="6" refX="24" refY="3" orient="auto">
+                  <polygon points="0 0, 8 3, 0 6" fill="#87918a" />
+                </marker>
                 <filter id="glow-terracotta" x="-20%" y="-20%" width="140%" height="140%">
                   <feGaussianBlur stdDeviation="4" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -134,7 +137,23 @@ export default function GraphVisualizer({
                 const v = graph.nodes.find(n => n.id === e.v);
                 if (!u || !v) return null;
 
-                const isVisitedEdge = step.visited?.includes(e.u) && step.visited?.includes(e.v);
+                const isMSTEdge = step.mstEdges?.some(me => (me.u === e.u && me.v === e.v) || (!graph.isDirected && me.u === e.v && me.v === e.u));
+                const isInspecting = step.inspectingEdge && ((step.inspectingEdge.u === e.u && step.inspectingEdge.v === e.v) || (!graph.isDirected && step.inspectingEdge.u === e.v && step.inspectingEdge.v === e.u));
+                const isRejected = step.rejectedEdge && ((step.rejectedEdge.u === e.u && step.rejectedEdge.v === e.v) || (!graph.isDirected && step.rejectedEdge.u === e.v && step.rejectedEdge.v === e.u));
+                const isVisitedEdge = isMSTEdge || (step.visited?.includes(e.u) && step.visited?.includes(e.v));
+
+                let stroke = "#35413b";
+                let strokeWidth = "2";
+                if (isRejected) {
+                  stroke = "#f87171";
+                  strokeWidth = "3";
+                } else if (isInspecting) {
+                  stroke = "#f4dd96";
+                  strokeWidth = "3";
+                } else if (isVisitedEdge) {
+                  stroke = "#d4ec7a";
+                  strokeWidth = "3";
+                }
 
                 return (
                   <g key={idx}>
@@ -143,8 +162,9 @@ export default function GraphVisualizer({
                       y1={u.y}
                       x2={v.x}
                       y2={v.y}
-                      stroke={isVisitedEdge ? "#d4ec7a" : "#35413b"}
-                      strokeWidth={isVisitedEdge ? "3" : "2"}
+                      stroke={stroke}
+                      strokeWidth={strokeWidth}
+                      markerEnd={graph.isDirected ? "url(#arrowhead-directed)" : undefined}
                       className="transition-all duration-300"
                     />
                     {e.weight !== undefined && (

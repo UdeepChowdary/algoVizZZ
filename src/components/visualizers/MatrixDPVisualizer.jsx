@@ -105,7 +105,7 @@ export default function MatrixDPVisualizer({
               ))}
               {items && Array.from({ length: items.W + 1 }, (_, w) => (
                 <th key={w} className="p-2.5 border border-[#35413b] bg-[#18211d] text-[#f4dd96] font-bold">
-                  w={w}
+                  {currentAlgo.name.includes("Coin") ? `amt=${w}` : `w=${w}`}
                 </th>
               ))}
             </tr>
@@ -115,7 +115,13 @@ export default function MatrixDPVisualizer({
               <tr key={rIdx}>
                 {/* Row Header */}
                 <td className="p-2.5 border border-[#35413b] bg-[#18211d] text-[#c9583c] font-bold">
-                  {s1 && rIdx > 0 ? `${s1[rIdx - 1]} [${rIdx}]` : rIdx === 0 ? "Ø [0]" : `Item ${rIdx}`}
+                  {s1 && rIdx > 0
+                    ? `${s1[rIdx - 1]} [${rIdx}]`
+                    : rIdx === 0
+                    ? "Ø [0]"
+                    : currentAlgo.name.includes("Coin")
+                    ? `Coin ${items?.weights?.[rIdx - 1] || rIdx}`
+                    : `Item ${rIdx}`}
                 </td>
 
                 {row.map((cell, cIdx) => {
@@ -126,12 +132,14 @@ export default function MatrixDPVisualizer({
                       className={`border border-[#303a35] px-3.5 py-2.5 transition-all duration-200 ${
                         isActive
                           ? "bg-[#c9583c] text-white font-black scale-110 shadow-lg"
-                          : cell > 0
+                          : cell > 0 && cell < 99
                           ? "bg-[#25322c] text-[#d4ec7a] font-semibold"
+                          : cell === 99
+                          ? "bg-[#18211d] text-[#707b73]"
                           : "bg-[#111815] text-[#526058]"
                       }`}
                     >
-                      {cell}
+                      {cell === 99 ? "∞" : cell}
                     </td>
                   );
                 })}
@@ -142,11 +150,15 @@ export default function MatrixDPVisualizer({
       </div>
 
       {/* Formula Hint Box */}
-      <div className="mt-4 p-3 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300 max-w-[500px] text-center">
+      <div className="mt-4 p-3 rounded-xl bg-[#18211d] border border-[#35413b] text-[11px] font-mono text-[#d5dbd3] max-w-[550px] text-center shadow-md">
         {currentAlgo.name.includes("Knapsack") ? (
-          <span>Formula: <code className="text-amber-300">dp[i][w] = max(val + dp[i-1][w-wt], dp[i-1][w])</code></span>
+          <span>Formula: <code className="text-[#f4dd96]">dp[i][w] = max(val + dp[i-1][w-wt], dp[i-1][w])</code></span>
+        ) : currentAlgo.name.includes("Coin") ? (
+          <span>Formula: <code className="text-[#d4ec7a]">dp[i][a] = min(dp[i-1][a], 1 + dp[i][a - coin])</code></span>
+        ) : currentAlgo.name.includes("Edit") ? (
+          <span>Formula: <code className="text-[#ffad8e]">dp[i][j] = (s1[i]==s2[j]) ? dp[i-1][j-1] : 1 + min(Del, Ins, Rep)</code></span>
         ) : (
-          <span>Formula: <code className="text-emerald-300">dp[i][j] = (s1[i]==s2[j]) ? 1 + dp[i-1][j-1] : max(dp[i-1][j], dp[i][j-1])</code></span>
+          <span>Formula: <code className="text-[#d4ec7a]">dp[i][j] = (s1[i]==s2[j]) ? 1 + dp[i-1][j-1] : max(dp[i-1][j], dp[i][j-1])</code></span>
         )}
       </div>
     </div>

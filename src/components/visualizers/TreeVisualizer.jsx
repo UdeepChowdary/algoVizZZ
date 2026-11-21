@@ -105,10 +105,10 @@ export default function TreeVisualizer({ step }) {
       <div className="p-3 bg-[#111815] rounded-xl border border-[#35413b] text-xs font-mono flex items-center justify-between">
         <div className="flex items-center gap-2 text-[#d4ec7a] font-bold font-sans">
           <GitGraph className="w-4 h-4" />
-          <span>Inorder Traversal Output:</span>
+          <span>{step.traversalType ? `${step.traversalType} Output:` : step.vars?.heapArray ? "Min-Heap Array View:" : "Tree Traversal Output:"}</span>
         </div>
         <div className="text-[#f5f4ed] font-mono font-bold">
-          [{visitedList.join(", ")}]
+          {step.vars?.heapArray ? step.vars.heapArray : `[${visitedList.join(", ")}]`}
         </div>
       </div>
     </div>

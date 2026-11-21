@@ -169,3 +169,205 @@ export function generateHeapSort(arr) {
   steps.push({ array: [...a], line: 7, compare: [], swap: [], pivot: [], sortedIdx: Array.from({ length: n }, (_, k) => k), vars: {}, note: "Max Heap sort complete!" });
   return steps;
 }
+
+// 7. Kadane's Algorithm (Maximum Subarray)
+export function generateKadane(arr) {
+  let a = [...arr];
+  const hasNegative = a.some(x => x < 0);
+  if (!hasNegative && a.length > 5) {
+    a = a.map((val, idx) => {
+      if (idx === 0) return Math.abs(val) % 30 + 10;
+      if (idx % 3 === 0 || idx % 5 === 0) return -(Math.abs(val) % 25 + 8);
+      return Math.abs(val) % 35 + 10;
+    });
+  }
+
+  const steps = [];
+  const n = a.length;
+  let maxSoFar = a[0];
+  let currentMax = a[0];
+  let start = 0;
+  let end = 0;
+  let s = 0;
+
+  steps.push({
+    array: [...a],
+    line: 2,
+    compare: [0],
+    swap: [],
+    pivot: [0],
+    sortedIdx: [0],
+    vars: { i: 0, "arr[i]": a[0], currentMax, maxSoFar, subarray: "[0..0]" },
+    note: `Initialize with first element: currentMax = ${a[0]}, maxSoFar = ${a[0]}`
+  });
+
+  for (let i = 1; i < n; i++) {
+    steps.push({
+      array: [...a],
+      line: 4,
+      compare: [i],
+      swap: [],
+      pivot: [start],
+      sortedIdx: Array.from({ length: end - start + 1 }, (_, k) => start + k),
+      vars: { i, "arr[i]": a[i], currentMax, maxSoFar },
+      note: `Evaluating index ${i} (value ${a[i]}). Does adding it exceed starting fresh?`
+    });
+
+    if (a[i] > currentMax + a[i]) {
+      currentMax = a[i];
+      s = i;
+      steps.push({
+        array: [...a],
+        line: 5,
+        compare: [],
+        swap: [i],
+        pivot: [i],
+        sortedIdx: [i],
+        vars: { i, currentMax, maxSoFar, action: "Start fresh subarray" },
+        note: `Previous running sum was negative! Starting a fresh subarray at index ${i} with sum ${currentMax}`
+      });
+    } else {
+      currentMax += a[i];
+      steps.push({
+        array: [...a],
+        line: 6,
+        compare: [i],
+        swap: [],
+        pivot: [s],
+        sortedIdx: Array.from({ length: i - s + 1 }, (_, k) => s + k),
+        vars: { i, currentMax, maxSoFar, action: "Extended subarray" },
+        note: `Extended subarray [${s}..${i}]. Running sum is now ${currentMax}`
+      });
+    }
+
+    if (currentMax > maxSoFar) {
+      maxSoFar = currentMax;
+      start = s;
+      end = i;
+      steps.push({
+        array: [...a],
+        line: 8,
+        compare: [],
+        swap: [],
+        pivot: [i],
+        sortedIdx: Array.from({ length: end - start + 1 }, (_, k) => start + k),
+        vars: { i, currentMax, maxSoFar, bestSubarray: `[${start}..${end}]` },
+        note: `New maximum subarray found from index ${start} to ${end} with sum = ${maxSoFar}!`
+      });
+    }
+  }
+
+  steps.push({
+    array: [...a],
+    line: 11,
+    compare: [],
+    swap: [],
+    pivot: [],
+    sortedIdx: Array.from({ length: end - start + 1 }, (_, k) => start + k),
+    vars: { maxSoFar, bestSubarray: `[${start}..${end}]` },
+    note: `Kadane's algorithm complete! Maximum contiguous subarray is [${start}..${end}] with sum = ${maxSoFar}.`
+  });
+
+  return steps;
+}
+
+// 8. Dutch National Flag (3-Way Partition / Sort 0s, 1s, 2s)
+export function generateDutchNationalFlag(arr) {
+  let a = arr.map(x => Math.abs(x) % 3);
+  if (!a.includes(0) || !a.includes(1) || !a.includes(2)) {
+    a = [2, 0, 2, 1, 1, 0, 2, 1, 0, 2, 0, 1];
+  }
+  const n = a.length;
+  const steps = [];
+
+  let low = 0;
+  let mid = 0;
+  let high = n - 1;
+
+  steps.push({
+    array: [...a],
+    line: 2,
+    compare: [mid],
+    swap: [],
+    pivot: [low, high],
+    sortedIdx: [],
+    vars: { low, mid, high, "arr[mid]": a[mid] },
+    note: `Initialized 3 pointers: low=0 (0s boundary), mid=0 (current scanner), high=${high} (2s boundary).`
+  });
+
+  while (mid <= high) {
+    if (a[mid] === 0) {
+      steps.push({
+        array: [...a],
+        line: 5,
+        compare: [mid, low],
+        swap: [],
+        pivot: [low, high],
+        sortedIdx: Array.from({ length: low }, (_, k) => k),
+        vars: { low, mid, high, "arr[mid]": a[mid] },
+        note: `arr[mid] is 0! Swapping arr[low] (${a[low]}) and arr[mid] (${a[mid]}).`
+      });
+      [a[low], a[mid]] = [a[mid], a[low]];
+      low++;
+      mid++;
+      steps.push({
+        array: [...a],
+        line: 6,
+        compare: [],
+        swap: [low - 1, mid - 1],
+        pivot: [low, high],
+        sortedIdx: Array.from({ length: low }, (_, k) => k),
+        vars: { low, mid, high },
+        note: `Placed 0 into left partition. Advanced low to ${low} and mid to ${mid}.`
+      });
+    } else if (a[mid] === 1) {
+      steps.push({
+        array: [...a],
+        line: 8,
+        compare: [mid],
+        swap: [],
+        pivot: [low, high],
+        sortedIdx: Array.from({ length: low }, (_, k) => k),
+        vars: { low, mid, high, "arr[mid]": 1 },
+        note: `arr[mid] is 1! Element is already in the middle partition. Increment mid to ${mid + 1}.`
+      });
+      mid++;
+    } else {
+      steps.push({
+        array: [...a],
+        line: 11,
+        compare: [mid, high],
+        swap: [],
+        pivot: [low, high],
+        sortedIdx: Array.from({ length: n - 1 - high }, (_, k) => n - 1 - k),
+        vars: { low, mid, high, "arr[mid]": a[mid] },
+        note: `arr[mid] is 2! Swapping arr[mid] (${a[mid]}) with arr[high] (${a[high]}).`
+      });
+      [a[mid], a[high]] = [a[high], a[mid]];
+      high--;
+      steps.push({
+        array: [...a],
+        line: 12,
+        compare: [],
+        swap: [mid, high + 1],
+        pivot: [low, high],
+        sortedIdx: Array.from({ length: n - 1 - high }, (_, k) => n - 1 - k),
+        vars: { low, mid, high },
+        note: `Placed 2 into right partition. Decremented high to ${high}. Keep mid at ${mid} to inspect swapped value.`
+      });
+    }
+  }
+
+  steps.push({
+    array: [...a],
+    line: 15,
+    compare: [],
+    swap: [],
+    pivot: [],
+    sortedIdx: Array.from({ length: n }, (_, k) => k),
+    vars: { low, mid, high },
+    note: `Dutch National Flag partition complete! All 0s, 1s, and 2s cleanly sorted in O(n) single pass.`
+  });
+
+  return steps;
+}

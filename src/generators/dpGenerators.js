@@ -45,3 +45,128 @@ export function generateLCS(s1 = "STONE", s2 = "LONGEST") {
   steps.push({ dpTable: dp.map(r => [...r]), s1, s2, activeCell: [m, n], line: 9, vars: { lcsLength: dp[m][n] }, note: `Length of Longest Common Subsequence is ${dp[m][n]}` });
   return steps;
 }
+
+// 14. Coin Change DP Step Generator (Minimum Coins)
+export function generateCoinChange(coins = [1, 2, 5], amount = 7) {
+  const n = coins.length;
+  const INF = 99; // visual representation of infinity
+  // dp[i][a] = min coins to form amount 'a' using first 'i' coins
+  const dp = Array.from({ length: n + 1 }, () => Array(amount + 1).fill(INF));
+  for (let i = 0; i <= n; i++) dp[i][0] = 0;
+
+  const steps = [];
+  const items = { weights: coins, values: coins, W: amount };
+
+  steps.push({
+    dpTable: dp.map(r => [...r]),
+    items,
+    activeCell: [0, 0],
+    line: 2,
+    vars: { amount, coins: `[${coins.join(", ")}]` },
+    note: `Initialized DP table (${n} coins x ${amount + 1} amounts). Base case: 0 coins needed for amount 0.`
+  });
+
+  for (let i = 1; i <= n; i++) {
+    const coin = coins[i - 1];
+    for (let a = 1; a <= amount; a++) {
+      if (coin <= a) {
+        const take = dp[i][a - coin] !== INF ? 1 + dp[i][a - coin] : INF;
+        const noTake = dp[i - 1][a];
+        dp[i][a] = Math.min(noTake, take);
+        steps.push({
+          dpTable: dp.map(r => [...r]),
+          items,
+          activeCell: [i, a],
+          line: 5,
+          vars: { coin, amount: a, "withoutCoin": noTake === INF ? "∞" : noTake, "withCoin": take === INF ? "∞" : take, result: dp[i][a] },
+          note: `Coin (${coin}) <= amount (${a}): min(exclude=${noTake === INF ? "∞" : noTake}, 1 + dp[${i}][${a - coin}]=${take === INF ? "∞" : take}) = ${dp[i][a] === INF ? "∞" : dp[i][a]}`
+        });
+      } else {
+        dp[i][a] = dp[i - 1][a];
+        steps.push({
+          dpTable: dp.map(r => [...r]),
+          items,
+          activeCell: [i, a],
+          line: 7,
+          vars: { coin, amount: a, "copiedFromAbove": dp[i][a] === INF ? "∞" : dp[i][a] },
+          note: `Coin (${coin}) > amount (${a}). Cannot use coin ${coin}, copied value from above: ${dp[i][a] === INF ? "∞" : dp[i][a]}`
+        });
+      }
+    }
+  }
+
+  const minCoins = dp[n][amount] === INF ? -1 : dp[n][amount];
+  steps.push({
+    dpTable: dp.map(r => [...r]),
+    items,
+    activeCell: [n, amount],
+    line: 10,
+    vars: { targetAmount: amount, minCoinsRequired: minCoins },
+    note: `Coin Change DP Complete! Minimum coins needed for amount ${amount} is ${minCoins}.`
+  });
+
+  return steps;
+}
+
+// 15. Edit Distance DP Step Generator (Levenshtein Distance)
+export function generateEditDistance(s1 = "HORSE", s2 = "ROS") {
+  const m = s1.length, n = s2.length;
+  const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+  const steps = [];
+
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+  steps.push({
+    dpTable: dp.map(r => [...r]),
+    s1,
+    s2,
+    activeCell: [0, 0],
+    line: 2,
+    vars: { s1, s2, m, n },
+    note: `Initialized base cases: transforming "" to string of length k takes k insertions/deletions.`
+  });
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (s1[i - 1] === s2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+        steps.push({
+          dpTable: dp.map(r => [...r]),
+          s1,
+          s2,
+          activeCell: [i, j],
+          line: 5,
+          vars: { "s1[i-1]": s1[i - 1], "s2[j-1]": s2[j - 1], cost: 0, operations: dp[i][j] },
+          note: `Exact match '${s1[i - 1]}'! No edit cost needed. dp[${i}][${j}] = dp[${i - 1}][${j - 1}] = ${dp[i][j]}`
+        });
+      } else {
+        const replace = dp[i - 1][j - 1];
+        const insert = dp[i][j - 1];
+        const del = dp[i - 1][j];
+        dp[i][j] = 1 + Math.min(replace, insert, del);
+        steps.push({
+          dpTable: dp.map(r => [...r]),
+          s1,
+          s2,
+          activeCell: [i, j],
+          line: 7,
+          vars: { "char1": s1[i - 1], "char2": s2[j - 1], "delete": del, "insert": insert, "replace": replace, minOps: dp[i][j] },
+          note: `Mismatch ('${s1[i - 1]}' vs '${s2[j - 1]}'): 1 + min(Replace:${replace}, Insert:${insert}, Delete:${del}) = ${dp[i][j]}`
+        });
+      }
+    }
+  }
+
+  steps.push({
+    dpTable: dp.map(r => [...r]),
+    s1,
+    s2,
+    activeCell: [m, n],
+    line: 11,
+    vars: { source: s1, target: s2, minOperations: dp[m][n] },
+    note: `Edit Distance computation complete! Minimum operations to transform "${s1}" into "${s2}" is ${dp[m][n]}.`
+  });
+
+  return steps;
+}

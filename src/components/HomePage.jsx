@@ -141,7 +141,7 @@ export default function HomePage({ onLaunchStudio, onSelectAlgorithm }) {
                 <button className="hero-primary" onClick={() => onLaunchStudio()}><Play size={15} fill="currentColor" /> Start exploring</button>
                 <a className="hero-secondary" href="#algorithm-index">Browse algorithms <ArrowDown size={15} /></a>
               </div>
-              <div className="hero-caption"><span>22+ algorithms</span><i /> <span>7 topic areas</span><i /> <span>Free to use</span></div>
+              <div className="hero-caption"><span>{allAlgorithms.length}+ algorithms</span><i /> <span>7 topic areas</span><i /> <span>Free to use</span></div>
             </div>
 
             <div className="sandbox" aria-label="Interactive algorithm sandbox">

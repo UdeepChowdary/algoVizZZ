@@ -174,3 +174,242 @@ export function generateDijkstra(graphData) {
   steps.push({ graph: { nodes, edges }, dist: { ...dist }, current: null, visited: Array.from(visited), line: 12, vars: {}, note: "Dijkstra Shortest Path Computed for all nodes!" });
   return steps;
 }
+
+// 11. Kruskal's Algorithm (Minimum Spanning Tree)
+export function generateKruskal(graphData) {
+  let nodes, edges;
+  if (graphData && graphData.nodes && graphData.nodes.length > 0) {
+    ({ nodes, edges } = graphData);
+  } else {
+    nodes = [
+      { id: 0, x: 100, y: 90, label: "0" },
+      { id: 1, x: 220, y: 50, label: "1" },
+      { id: 2, x: 220, y: 150, label: "2" },
+      { id: 3, x: 350, y: 50, label: "3" },
+      { id: 4, x: 350, y: 150, label: "4" },
+      { id: 5, x: 460, y: 90, label: "5" }
+    ];
+    edges = [
+      { u: 0, v: 1, weight: 4 },
+      { u: 0, v: 2, weight: 2 },
+      { u: 1, v: 2, weight: 1 },
+      { u: 1, v: 3, weight: 5 },
+      { u: 2, v: 4, weight: 8 },
+      { u: 3, v: 4, weight: 3 },
+      { u: 3, v: 5, weight: 6 },
+      { u: 4, v: 5, weight: 7 }
+    ];
+  }
+
+  const steps = [];
+  const sortedEdges = [...edges].sort((a, b) => (a.weight || 1) - (b.weight || 1));
+  const parent = {};
+  nodes.forEach(n => { parent[n.id] = n.id; });
+
+  function find(i) {
+    if (parent[i] === i) return i;
+    return (parent[i] = find(parent[i]));
+  }
+
+  function union(i, j) {
+    const rootI = find(i);
+    const rootJ = find(j);
+    if (rootI !== rootJ) {
+      parent[rootI] = rootJ;
+      return true;
+    }
+    return false;
+  }
+
+  const mstEdges = [];
+  let totalWeight = 0;
+
+  steps.push({
+    graph: { nodes, edges, isDirected: false },
+    current: null,
+    visited: [],
+    mstEdges: [],
+    line: 2,
+    vars: { totalEdges: edges.length, sortedCount: sortedEdges.length },
+    note: `Sorted ${edges.length} edges by ascending weight. Initialized Disjoint Set Union (DSU).`
+  });
+
+  for (let idx = 0; idx < sortedEdges.length; idx++) {
+    const edge = sortedEdges[idx];
+    const uLabel = nodes.find(n => n.id === edge.u)?.label || edge.u;
+    const vLabel = nodes.find(n => n.id === edge.v)?.label || edge.v;
+
+    steps.push({
+      graph: { nodes, edges, isDirected: false },
+      current: edge.u,
+      visited: nodes.map(n => n.id).filter(id => mstEdges.some(e => e.u === id || e.v === id)),
+      mstEdges: [...mstEdges],
+      inspectingEdge: edge,
+      line: 4,
+      vars: { edge: `${uLabel}-${vLabel}`, weight: edge.weight, totalWeight, edgesInMST: mstEdges.length },
+      note: `Checking lowest-weight available edge (${uLabel} - ${vLabel}, w=${edge.weight}).`
+    });
+
+    const rootU = find(edge.u);
+    const rootV = find(edge.v);
+
+    if (rootU !== rootV) {
+      union(edge.u, edge.v);
+      mstEdges.push(edge);
+      totalWeight += edge.weight || 1;
+
+      steps.push({
+        graph: { nodes, edges, isDirected: false },
+        current: edge.v,
+        visited: nodes.map(n => n.id).filter(id => mstEdges.some(e => e.u === id || e.v === id)),
+        mstEdges: [...mstEdges],
+        inspectingEdge: null,
+        line: 6,
+        vars: { addedEdge: `${uLabel}-${vLabel}`, weight: edge.weight, totalWeight, edgesInMST: mstEdges.length },
+        note: `No cycle! Added edge (${uLabel} - ${vLabel}) to MST. Current tree weight = ${totalWeight}.`
+      });
+
+      if (mstEdges.length === nodes.length - 1) {
+        break; // Spanning tree is complete
+      }
+    } else {
+      steps.push({
+        graph: { nodes, edges, isDirected: false },
+        current: null,
+        visited: nodes.map(n => n.id).filter(id => mstEdges.some(e => e.u === id || e.v === id)),
+        mstEdges: [...mstEdges],
+        rejectedEdge: edge,
+        inspectingEdge: null,
+        line: 8,
+        vars: { rejectedEdge: `${uLabel}-${vLabel}`, weight: edge.weight, reason: "Cycle detected" },
+        note: `Cycle detected! Vertices ${uLabel} and ${vLabel} are already in the same component. Skipped.`
+      });
+    }
+  }
+
+  steps.push({
+    graph: { nodes, edges, isDirected: false },
+    current: null,
+    visited: nodes.map(n => n.id),
+    mstEdges: [...mstEdges],
+    inspectingEdge: null,
+    rejectedEdge: null,
+    line: 11,
+    vars: { totalMSTWeight: totalWeight, treeEdges: mstEdges.length },
+    note: `Kruskal's MST Complete! Connected all ${nodes.length} nodes with minimal weight = ${totalWeight}.`
+  });
+
+  return steps;
+}
+
+// 12. Topological Sort (Kahn's Algorithm)
+export function generateTopologicalSort(graphData) {
+  let nodes, edges;
+  if (graphData && graphData.nodes && graphData.nodes.length > 0) {
+    ({ nodes, edges } = graphData);
+  } else {
+    nodes = [
+      { id: 0, x: 100, y: 100, label: "0" },
+      { id: 1, x: 220, y: 55, label: "1" },
+      { id: 2, x: 220, y: 155, label: "2" },
+      { id: 3, x: 340, y: 55, label: "3" },
+      { id: 4, x: 340, y: 155, label: "4" },
+      { id: 5, x: 450, y: 100, label: "5" }
+    ];
+    edges = [
+      { u: 0, v: 1 },
+      { u: 0, v: 2 },
+      { u: 1, v: 3 },
+      { u: 2, v: 4 },
+      { u: 2, v: 3 },
+      { u: 3, v: 5 },
+      { u: 4, v: 5 }
+    ];
+  }
+
+  const steps = [];
+  const inDegree = {};
+  const adj = {};
+  nodes.forEach(n => {
+    inDegree[n.id] = 0;
+    adj[n.id] = [];
+  });
+
+  edges.forEach(e => {
+    inDegree[e.v] = (inDegree[e.v] || 0) + 1;
+    adj[e.u] = adj[e.u] || [];
+    adj[e.u].push(e.v);
+  });
+
+  const queue = nodes.filter(n => inDegree[n.id] === 0).map(n => n.id);
+  const topoOrder = [];
+
+  steps.push({
+    graph: { nodes, edges, isDirected: true },
+    current: null,
+    visited: [],
+    queue: [...queue],
+    line: 2,
+    vars: { inDegrees: JSON.stringify(inDegree), initialZeroInDegree: `[${queue.join(", ")}]` },
+    note: `Calculated in-degrees for all vertices. Enqueued starting vertices with in-degree 0: [${queue.join(", ")}].`
+  });
+
+  while (queue.length > 0) {
+    const curr = queue.shift();
+    topoOrder.push(curr);
+    const currLabel = nodes.find(n => n.id === curr)?.label || curr;
+
+    steps.push({
+      graph: { nodes, edges, isDirected: true },
+      current: curr,
+      visited: [...topoOrder],
+      queue: [...queue],
+      line: 5,
+      vars: { current: currLabel, queue: `[${queue.join(", ")}]`, topoOrder: `[${topoOrder.join(" → ")}]` },
+      note: `Dequeued node ${currLabel} and appended to Topological Order.`
+    });
+
+    for (const neighbor of (adj[curr] || [])) {
+      inDegree[neighbor]--;
+      const neighborLabel = nodes.find(n => n.id === neighbor)?.label || neighbor;
+
+      steps.push({
+        graph: { nodes, edges, isDirected: true },
+        current: curr,
+        visited: [...topoOrder],
+        queue: [...queue],
+        line: 7,
+        vars: { neighbor: neighborLabel, newInDegree: inDegree[neighbor] },
+        note: `Removed dependency edge (${currLabel} → ${neighborLabel}). In-degree of ${neighborLabel} decremented to ${inDegree[neighbor]}.`
+      });
+
+      if (inDegree[neighbor] === 0) {
+        queue.push(neighbor);
+        steps.push({
+          graph: { nodes, edges, isDirected: true },
+          current: neighbor,
+          visited: [...topoOrder],
+          queue: [...queue],
+          line: 9,
+          vars: { resolvedDependency: neighborLabel, queue: `[${queue.join(", ")}]` },
+          note: `Node ${neighborLabel} has 0 remaining dependencies! Added to queue.`
+        });
+      }
+    }
+  }
+
+  const isDAG = topoOrder.length === nodes.length;
+  steps.push({
+    graph: { nodes, edges, isDirected: true },
+    current: null,
+    visited: [...topoOrder],
+    queue: [],
+    line: 12,
+    vars: { isDAG: isDAG ? "Yes" : "No (Cycle detected)", topoOrder: `[${topoOrder.join(" → ")}]` },
+    note: isDAG
+      ? `Topological Sort complete! Valid execution order: [${topoOrder.join(" → ")}].`
+      : "Graph contains a directed cycle! Cannot produce a valid topological ordering."
+  });
+
+  return steps;
+}

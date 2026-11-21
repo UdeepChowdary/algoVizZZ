@@ -63,8 +63,11 @@ export function useVisualizer(initialAlgoKey = "selection") {
     if (algoKey === "nqueens") {
       return gen(nQueensSize);
     }
-    if (algoKey === "lcs") {
+    if (algoKey === "lcs" || algoKey === "editDistance") {
       return gen(dpStrings.s1, dpStrings.s2);
+    }
+    if (algoKey === "coinChange") {
+      return gen([1, 2, 5], 7);
     }
     if (algoKey === "knapsack01") {
       return gen(knapsackItems.weights, knapsackItems.values, knapsackItems.capacity);

@@ -108,6 +108,25 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
       const bottomPadding = 25; // Space for index
       const topPadding = 45; // Space for values and badges
       const maxBarHeight = h - bottomPadding - topPadding;
+
+      const minVal = Math.min(0, ...arr);
+      const maxVal = Math.max(...arr, 1);
+      const hasNegative = minVal < 0;
+      const valRange = hasNegative ? (maxVal - minVal) : Math.max(maxVal, 100);
+      const zeroY = hasNegative 
+        ? topPadding + (maxVal / valRange) * maxBarHeight 
+        : h - bottomPadding;
+
+      // Draw zero baseline if negative values exist
+      if (hasNegative) {
+        ctx.strokeStyle = 'rgba(214, 228, 204, 0.2)';
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(startX - 10, zeroY);
+        ctx.lineTo(startX + totalChartWidth + 10, zeroY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
       
       arr.forEach((val, idx) => {
         const isSorted = step.sortedIdx?.includes(idx);
@@ -116,8 +135,16 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
         const isCompare = step.compare?.includes(idx);
         
         const x = startX + idx * (barWidth + gap);
-        const barHeight = Math.max(14, (val / maxVal) * maxBarHeight);
-        const y = h - bottomPadding - barHeight;
+        let barHeight = 14;
+        let y = zeroY - 14;
+
+        if (!hasNegative) {
+          barHeight = Math.max(14, (val / maxVal) * maxBarHeight);
+          y = h - bottomPadding - barHeight;
+        } else {
+          barHeight = Math.max(10, (Math.abs(val) / valRange) * maxBarHeight);
+          y = val >= 0 ? zeroY - barHeight : zeroY;
+        }
         
         let baseColor = [103, 131, 79]; // forest sage (#67834f)
         let topColor = [181, 206, 115]; // acid olive (#b5ce73)
@@ -204,7 +231,8 @@ export default function ArrayVisualizer({ step, baseArray, onSetCustomArray }) {
           // Value
           ctx.fillStyle = textColor;
           ctx.font = (isCompare || isSwap || isPivot) ? 'bold 11px sans-serif' : '11px sans-serif';
-          ctx.fillText(val.toString(), x + barWidth / 2, y - 10);
+          const valY = val < 0 ? y + barHeight + 12 : y - 10;
+          ctx.fillText(val.toString(), x + barWidth / 2, valY);
           
           // Badge
           if (labelBadge) {
